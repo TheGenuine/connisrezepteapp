@@ -1,5 +1,7 @@
 package de.reneruck.connisRezepteApp;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,10 +18,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Main extends Activity {
+public class Main extends Activity implements PropertyChangeListener{
 
 	private static Context context;
 	private List<String> rezepteList;
+	private NewDocumentsBean newDocumentsBean;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +31,9 @@ public class Main extends Activity {
         
         setContentView(R.layout.main);
         
-        new FileScanner().doInBackground();
+        this.newDocumentsBean = new NewDocumentsBean();
+        this.newDocumentsBean.addPropertyChangeListener(this);
+        new FileScanner(this.newDocumentsBean).doInBackground();
         
         DBManager manager = new DBManager(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
 		final SQLiteDatabase db = manager.getReadableDatabase();
@@ -63,5 +68,16 @@ public class Main extends Activity {
 	public static Context getContext() {
 		return context;
 	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		List<String> newDocuments = (List<String>) event.getNewValue();
+		
+		if(newDocuments != null && !newDocuments.isEmpty()){
+			((TextView)findViewById(R.id.newDocsText)).setText(newDocuments.size());
+		}
+		
+	}
 
+	
 }

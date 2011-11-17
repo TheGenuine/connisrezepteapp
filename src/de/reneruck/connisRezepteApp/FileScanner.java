@@ -16,6 +16,12 @@ public class FileScanner extends AsyncTask<String, Integer, List<String>>{
 	private String[] documentsOnStorage;
 	private String[] documentsInDatabase;
 	private List<String> diff;
+	private NewDocumentsBean newDocumentBean;
+	
+	public FileScanner(NewDocumentsBean newDocumentBean) {
+		this.newDocumentBean = newDocumentBean;
+	}
+	
 	@Override
 	protected List<String> doInBackground(String... arg0) {
 
@@ -49,6 +55,7 @@ public class FileScanner extends AsyncTask<String, Integer, List<String>>{
 			Log.e("FileScanner", "Rezepte Path: "+ Configurations.rezepteDirPath + "is no Directory or was not found");
 			return null;
 		}
+		this.newDocumentBean.putAllEntries(diff);
 		return this.diff;
 	}
 	
