@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -18,11 +19,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Main extends Activity implements PropertyChangeListener{
+public class Main extends Activity {
 
 	private static Context context;
 	private List<String> rezepteList;
 	private NewDocumentsBean newDocumentsBean;
+	private DBManager manager = new DBManager(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
+	
+	public static Context getContext() {
+		return context;
+	}
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,11 +38,15 @@ public class Main extends Activity implements PropertyChangeListener{
         setContentView(R.layout.main);
         
         this.newDocumentsBean = new NewDocumentsBean();
-        this.newDocumentsBean.addPropertyChangeListener(this);
+        this.newDocumentsBean.addPropertyChangeListener(newDocumentsPropertyChangeListener);
         new FileScanner(this.newDocumentsBean).doInBackground();
         
-        DBManager manager = new DBManager(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
-		final SQLiteDatabase db = manager.getReadableDatabase();
+        buildDocumentsList();
+    }
+
+	private void buildDocumentsList() {
+		
+		final SQLiteDatabase db = this.manager.getReadableDatabase();
 		
 		Cursor c = db.rawQuery("select * from " +Configurations.table_Rezepte+ "", null);
 		
@@ -55,9 +65,14 @@ public class Main extends Activity implements PropertyChangeListener{
 		ListView lv = (ListView) findViewById(R.id.listView);
 		lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.rezeptelistentry, this.rezepteList));
 		lv.setOnItemClickListener(this.rezepteListEntyListener);
-    }
-
-    OnItemClickListener rezepteListEntyListener = new OnItemClickListener() {
+	}
+	
+	
+	
+	/**
+	 *  All the listeners are implemented here
+	 */
+	OnItemClickListener rezepteListEntyListener = new OnItemClickListener() {
 		
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view, int arg2, long arg3) {
@@ -65,19 +80,33 @@ public class Main extends Activity implements PropertyChangeListener{
 					Toast.LENGTH_SHORT).show();			
 		}
 	};
-	public static Context getContext() {
-		return context;
-	}
 	
-	@Override
-	public void propertyChange(PropertyChangeEvent event) {
-		List<String> newDocuments = (List<String>) event.getNewValue();
+	/**
+	 * Listens on changes of the 
+	 */
+	PropertyChangeListener newDocumentsPropertyChangeListener = new PropertyChangeListener() {
 		
-		if(newDocuments != null && !newDocuments.isEmpty()){
-			((TextView)findViewById(R.id.newDocsText)).setText(newDocuments.size());
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			List<String> newDocuments = (List<String>) event.getNewValue();
+			
+			if(newDocuments != null && !newDocuments.isEmpty()){
+				((TextView)findViewById(R.id.newDocsText)).setText(newDocuments.size());
+				((TextView)findViewById(R.id.newDocsText)).setOnClickListener(newDocumentsListener);
+			}
+			
 		}
+	};
+	
+	OnClickListener newDocumentsListener = new OnClickListener() {
 		
-	}
-
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
+	
 	
 }
