@@ -3,7 +3,6 @@ package de.reneruck.connisRezepteApp;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +14,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -47,12 +47,11 @@ public class Main extends Activity {
 		this.newDocumentsBean.addPropertyChangeListener(newDocumentsPropertyChangeListener);
 		new FileScanner(this.newDocumentsBean).doInBackground();
 
-		buildDocumentsList();
+		buildDocumentsList(this.manager.getReadableDatabase());
 	}
 
-	private void buildDocumentsList() {
+	private void buildDocumentsList(SQLiteDatabase db) {
 
-		final SQLiteDatabase db = this.manager.getReadableDatabase();
 		this.rezepteList = new LinkedList<String>();
 		try {
 			Cursor c = db.query(Configurations.table_Rezepte, new String[] { "*" }, null, null, null, null, null);
@@ -135,9 +134,54 @@ public class Main extends Activity {
 				}
 			}
 			newDocumentsBean.clearList();
-			buildDocumentsList();
+			buildDocumentsList(manager.getReadableDatabase());
 			((TextView) findViewById(R.id.newDocsText)).setOnClickListener(null);
 		}
 	};
 
+	/* Creates the menu items */
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	menu.add(0,  1, 0, "Clear Database").setIcon(R.drawable.settings);
+//    	menu.add(0,  2, 0, "Übersicht").setIcon(R.drawable.about);
+        menu.add(0,  3, 0, "Exit").setIcon(R.drawable.exit);
+        return true;
+    }
+
+    /* 
+     * Menü Items
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        
+    	switch(item.getItemId()){
+    	
+        case 1:
+        	try {
+        		SQLiteDatabase db = manager.getWritableDatabase();
+        		db.delete(Configurations.table_Rezepte, null, null);
+        		db.close();
+        		buildDocumentsList(manager.getReadableDatabase());
+			} catch (SQLException e) {
+					e.printStackTrace();
+			}
+        	break;
+        case 2:
+        	break;
+        case 3:
+        	this.finish();
+        	break;
+        default: return false;	
+    	}
+       return true;
+     }
+    
+    @Override
+    protected void onPause() {
+		this.manager.close();
+    	super.onPause();
+    }
+    
+	protected void onDestroy() {
+		this.manager.close();
+		super.onDestroy();
+	};
 }
