@@ -14,13 +14,17 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,10 +50,64 @@ public class Main extends Activity {
 		this.newDocumentsBean = new NewDocumentsBean();
 		this.newDocumentsBean.addPropertyChangeListener(newDocumentsPropertyChangeListener);
 		new FileScanner(this.newDocumentsBean).doInBackground();
-
+		setupSearchBar();
+		
+//		searchView.setOnFocusChangeListener(searchFocusListener);
 		buildDocumentsList(this.manager.getReadableDatabase());
 	}
 
+	/**
+	 * 
+	 */
+	private void setupSearchBar() {
+
+		TextView.OnEditorActionListener returnButtonListener = new TextView.OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_NULL) {
+					Toast.makeText(getApplicationContext(), "Retrun pressed, now we can search", Toast.LENGTH_SHORT).show();
+				}
+				return true;
+			}
+		};
+		
+		//setup the search view
+		final AutoCompleteTextView searchView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView1);
+		ArrayAdapter<String> autoCompleteList = new ArrayAdapter<String>(getApplicationContext(), R.layout.autocomplete_list_item);
+		
+		SQLiteDatabase db = manager.getReadableDatabase();
+		Cursor c = db.query(Configurations.table_Rezepte, new String[] { Configurations.rezept_Name }, null, null, null, null, null);
+		
+		//get all entries from the database
+		for (c.moveToFirst(); c.moveToNext(); c.isAfterLast()) {
+			autoCompleteList.add(c.getString(0));
+		}
+		searchView.setAdapter(autoCompleteList);
+		searchView.setOnEditorActionListener(returnButtonListener);
+		
+//		OnFocusChangeListener searchFocusListener = new OnFocusChangeListener() {
+//
+//			@Override
+//			public void onFocusChange(View v, boolean hasFocus) {
+//				if (hasFocus) {
+//					ArrayAdapter<String> autoCompleteList = new ArrayAdapter<String>(getApplicationContext(), R.layout.autocomplete_list_item);
+//					SQLiteDatabase db = manager.getReadableDatabase();
+//					Cursor c = db.query(Configurations.table_Rezepte, new String[] { Configurations.rezept_Name }, null, null, null, null, null);
+//					for (c.moveToFirst(); c.moveToNext(); c.isAfterLast()) {
+//						autoCompleteList.add(c.getString(0));
+//					}
+//					searchView.setAdapter(autoCompleteList);
+//				}
+//			}
+//		};
+
+	}
+	
+	/**
+	 * Builds the center Documents list
+	 * @param db
+	 */
 	private void buildDocumentsList(SQLiteDatabase db) {
 
 		this.rezepteList = new LinkedList<String>();
@@ -64,7 +122,7 @@ public class Main extends Activity {
 				c.moveToFirst();
 				do {
 					int name = c.getColumnIndex(Configurations.rezept_Name);
-					int doc = c.getColumnIndex(Configurations.rezept_Document);
+					int doc = c.getColumnIndex(Configurations.rezept_DocumentPath);
 
 					rezepteList.add(c.getString(name) + " - " + c.getString(doc));
 				} while (c.moveToNext());
@@ -99,17 +157,18 @@ public class Main extends Activity {
 			Object newValue =  event.getNewValue();
 			if(newValue instanceof Collection){
 				List<String> newDocuments = (List<String>) newValue;
+				
 				if (newDocuments != null && !newDocuments.isEmpty()) {
 					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
 					newDocsIndicator.setText(String.valueOf(newDocuments.size()));
 					newDocsIndicator.setTextColor(Color.RED);
 					newDocsIndicator.setOnClickListener(newDocumentsListener);
-				}else{
-					((TextView) findViewById(R.id.newDocsText)).setText(1);
-					((TextView) findViewById(R.id.newDocsText)).setTextColor(Color.RED);
-					((TextView) findViewById(R.id.newDocsText)).setOnClickListener(newDocumentsListener);
 				}
 				
+			}else{
+				((TextView) findViewById(R.id.newDocsText)).setText("1");
+				((TextView) findViewById(R.id.newDocsText)).setTextColor(Color.RED);
+				((TextView) findViewById(R.id.newDocsText)).setOnClickListener(newDocumentsListener);
 			}
 
 		}
@@ -124,7 +183,7 @@ public class Main extends Activity {
 			ContentValues values = new ContentValues(liste.size());
 			for (String string : liste) {
 				values.put(Configurations.rezept_Name, string);
-				values.put(Configurations.rezept_Document, "/sdcard/Rezepte/" + string);
+				values.put(Configurations.rezept_DocumentPath, "/sdcard/Rezepte/" + string);
 				long result = db.insert(Configurations.table_Rezepte, null, values);
 				if(result > -1){
 					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
