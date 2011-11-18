@@ -64,6 +64,7 @@ public class FileScanner extends AsyncTask<String, Integer, List<String>>{
 		}else{
 			Log.e("FileScanner", "Rezepte Path: "+ Configurations.rezepteDirPath + "is no Directory or was not found");
 		}
+		db.close();
 		return this.diff;
 	}
 	
