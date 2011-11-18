@@ -143,7 +143,7 @@ public class Main extends Activity {
 
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view, int arg2, long arg3) {
-			Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), ((TextView) view.findViewById(R.id.toptext)).getText(), Toast.LENGTH_SHORT).show();
 		}
 	};
 
