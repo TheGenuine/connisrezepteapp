@@ -1,5 +1,6 @@
 package de.reneruck.connisRezepteApp;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Collection;
@@ -12,10 +13,12 @@ public class NewDocumentsBean {
 
 	public void putEntry(String entry){
 		neueDokumente.add(entry);
+		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, null, null, entry));
 	}
 	
 	public void putAllEntries(Collection<String> collection){
 		neueDokumente.addAll(collection);
+		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, null, null, collection));
 	}
 	
 	public void removeEntry(String entry){
@@ -25,7 +28,6 @@ public class NewDocumentsBean {
 	public void clearList(){
 		neueDokumente.clear();
 	}
-	
 	
 	/**
 	 * Method that all JavaBeans class need to implement to be able to inform
