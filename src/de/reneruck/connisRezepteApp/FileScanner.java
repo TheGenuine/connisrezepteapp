@@ -2,8 +2,6 @@ package de.reneruck.connisRezepteApp;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections.ListUtils;
@@ -36,20 +34,20 @@ public class FileScanner extends AsyncTask<String, Integer, List<String>>{
 		if(rezepteDictionary.exists() && rezepteDictionary.isDirectory()){
 			this.documentsOnStorage = rezepteDictionary.list();
 			try {
-				Cursor documentsCursor = db.query(Configurations.table_Rezepte, new String[]{Configurations.rezept_Document}, null, null, null, null, null);
+				Cursor documentsCursor = db.query(Configurations.table_Rezepte, new String[]{Configurations.rezept_Name}, null, null, null, null, null);
 				
 				if(documentsCursor.getCount() > 0){
 					this.documentsInDatabase = new String[documentsCursor.getCount()];
 					int count = 0;
 					documentsCursor.moveToFirst();
 					do {
-						int docIndex = documentsCursor.getColumnIndex(Configurations.rezept_Document);
+						int docIndex = documentsCursor.getColumnIndex(Configurations.rezept_Name);
 						this.documentsInDatabase[count] = documentsCursor.getString(docIndex);
 						count ++;
 					} while (documentsCursor.moveToNext());
 					
 					// hinzufügen = inDB - onDisc
-					this.diff = ListUtils.subtract(Arrays.asList(this.documentsInDatabase), Arrays.asList(this.documentsOnStorage));
+					this.diff = ListUtils.subtract(Arrays.asList(this.documentsOnStorage), Arrays.asList(this.documentsInDatabase));
 					this.newDocumentBean.putAllEntries(diff);
 					
 				}else{
