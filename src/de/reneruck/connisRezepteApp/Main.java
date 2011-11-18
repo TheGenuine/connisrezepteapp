@@ -2,24 +2,29 @@ package de.reneruck.connisRezepteApp;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -43,13 +48,13 @@ public class Main extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.context = getApplicationContext();
+		Main.context = getApplicationContext();
 
 		setContentView(R.layout.main);
 		this.manager = new DBManager(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
-		this.newDocumentsBean = new NewDocumentsBean();
-		this.newDocumentsBean.addPropertyChangeListener(newDocumentsPropertyChangeListener);
-		new FileScanner(this.newDocumentsBean).doInBackground();
+		Main.newDocumentsBean = new NewDocumentsBean();
+		Main.newDocumentsBean.addPropertyChangeListener(newDocumentsPropertyChangeListener);
+		new FileScanner(Main.newDocumentsBean).doInBackground();
 		setupSearchBar();
 		
 //		searchView.setOnFocusChangeListener(searchFocusListener);
@@ -143,7 +148,23 @@ public class Main extends Activity {
 
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view, int arg2, long arg3) {
-			Toast.makeText(getApplicationContext(), ((TextView) view.findViewById(R.id.toptext)).getText(), Toast.LENGTH_SHORT).show();
+			
+			try {
+				Intent intent = new Intent();
+				intent.setAction(android.content.Intent.ACTION_VIEW);
+				File file = new File(Configurations.rezepteDirPath + ((TextView) view.findViewById(R.id.toptext)).getText());
+				String mimeType = file.toURL().openConnection().getContentType();
+				intent.setDataAndType(Uri.fromFile(file), mimeType );
+				startActivity(intent); 
+			} catch (ActivityNotFoundException e){
+				Toast.makeText(getApplicationContext(), "Kein Programm zum Öffnen von " + ((TextView) view.findViewById(R.id.toptext)).getText() + " gefunden!", Toast.LENGTH_LONG).show();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	};
 
