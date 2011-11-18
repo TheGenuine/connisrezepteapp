@@ -132,7 +132,7 @@ public class Main extends Activity {
 			e.fillInStackTrace();
 		}
 		ListView lv = (ListView) findViewById(R.id.listView);
-		lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.rezeptelistentry, this.rezepteList));
+		lv.setAdapter(new RezepteListAdapter(getApplicationContext(), this.rezepteList));
 		lv.setOnItemClickListener(this.rezepteListEntyListener);
 	}
 
