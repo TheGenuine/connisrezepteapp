@@ -8,10 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBManager extends SQLiteOpenHelper {
 
-	private static final String CREATE_SQL = "create table " + Configurations.table_Rezepte + " (" + Configurations.rezept_Id + " integer primary key autoincrement, "
+	private static final String CREATE_REZEPTE_DB = "create table " + Configurations.table_Rezepte + " (" + Configurations.rezept_Id + " integer primary key autoincrement, "
 			+ Configurations.rezept_Name+ " text not null, "
-			+ Configurations.rezept_Document + " text not null, " 
+			+ Configurations.rezept_DocumentPath + " text not null, " 
 			+ Configurations.rezepte_stichwoerter + " text);"; 
+	private static final String CREATE_KEYWODS_DB = "create table " + Configurations.table_Keywords + " (" + Configurations.keywords_Id + " integer primary key autoincrement, "
+			+ Configurations.keywords_keyword + " text not null);"; 
 	
 	public DBManager(Context context, String name, CursorFactory factory, int version) {
 		super(context, Configurations.databaseName, factory,  Configurations.databaseVersion);
@@ -29,7 +31,8 @@ public class DBManager extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		try {
-			db.execSQL(CREATE_SQL);
+			db.execSQL(CREATE_REZEPTE_DB);
+			db.execSQL(CREATE_KEYWODS_DB);
 		} catch (SQLException e) {
 			System.err.println(e);
 		}
@@ -37,7 +40,8 @@ public class DBManager extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
-		db.execSQL("DROP TABLE IF EXISTS" +Configurations.table_Rezepte + "");
+		db.execSQL("DROP TABLE IF EXISTS " +Configurations.table_Rezepte + "");
+		db.execSQL("DROP TABLE IF EXISTS " +Configurations.table_Keywords + "");
 		onCreate(db);
 	}
 
