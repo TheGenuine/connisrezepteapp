@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="suchen" />
-
+
         <TextView
             android:id="@+id/newDocsText"
             android:layout_width="wrap_content"
