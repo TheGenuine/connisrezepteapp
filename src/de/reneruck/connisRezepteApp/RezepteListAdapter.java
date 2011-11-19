@@ -61,8 +61,13 @@ public class RezepteListAdapter extends BaseAdapter implements Filterable {
 		}
 
 		String[] entrySplit = (data.get(position)).split(" - ");
-		holder.toptext.setText(entrySplit[0]);
-		holder.subtext.setText(entrySplit[1]);
+		if(entrySplit.length > 1){
+			holder.toptext.setText(entrySplit[0]);
+			holder.subtext.setText(entrySplit[1]);
+		}else{
+			holder.toptext.setText(data.get(position));
+			holder.subtext.setText("");
+		}
 		// Bind the data efficiently with the holder.
 		return convertView;
 	}
