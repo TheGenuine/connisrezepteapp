@@ -23,10 +23,12 @@ public class NewDocumentsBean {
 	
 	public void removeEntry(String entry){
 		neueDokumente.remove(entry);
+		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "neueDokumente", null, this.neueDokumente));
 	}
 	
 	public void clearList(){
 		neueDokumente.clear();
+		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, null, null, this.neueDokumente));
 	}
 	
 	/**

@@ -10,6 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
@@ -58,7 +61,7 @@ public class Main extends Activity {
 		setupSearchBar();
 		
 //		searchView.setOnFocusChangeListener(searchFocusListener);
-		buildDocumentsList(this.manager.getReadableDatabase());
+		buildDocumentsList();
 	}
 
 	/**
@@ -113,10 +116,11 @@ public class Main extends Activity {
 	 * Builds the center Documents list
 	 * @param db
 	 */
-	private void buildDocumentsList(SQLiteDatabase db) {
+	private void buildDocumentsList() {
 
 		this.rezepteList = new LinkedList<String>();
 		try {
+			SQLiteDatabase db = manager.getReadableDatabase();
 			Cursor c = db.query(Configurations.table_Rezepte, new String[] { "*" }, null, null, null, null, null);
 			// Cursor c = db.rawQuery("select * from "
 			// +Configurations.table_Rezepte+ "", null);
@@ -127,12 +131,13 @@ public class Main extends Activity {
 				c.moveToFirst();
 				do {
 					int name = c.getColumnIndex(Configurations.rezept_Name);
-					int doc = c.getColumnIndex(Configurations.rezept_DocumentPath);
+					int doc = c.getColumnIndex(Configurations.rezept_DocumentName);
+					int path = c.getColumnIndex(Configurations.rezept_PathToDocument);
 
-					rezepteList.add(c.getString(name) + " - " + c.getString(doc));
+					rezepteList.add(c.getString(name) + " - " + c.getString(path)+c.getString(doc));
 				} while (c.moveToNext());
 			}
-
+			db.close();
 		} catch (SQLException e) {
 			e.fillInStackTrace();
 		}
@@ -191,31 +196,26 @@ public class Main extends Activity {
 				((TextView) findViewById(R.id.newDocsText)).setTextColor(Color.RED);
 				((TextView) findViewById(R.id.newDocsText)).setOnClickListener(newDocumentsListener);
 			}
-
+			buildDocumentsList();
 		}
 	};
 
+	/**
+	 * Listener to react on clicks on the new Documents indicator
+	 */
 	OnClickListener newDocumentsListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			SQLiteDatabase db = manager.getWritableDatabase();
 			List<String> liste = newDocumentsBean.getNeueDokumente();
-			ContentValues values = new ContentValues(liste.size());
-			for (String string : liste) {
-				values.put(Configurations.rezept_Name, string);
-				values.put(Configurations.rezept_DocumentPath, "/sdcard/Rezepte/" + string);
-				long result = db.insert(Configurations.table_Rezepte, null, values);
-				if(result > -1){
-					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
-					int countBevore = Integer.parseInt((String) newDocsIndicator.getText());
-					newDocsIndicator.setText(String.valueOf(countBevore-1));
-					newDocsIndicator.setTextColor(Color.WHITE);
-				}
-			}
-			newDocumentsBean.clearList();
-			buildDocumentsList(manager.getReadableDatabase());
-			((TextView) findViewById(R.id.newDocsText)).setOnClickListener(null);
+			
+			 DialogFragment newFragment = new DokumentEditDialog(newDocumentsBean, manager);
+			 showDialog(newFragment);
+			
+//			newDocumentsBean.clearList();
+//			buildDocumentsList(manager.getReadableDatabase());
+//			((TextView) findViewById(R.id.newDocsText)).setOnClickListener(null);
 		}
 	};
 
@@ -239,7 +239,7 @@ public class Main extends Activity {
         		SQLiteDatabase db = manager.getWritableDatabase();
         		db.delete(Configurations.table_Rezepte, null, null);
         		db.close();
-        		buildDocumentsList(manager.getReadableDatabase());
+        		buildDocumentsList();
 			} catch (SQLException e) {
 					e.printStackTrace();
 			}
@@ -253,6 +253,22 @@ public class Main extends Activity {
     	}
        return true;
      }
+    
+    void showDialog(DialogFragment newFragment) {
+
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        newFragment.show(ft, "dialog");
+    }
     
     @Override
     protected void onPause() {
