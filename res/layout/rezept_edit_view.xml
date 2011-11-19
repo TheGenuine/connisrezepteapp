@@ -1,40 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    android:paddingLeft="300dip"
+    android:paddingRight="300dip"
+    android:paddingTop="100dip"
+    android:paddingBottom="100dip">
+
+    <RelativeLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="35dip" 
-        >
+        android:layout_height="35dip" >
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/button_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_arrow_left"
-            />
-
-        <View
-            android:id="@+id/view1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-        
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_arrow_right" 
-            />
+            android:layout_alignParentTop="true"
+            android:background="@drawable/ic_arrow_left" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/button_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/ic_arrow_right" />
+
+        <TextView
+            android:id="@+id/num_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_horizontal"
+            android:text="0/0" />
+
+    </RelativeLayout>
+
     <LinearLayout
-        android:id="@+id/linearLayout1"
+        android:id="@+id/line"
         android:layout_width="match_parent"
-        android:layout_height="1dip" 
+        android:layout_height="2dip" 
         android:background="#696969">
     </LinearLayout>
     
@@ -53,7 +61,7 @@
             android:textSize="10dip" />
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/rezept_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
         </EditText>
@@ -73,7 +81,7 @@
             android:text="Rezept Pfad"
             android:textSize="10dip" />
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/rezept_document_path"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="/sdcard/Rezepte/..." 
@@ -96,7 +104,7 @@
             android:text="Stichwörter"
             android:textSize="10dip" />
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/rezept_keywords"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine" >
@@ -113,7 +121,7 @@
         android:paddingTop="20dip">
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/button_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_cancle"/>
@@ -126,7 +134,7 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/button_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
              android:background="@drawable/ic_ok"/>
