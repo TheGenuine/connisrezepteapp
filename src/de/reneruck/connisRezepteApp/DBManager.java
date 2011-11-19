@@ -10,7 +10,8 @@ public class DBManager extends SQLiteOpenHelper {
 
 	private static final String CREATE_REZEPTE_DB = "create table " + Configurations.table_Rezepte + " (" + Configurations.rezept_Id + " integer primary key autoincrement, "
 			+ Configurations.rezept_Name+ " text not null, "
-			+ Configurations.rezept_DocumentPath + " text not null, " 
+			+ Configurations.rezept_DocumentName + " text not null, " 
+			+ Configurations.rezept_PathToDocument + " text , " 
 			+ Configurations.rezepte_stichwoerter + " text);"; 
 	private static final String CREATE_KEYWODS_DB = "create table " + Configurations.table_Keywords + " (" + Configurations.keywords_Id + " integer primary key autoincrement, "
 			+ Configurations.keywords_keyword + " text not null);"; 

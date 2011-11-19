@@ -39,7 +39,7 @@ public class FileScanner extends AsyncTask<String, Integer, List<String>>{
 			this.documentsOnStorage = Arrays.asList(rezepteDictionary.list());
 			
 			try {
-				Cursor documentsCursor = db.query(Configurations.table_Rezepte, new String[]{Configurations.rezept_Name}, null, null, null, null, null);
+				Cursor documentsCursor = db.query(Configurations.table_Rezepte, new String[]{Configurations.rezept_DocumentName}, null, null, null, null, null);
 				
 				// there is something in the saved in the database
 				if(documentsCursor.getCount() > 0){
