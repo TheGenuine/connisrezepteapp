@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import android.app.DialogFragment;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -46,7 +44,7 @@ public class DokumentEditDialog extends DialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
-		View v = inflater.inflate(R.layout.rezept_edit_view, container, false);
+		View v = inflater.inflate(R.layout.fragment_rezept_edit_view, container, false);
 		((TextView)v.findViewById(R.id.button_cancel)).setOnClickListener(cancel_listener);
 		((TextView)v.findViewById(R.id.button_ok)).setOnClickListener(ok_listener);
 		((TextView)v.findViewById(R.id.button_left)).setOnClickListener(left_button_listener);
@@ -70,23 +68,17 @@ public class DokumentEditDialog extends DialogFragment {
 		} else {
 			((LinearLayout) view.findViewById(R.id.line)).setBackgroundColor(Color.DKGRAY);
 		}
-		((EditText) view.findViewById(R.id.rezept_name)).setText(entries.get(actualEntry).getName());
-		((EditText) view.findViewById(R.id.rezept_name)).setOnEditorActionListener(returnButtonListener);
+		((EditText) view.findViewById(R.id.input_rezept_name)).setText(entries.get(actualEntry).getName());
+		((EditText) view.findViewById(R.id.input_rezept_name)).setOnEditorActionListener(returnButtonListener);
 		((TextView) view.findViewById(R.id.rezept_document_path)).setText(entries.get(actualEntry).getDocumentPath());
 
-		List<String> keywords = entries.get(actualEntry).getKeywords();
-		if(keywords != null){
-			((EditText) view.findViewById(R.id.rezept_keywords)).setText(StringUtils.join(keywords, ","));
-			((EditText) view.findViewById(R.id.rezept_keywords)).setOnEditorActionListener(returnButtonListener);
-		}
 	}
 	
 	/**
 	 * gets all text and so from the gui entries and saves it to the corrosponding object
 	 */
 	private void saveGuiToObject(){
-		entries.get(actualEntry).setName(((EditText) view.findViewById(R.id.rezept_name)).getText().toString());
-		entries.get(actualEntry).setKeywords(((EditText) view.findViewById(R.id.rezept_keywords)).getText().toString());
+		entries.get(actualEntry).setName(((EditText) view.findViewById(R.id.input_rezept_name)).getText().toString());
 		
 	}
 	
