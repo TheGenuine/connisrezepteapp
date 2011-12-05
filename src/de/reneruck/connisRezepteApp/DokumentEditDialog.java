@@ -1,5 +1,6 @@
 package de.reneruck.connisRezepteApp;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,10 +29,10 @@ public class DokumentEditDialog extends DialogFragment {
 	private NewDocumentsBean newDocumentsBean;
 	
 	public DokumentEditDialog(NewDocumentsBean bean, DBManager manager) {
-		List<String> liste = bean.getNeueDokumente();
+		List<File> liste = bean.getNeueDokumente();
 		this.newDocumentsBean = bean;
-		for (String string : liste) {
-			this.entries.add(new Rezept(string));
+		for (File file : liste) {
+			this.entries.add(new Rezept(file.getName()));
 		}
 		this.manager = manager;
 	}

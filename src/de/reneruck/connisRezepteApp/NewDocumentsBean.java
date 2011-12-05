@@ -3,20 +3,21 @@ package de.reneruck.connisRezepteApp;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 public class NewDocumentsBean {
-	private List<String> neueDokumente = new LinkedList<String>();
+	private List<File> neueDokumente = new LinkedList<File>();
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-	public void putEntry(String entry){
+	public void putEntry(File entry){
 		neueDokumente.add(entry);
 		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, null, null, entry));
 	}
 	
-	public void putAllEntries(Collection<String> collection){
+	public void putAllEntries(Collection<File> collection){
 		neueDokumente.addAll(collection);
 		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, null, null, collection));
 	}
@@ -57,13 +58,13 @@ public class NewDocumentsBean {
 
 
 
-	public List<String> getNeueDokumente() {
+	public List<File> getNeueDokumente() {
 		return neueDokumente;
 	}
 
 
 
-	public void setNeueDokumente(List<String> neueDokumente) {
+	public void setNeueDokumente(List<File> neueDokumente) {
 		this.neueDokumente = neueDokumente;
 	} 
 }
