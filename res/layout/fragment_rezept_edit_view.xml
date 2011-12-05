@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+     <RelativeLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="35dip" >
+
+        <TextView
+            android:id="@+id/button_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/ic_arrow_left" />
+        <TextView
+            android:id="@+id/button_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/ic_arrow_right" />
+        <TextView
+            android:id="@+id/num_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_horizontal"
+            android:textSize="23dip"
+            android:text="0/0" />
+        
+    </RelativeLayout>
+        
+		    <View
+		        android:id="@+id/line"
+		        android:layout_width="match_parent"
+		        android:layout_height="2dip" 
+		        android:background="#696969"/>
+		
+<!-- 		        <fragment -->
+<!-- 		            android:id="@+id/fragment1" -->
+<!-- 		            android:layout_width="wrap_content" -->
+<!-- 		            android:layout_height="match_parent" -->
+<!-- 		            android:name="android.app.DialogFragment" /> -->
+		
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="horizontal" >
+
+	    <LinearLayout
+	        android:id="@+id/linearLayout2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="5dip"
+	        android:orientation="vertical" 
+	        android:layout_weight="1">
+
+	        <LinearLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="vertical"
+	            android:layout_marginTop="5dip" >
+
+	            <LinearLayout
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="5dip"
+	                android:orientation="vertical" >
+
+	                <TextView
+	                    android:id="@+id/textView1"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:text="Rezept Pfad" />
+
+	                <TextView
+	                    android:id="@+id/rezept_document_path"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="wrap_content"
+	                    android:paddingLeft="5dip"
+	                    android:text="/sdcard/Rezepte/..." />
+	            </LinearLayout>
+
+	            <TextView
+	                android:id="@+id/textView1"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:paddingTop="8dip"
+	                android:text="Rezept Name" />
+	            <EditText
+	                android:id="@+id/input_rezept_name"
+	                android:layout_width="351dp"
+	                android:layout_height="wrap_content" />
+	        </LinearLayout>
+
+	        <LinearLayout
+	            android:id="@+id/linearLayout2"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="5dip"
+	            android:orientation="vertical"
+	            android:paddingTop="10dip" >
+	            <TextView
+	                android:id="@+id/textView2"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="Zuereitungsart" />
+	            <AutoCompleteTextView
+	                android:id="@+id/input_zubereitung"
+	                android:layout_width="350dp"
+	                android:layout_height="wrap_content"
+	                android:text="Zubereitungsart" />
+	        </LinearLayout>
+
+	        <LinearLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="5dip"
+	            android:orientation="vertical" >
+	            <TextView
+	                android:id="@+id/textView3"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:paddingTop="8dip"
+	                android:text="Kategorie" />
+	            <LinearLayout
+	                android:id="@+id/linearLayout4"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:gravity="center_vertical" >
+	                <MultiAutoCompleteTextView
+	                    android:id="@+id/input_kategorie"
+	                    android:layout_width="350dp"
+	                    android:layout_height="wrap_content"
+	                    android:text="Kategorie" />
+	                <ImageView
+	                    android:id="@+id/button_plus_kategorie"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:paddingLeft="5dip"
+	                    android:src="@drawable/plus" />
+	            </LinearLayout>
+	        </LinearLayout>
+
+	        <LinearLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="5dip"
+	            android:orientation="vertical" >
+	            <TextView
+	                android:id="@+id/textView4"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:paddingTop="8dip"
+	                android:text="Zutaten" />
+	            <EditText
+	                android:id="@+id/input_zutaten"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:text="Zutat, Zutat" />
+	        </LinearLayout>
+
+	        <LinearLayout
+	            android:id="@+id/linearLayout3"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:paddingTop="20dip" >
+	            <TextView
+	                android:id="@+id/button_cancel"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/ic_cancle" />
+	            <View
+	                android:id="@+id/view2"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1" />
+	            <TextView
+	                android:id="@+id/button_ok"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/ic_ok" />
+	        </LinearLayout>
+	        
+	    </LinearLayout>
+
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:orientation="vertical" 
+	        android:layout_weight="1.618">
+	        <fragment
+	            android:id="@+id/fragment2"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:name="de.reneruck.connisRezepteApp.fragments.DocumentPreview" >
+	        </fragment>
+	    </LinearLayout>
+	</LinearLayout>
+
+</LinearLayout>
