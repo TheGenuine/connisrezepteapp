@@ -85,7 +85,7 @@ public class Main extends Activity {
 		ArrayAdapter<String> autoCompleteList = new ArrayAdapter<String>(getApplicationContext(), R.layout.autocomplete_list_item);
 		
 		SQLiteDatabase db = manager.getReadableDatabase();
-		Cursor c = db.query(Configurations.table_Rezepte, new String[] { Configurations.rezept_Name }, null, null, null, null, null);
+		Cursor c = db.query(Configurations.table_Rezepte, new String[] { Configurations.rezepte_Name }, null, null, null, null, null);
 		
 		//get all entries from the database
 		for (c.moveToFirst(); c.moveToNext(); c.isAfterLast()) {
@@ -130,9 +130,9 @@ public class Main extends Activity {
 			} else {
 				c.moveToFirst();
 				do {
-					int name = c.getColumnIndex(Configurations.rezept_Name);
-					int doc = c.getColumnIndex(Configurations.rezept_DocumentName);
-					int path = c.getColumnIndex(Configurations.rezept_PathToDocument);
+					int name = c.getColumnIndex(Configurations.rezepte_Name);
+					int doc = c.getColumnIndex(Configurations.rezepte_DocumentName);
+					int path = c.getColumnIndex(Configurations.rezepte_PathToDocument);
 
 					rezepteList.add(c.getString(name) + " - " + c.getString(path)+c.getString(doc));
 				} while (c.moveToNext());
@@ -157,7 +157,7 @@ public class Main extends Activity {
 			try {
 				Intent intent = new Intent();
 				intent.setAction(android.content.Intent.ACTION_VIEW);
-				File file = new File(Configurations.rezepteDirPath + ((TextView) view.findViewById(R.id.toptext)).getText());
+				File file = new File(Configurations.dirPath + ((TextView) view.findViewById(R.id.toptext)).getText());
 				String mimeType = file.toURL().openConnection().getContentType();
 				intent.setDataAndType(Uri.fromFile(file), mimeType );
 				startActivity(intent); 
@@ -208,7 +208,7 @@ public class Main extends Activity {
 		@Override
 		public void onClick(View v) {
 			SQLiteDatabase db = manager.getWritableDatabase();
-			List<String> liste = newDocumentsBean.getNeueDokumente();
+			List<File> liste = newDocumentsBean.getNeueDokumente();
 			
 			 DialogFragment newFragment = new DokumentEditDialog(newDocumentsBean, manager);
 			 showDialog(newFragment);

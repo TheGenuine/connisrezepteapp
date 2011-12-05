@@ -19,7 +19,7 @@ public class Rezept {
 	public Rezept(String documentName) {
 		this.name = documentName;
 		this.documentName = documentName;
-		this.documentPath = Configurations.rezepteDirPath+documentName;
+		this.documentPath = Configurations.dirPath+documentName;
 	}
 	public int getId() {
 		return id;
@@ -71,10 +71,10 @@ public class Rezept {
 		}
 		
 		ContentValues values2 = new ContentValues(2);
-		values2.put(Configurations.rezept_Name, this.name);
-		values2.put(Configurations.rezept_PathToDocument, this.documentPath);
-		values2.put(Configurations.rezept_DocumentName, this.documentName);
-		values2.put(Configurations.rezepte_stichwoerter, keywords);
+		values2.put(Configurations.rezepte_Name, this.name);
+		values2.put(Configurations.rezepte_PathToDocument, this.documentPath);
+		values2.put(Configurations.rezepte_DocumentName, this.documentName);
+		values2.put(Configurations.rezepte_Stichwoerter, keywords);
 		
 		long id = db.insert(Configurations.table_Rezepte, null, values2);
 		
