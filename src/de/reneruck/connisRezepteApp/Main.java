@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -19,6 +21,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -116,33 +119,14 @@ public class Main extends Activity {
 	 * @param db
 	 */
 	private void buildDocumentsList() {
-
-		this.rezepteList = new LinkedList<String>();
-		try {
-			SQLiteDatabase db = manager.getReadableDatabase();
-			Cursor c = db.query(Configurations.table_Rezepte, new String[] { "*" }, null, null, null, null, null);
-			// Cursor c = db.rawQuery("select * from "
-			// +Configurations.table_Rezepte+ "", null);
-
-			if (c.getCount() == 0) {
-				this.rezepteList.add("Keine Rezepte gefunden");
-			} else {
-				c.moveToFirst();
-				do {
-					int name = c.getColumnIndex(Configurations.rezepte_Name);
-					int doc = c.getColumnIndex(Configurations.rezepte_DocumentName);
-					int path = c.getColumnIndex(Configurations.rezepte_PathToDocument);
-
-					rezepteList.add(c.getString(name) + " - " + c.getString(path)+c.getString(doc));
-				} while (c.moveToNext());
-			}
-			db.close();
-		} catch (SQLException e) {
-			e.fillInStackTrace();
-		}
-		ListView lv = (ListView) findViewById(R.id.listView);
-		lv.setAdapter(new RezepteListAdapter(getApplicationContext(), this.rezepteList));
-		lv.setOnItemClickListener(this.rezepteListEntyListener);
+		String query = SQLiteQueryBuilder.buildQueryString(true, Configurations.table_Rezepte, new String[]{"*"}, null, null, null, Configurations.rezepte_Name, null);
+		
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put("listView", (ListView) findViewById(R.id.listView));
+		parameter.put("dbManager", this.manager);
+		parameter.put("query", query);
+		
+		new QueryDocumentList().doInBackground(parameter);
 	}
 
 	/**
