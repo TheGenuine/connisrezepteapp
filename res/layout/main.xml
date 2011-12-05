@@ -39,24 +39,42 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal" >
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true" 
-        android:layout_weight="2">
-
-        <ListView
-            android:id="@+id/listView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-        </ListView>
-    </ScrollView>
-	<View
-	    android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"/>
-    </LinearLayout></LinearLayout>
+        
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1">
+	        
+		    <ScrollView
+		        android:id="@+id/scrollView1"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:fillViewport="true" 
+		        android:layout_weight="2">
+		
+		        <ListView
+		            android:id="@+id/listView"
+		            android:layout_width="match_parent"
+		            android:layout_height="match_parent">
+		        </ListView>
+		    </ScrollView>
+	        
+	    </LinearLayout>
+	        
+		
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1.618">
+	        
+		    <fragment
+		        android:id="@+id/fragment1"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:name="de.reneruck.connisRezepteApp.fragments.DocumentPreview" >
+		    </fragment>
+	    </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
