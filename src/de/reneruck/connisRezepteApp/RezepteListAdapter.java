@@ -1,6 +1,7 @@
 package de.reneruck.connisRezepteApp;
 
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,14 +15,14 @@ import android.widget.TextView;
 
 public class RezepteListAdapter extends BaseAdapter implements Filterable {
 
-	private Context context;
 	private LayoutInflater mInflater;
-	private List<String> data;
+	private Map<Integer, String> data;
+	private Set<Integer> keys;
 
-	public RezepteListAdapter(Context context, List<String> data) {
+	public RezepteListAdapter(Context context, Map<Integer, String> data) {
 		this.data = data;
-		this.context = context;
 		this.mInflater = LayoutInflater.from(context);
+		this.keys = data.keySet();
 	}
 
 	/**
