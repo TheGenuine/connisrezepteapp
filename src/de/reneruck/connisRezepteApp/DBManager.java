@@ -13,8 +13,15 @@ public class DBManager extends SQLiteOpenHelper {
 			+ Configurations.rezepte_DocumentName + " text not null, " 
 			+ Configurations.rezepte_PathToDocument + " text , " 
 			+ Configurations.rezepte_Stichwoerter + " text);"; 
+	
 	private static final String CREATE_KEYWODS_DB = "create table " + Configurations.table_Keywords + " (" + Configurations.keywords_Id + " integer primary key autoincrement, "
-			+ Configurations.keywords_keyword + " text not null);"; 
+			+ Configurations.keywords_keyword + " text not null);";
+	
+	private static final String CREATE_ZUTATEN_DB = "create table " + Configurations.table_Zutaten+ " (" + Configurations.zutaten_Id + " integer primary key autoincrement, "
+			+ Configurations.zutaten_value + " text not null);";
+	
+	private static final String CREATE_KATEGORIEN_DB = "create table " + Configurations.table_Keywords + " (" + Configurations.kategorien_Id + " integer primary key autoincrement, "
+			+ Configurations.kategorien_value + " text not null);"; 
 	
 	public DBManager(Context context, String name, CursorFactory factory, int version) {
 		super(context, Configurations.databaseName, factory,  Configurations.databaseVersion);
@@ -34,6 +41,8 @@ public class DBManager extends SQLiteOpenHelper {
 		try {
 			db.execSQL(CREATE_REZEPTE_DB);
 			db.execSQL(CREATE_KEYWODS_DB);
+			db.execSQL(CREATE_ZUTATEN_DB);
+			db.execSQL(CREATE_KATEGORIEN_DB);
 		} catch (SQLException e) {
 			System.err.println(e);
 		}
@@ -41,8 +50,13 @@ public class DBManager extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
+		/*
+		 * TODO: Here should happen a data migration!!  
+		 */
 		db.execSQL("DROP TABLE IF EXISTS " +Configurations.table_Rezepte + "");
 		db.execSQL("DROP TABLE IF EXISTS " +Configurations.table_Keywords + "");
+		db.execSQL("DROP TABLE IF EXISTS " +Configurations.table_Zutaten + "");
+		db.execSQL("DROP TABLE IF EXISTS " +Configurations.table_Kategorien + "");
 		onCreate(db);
 	}
 
