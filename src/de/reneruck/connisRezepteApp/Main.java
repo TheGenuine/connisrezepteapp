@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +41,6 @@ import android.widget.Toast;
 public class Main extends Activity {
 
 	private static Context context;
-	private List<String> rezepteList;
 	private static NewDocumentsBean newDocumentsBean;
 	private DBManager manager;
 
@@ -59,7 +57,12 @@ public class Main extends Activity {
 		this.manager = new DBManager(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
 		Main.newDocumentsBean = new NewDocumentsBean();
 		Main.newDocumentsBean.addPropertyChangeListener(newDocumentsPropertyChangeListener);
-		new FileScanner(Main.newDocumentsBean).doInBackground();
+		
+		// initialize and start the background file scanner
+		FileScanner filescanner = new FileScanner(Main.newDocumentsBean);
+		filescanner.setRunnig(true);
+		filescanner.doInBackground("");
+		
 		setupSearchBar();
 		
 //		searchView.setOnFocusChangeListener(searchFocusListener);
@@ -67,7 +70,7 @@ public class Main extends Activity {
 	}
 
 	/**
-	 * 
+	 * Initializes the Top search bar with its autocomplete input
 	 */
 	private void setupSearchBar() {
 
@@ -115,7 +118,7 @@ public class Main extends Activity {
 	}
 	
 	/**
-	 * Builds the center Documents list
+	 * Builds an initial list of all Documents in the center list view
 	 * @param db
 	 */
 	private void buildDocumentsList() {

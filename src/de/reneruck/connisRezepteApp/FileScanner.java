@@ -1,7 +1,6 @@
 package de.reneruck.connisRezepteApp;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +18,7 @@ import android.util.Log;
 public class FileScanner extends AsyncTask<String, Integer, Object>{
 
 	private NewDocumentsBean newDocumentBean;
-	boolean isRunnig;
+	private boolean isRunnig = false;
 	
 	public FileScanner(NewDocumentsBean newDocumentBean) {
 		this.newDocumentBean = newDocumentBean;
@@ -123,6 +122,14 @@ public class FileScanner extends AsyncTask<String, Integer, Object>{
 			}
 		}
 		return fileList;
+	}
+
+	public boolean isRunnig() {
+		return isRunnig;
+	}
+
+	public void setRunnig(boolean isRunnig) {
+		this.isRunnig = isRunnig;
 	}
 		
 
