@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -29,17 +31,19 @@ public class DokumentEditDialog extends DialogFragment {
 	private static View view;
 	private DBManager manager;
 	private NewDocumentsBean newDocumentsBean;
+	private OnDismissListener listener;
 	
 	 public DokumentEditDialog() {
 	}
 	
-	public DokumentEditDialog(NewDocumentsBean bean, DBManager manager) {
+	public DokumentEditDialog(NewDocumentsBean bean, DBManager manager, OnDismissListener listener) {
 		List<File> liste = bean.getNeueDokumente();
 		this.newDocumentsBean = bean;
 		for (File file : liste) {
 			this.entries.add(new Rezept(file.getName()));
 		}
 		this.manager = manager;
+		this.listener = listener;
 	}
 	
 	@Override
@@ -72,11 +76,46 @@ public class DokumentEditDialog extends DialogFragment {
 		
 		//fill in data
 		setStorageIndicator(this.entries.get(actualEntry).isStored());
-		((EditText) view.findViewById(R.id.input_rezept_name)).setText(entries.get(actualEntry).getName());
-		((TextView) view.findViewById(R.id.rezept_document_path)).setText(entries.get(actualEntry).getDocumentPath());
+		((EditText) view.findViewById(R.id.input_rezept_name)).setText(this.entries.get(this.actualEntry).getName());
+		((TextView) view.findViewById(R.id.rezept_document_path)).setText(this.entries.get(this.actualEntry).getDocumentPath());
+		
+		if(this.entries.get(this.actualEntry).getZubereitungsart() == null || this.entries.get(this.actualEntry).getZubereitungsart().length() < 1){
+			tryToPredictZubereitungsart();
+		}else{
+			((TextView) view.findViewById(R.id.input_zubereitung)).setText(this.entries.get(this.actualEntry).getZubereitungsart());
+		}
+		
+		if(this.entries.get(this.actualEntry).getZutaten() == null || this.entries.get(this.actualEntry).getZutaten().size() < 1){
+			tryToPredictZutaten();
+		}else{
+			List<String> zutaten = this.entries.get(this.actualEntry).getZutaten();
+			StringBuilder zutatenBuilder = new StringBuilder();
+			for (String zutat : zutaten) {
+				zutatenBuilder.append(zutat + ",");
+			}
+			((TextView) view.findViewById(R.id.input_zutaten)).setText(zutatenBuilder.toString());
+		}
+		
+		if(this.entries.get(this.actualEntry).getKategorien() == null || this.entries.get(this.actualEntry).getKategorien().size() < 1){
+			tryToPredictKategorie();
+		}else{
+			((TextView) view.findViewById(R.id.input_kategorie)).setText(this.entries.get(this.actualEntry).getKategorien().get(0));
+		}
 
 	}
 	
+	private void tryToPredictKategorie() {
+		((TextView) view.findViewById(R.id.input_kategorie)).setText("");
+	}
+
+	private void tryToPredictZutaten() {
+		((TextView) view.findViewById(R.id.input_zutaten)).setText("");		
+	}
+
+	private void tryToPredictZubereitungsart() {
+		((TextView) view.findViewById(R.id.input_zubereitung)).setText("");
+	}
+
 	/**
 	 * gets all text and so from the gui entries and saves it to the corrosponding object
 	 */
@@ -97,6 +136,7 @@ public class DokumentEditDialog extends DialogFragment {
 			dismiss();
 		}
 	};
+	
 	private OnClickListener ok_listener = new OnClickListener() {
 		
 		@Override
@@ -107,9 +147,10 @@ public class DokumentEditDialog extends DialogFragment {
 	
 	private void saveToDatabase() {
 		saveGuiToObject();
-		if(entries.get(actualEntry).saveToDB(manager.getWritableDatabase())){
+		if(this.entries.get(actualEntry).saveToDB(manager.getWritableDatabase())){
 			Toast.makeText(getActivity(), "The Object saved successfully", Toast.LENGTH_SHORT).show();
 			setStorageIndicator(true);
+			entries.get(actualEntry).setStored(true);
 		}else{
 			Toast.makeText(getActivity(), "ERROR on saving object", Toast.LENGTH_SHORT).show();
 		}
@@ -155,12 +196,13 @@ public class DokumentEditDialog extends DialogFragment {
 			return true;
 		}
 	};
-	public void onDismiss(android.content.DialogInterface dialog) {
-		for (Rezept rezept: entries) {
+	public void onDismiss(DialogInterface dialog) {
+		for (Rezept rezept: this.entries) {
 			if (rezept.isStored()) {
-				newDocumentsBean.removeEntry(rezept.getDocumentName());
+				this.newDocumentsBean.removeEntry(rezept.getDocumentName());
 			}
 		}
+		this.listener.onDismiss(null);
 		super.onDismiss(dialog);
 	};
 }
