@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.collections.ListUtils;
 
@@ -26,12 +25,8 @@ public class FileScanner extends AsyncTask<String, Integer, Object>{
 	
 	@Override
 	protected List<String> doInBackground(String... arg0) {
-
-		DBManager manager = new DBManager(Main.getContext(),
-				Configurations.databaseName, null,
-				Configurations.databaseVersion);
+		DBManager manager = new DBManager(Main.getContext(),Configurations.databaseName, null,Configurations.databaseVersion);
 		final SQLiteDatabase db = manager.getReadableDatabase();
-
 		File rezepteDictionary = new File(Configurations.dirPath);
 
 		// check if the directory is existent
@@ -40,34 +35,23 @@ public class FileScanner extends AsyncTask<String, Integer, Object>{
 
 			List<Integer> documentsInDatabase = getDocsInDatabase(db);
 
-			while (isRunnig) {
 
 				Map<Integer, File> documentsOnStorageMap = getDocsOnStorage(rezepteDictionary);
+				List<File> list = new LinkedList<File>();
+				
 				if (documentsInDatabase.size() > 0) {
-					Set<Integer> documentsOnStorageHashList = documentsOnStorageMap
-							.keySet();
+					List<Integer> documentsOnStorageHashList = new LinkedList<Integer>(documentsOnStorageMap.keySet());
+					
 					// hinzufügen = onDisc - inDB
-					List<Integer> diff = ListUtils.subtract(
-							(List) documentsOnStorageHashList,
-							documentsInDatabase);
-
+					List<Integer> diff = ListUtils.subtract(documentsOnStorageHashList,documentsInDatabase);
 					for (Integer integer : diff) {
-						this.newDocumentBean.putEntry(documentsOnStorageMap
-								.get(integer));
-					}
-					documentsInDatabase.addAll(diff);
-					try {
-						Thread.sleep(1200000);
-					} catch (InterruptedException e) {
-						Log.e(getClass().getName(),
-								"Error while waiting in File Scanner", e);
+						list.add(documentsOnStorageMap.get(integer));
 					}
 				} else {
-					this.newDocumentBean.putAllEntries(documentsOnStorageMap
-							.values());
+					list = new LinkedList<File>(documentsOnStorageMap.values());
 				}
-			}
 
+				this.newDocumentBean.putAllEntries(list);
 		} else {
 			Log.e("FileScanner", "Rezepte Path: " + Configurations.dirPath
 					+ "is no Directory or was not found");
@@ -90,14 +74,13 @@ public class FileScanner extends AsyncTask<String, Integer, Object>{
 		List<Integer> docsInDatabase = new LinkedList<Integer>();
 
 		Cursor documentsCursor = db.query(Configurations.table_Rezepte,
-				new String[] { Configurations.rezepte_DocumentName }, null,
+				new String[] { Configurations.rezepte_DocumentHash }, null,
 				null, null, null, null);
 
 		if (documentsCursor.getCount() > 0) {
 			// copy all entries from the cursor to a compareable list
-			for (documentsCursor.moveToFirst(); documentsCursor.moveToNext(); documentsCursor
-					.isAfterLast()) {
-				docsInDatabase.add(documentsCursor.getString(0).hashCode());
+			for (documentsCursor.moveToFirst(); !documentsCursor.isAfterLast(); documentsCursor.moveToNext()) {
+				docsInDatabase.add(documentsCursor.getInt(0));
 			}
 		}
 		return docsInDatabase;
