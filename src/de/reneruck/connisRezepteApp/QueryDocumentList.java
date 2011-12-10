@@ -1,6 +1,7 @@
 package de.reneruck.connisRezepteApp;
 
-import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import android.database.Cursor;
@@ -9,33 +10,33 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.widget.ListView;
 
-public class QueryDocumentList extends AsyncTask<Map<String, Object>, String, Map<Integer, String>> {
+public class QueryDocumentList extends AsyncTask<Map<String, Object>, String, List<Rezept>> {
 
 	private ListView listView;
 
 	@Override
-	protected Map<Integer, String> doInBackground(Map<String, Object>... params) {
+	protected List<Rezept> doInBackground(Map<String, Object>... params) {
 		Map<String, Object> param = params[0];
 		DBManager manager = (DBManager) param.get("dbManager");
 		String query = (String) param.get("query");
 		this.listView = (ListView) param.get("listView");
 		
-		Map<Integer, String> rezepteList = new HashMap<Integer, String>();
+		List<Rezept> rezepteList = new LinkedList<Rezept>();
 		try {
 			SQLiteDatabase db = manager.getReadableDatabase();
 			Cursor c = db.rawQuery(query, null);
 
 			if (c.getCount() == 0) {
-				rezepteList.put(-1, "Keine Rezepte gefunden");
+				rezepteList.add(new Rezept("Keine Rezepte gefunden"));
 			} else {
 				c.moveToFirst();
 				do {
-					int id = c.getColumnIndex(Configurations.rezepte_Id);
-					int name = c.getColumnIndex(Configurations.rezepte_Name);
-					int doc = c.getColumnIndex(Configurations.rezepte_DocumentName);
-					int path = c.getColumnIndex(Configurations.rezepte_PathToDocument);
+					Rezept rezept = new Rezept(c);
 					
-					rezepteList.put(c.getInt(id),c.getString(name) + " - " + c.getString(path)+c.getString(doc));
+					queryZutaten(db, rezept);
+					queryKateorien(db, rezept);
+					
+					rezepteList.add(rezept);
 				} while (c.moveToNext());
 			}
 			db.close();
@@ -43,11 +44,28 @@ public class QueryDocumentList extends AsyncTask<Map<String, Object>, String, Ma
 			e.fillInStackTrace();
 		}
 		
-		return null;
+		return rezepteList;
 	}
 	
+
+	private void queryZutaten(SQLiteDatabase db, Rezept rezept) {
+		String query = "select " + Configurations.zutaten_value+ " from " + Configurations.table_Zutaten + ", " + Configurations.table_Rezept_to_Zutat
+				+ " where " + Configurations.table_Rezept_to_Zutat+ "." + Configurations.rezept_to_zutat_rezeptId + "=" + rezept.getId()
+				+ " and " + Configurations.table_Zutaten + "." + Configurations.zutaten_Id + " = " + Configurations.table_Rezept_to_Zutat + "." + Configurations.rezept_to_zutat_rezeptId;
+
+		Cursor c = db.rawQuery(query, null);
+		if(c.getCount() > 0){
+			
+		}
+	}
+	
+	private void queryKateorien(SQLiteDatabase db, Rezept rezept) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
-	protected void onPostExecute(Map<Integer, String> result) {
+	protected void onPostExecute(List<Rezept> result) {
 
 		this.listView.setAdapter(new RezepteListAdapter(this.listView.getContext(), result));
 //		this.listView.setOnItemClickListener(rezepteListEntyListener);
