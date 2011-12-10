@@ -13,22 +13,22 @@ public class NewDocumentsBean {
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
 	public void putEntry(File entry){
-		neueDokumente.add(entry);
+		this.neueDokumente.add(entry);
 		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, null, null, entry));
 	}
 	
 	public void putAllEntries(Collection<File> collection){
-		neueDokumente.addAll(collection);
+		this.neueDokumente.addAll(collection);
 		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, null, null, collection));
 	}
 	
 	public void removeEntry(String entry){
-		neueDokumente.remove(entry);
+		this.neueDokumente.remove(entry);
 		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "neueDokumente", null, this.neueDokumente));
 	}
 	
 	public void clearList(){
-		neueDokumente.clear();
+		this.neueDokumente.clear();
 		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, null, null, this.neueDokumente));
 	}
 	
