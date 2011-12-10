@@ -235,7 +235,7 @@ public class Rezept {
 	public void setZubereitungsart(String zubereitungsart) {
 		this.zubereitungsart = zubereitungsart;
 	}
-	public List<String> getZutat() {
+	public List<String> getZutaten() {
 		return zutat;
 	}
 	public void setZutaten(List<String> zutat) {
