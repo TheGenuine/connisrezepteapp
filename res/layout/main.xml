@@ -2,39 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="#eeeeee"
+    android:paddingLeft="5dip"
+    android:paddingTop="5dip">
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
+    <RelativeLayout
+        android:id="@+id/head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
+        android:layout_height="wrap_content"
+        android:background="#C0C0C0" >
+
         <AutoCompleteTextView
             android:id="@+id/autoCompleteTextView1"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:autoText="true"
-            android:text="" >
-
-        </AutoCompleteTextView>
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:width="700dip"
+            android:autoText="true" />
         <Button
             android:id="@+id/button1"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="suchen" />
-
-        <TextView
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/autoCompleteTextView1"
+            android:text="suchen" />        <TextView
             android:id="@+id/newDocsText"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="25dip"
-            android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:text="0"
-            android:textSize="25dip" />
-   
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/button1"
+            android:layout_toRightOf="@+id/button1"
+            android:background="@drawable/newdocumentindicator_gray_64"
+            android:gravity="bottom|right"
+            android:textColor="#696969"
+            android:textStyle="bold"
+            android:text=""
+            android:textSize="20dip" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -62,19 +68,12 @@
 		    </ScrollView>
 	        
 	    </LinearLayout>
-	        
-		
+
 	    <LinearLayout
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
-	        android:layout_weight="1.618">
-	        
-		    <fragment
-		        android:id="@+id/fragment1"
-		        android:layout_width="match_parent"
-		        android:layout_height="match_parent"
-		        android:name="de.reneruck.connisRezepteApp.fragments.DocumentPreview" >
-		    </fragment>
+	        android:layout_weight="1.618" >
 	    </LinearLayout>
+
     </LinearLayout>
-</LinearLayout>
+</LinearLayout>
