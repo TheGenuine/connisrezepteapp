@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/progressBar1"
-        android:text="@string/inprogress_test"
+        android:text="@string/inprogress"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
