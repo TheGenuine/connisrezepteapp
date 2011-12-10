@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -44,7 +45,7 @@ public class Main extends Activity {
 
 	private static final String TAG = "RezepteApp-Main";
 	private static Context context;
-	private static NewDocumentsBean newDocumentsBean;
+	private NewDocumentsBean newDocumentsBean;
 	private DBManager manager;
 
 	public static Context getContext() {
@@ -58,11 +59,11 @@ public class Main extends Activity {
 
 		setContentView(R.layout.main);
 		this.manager = new DBManager(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
-		Main.newDocumentsBean = new NewDocumentsBean();
-		Main.newDocumentsBean.addPropertyChangeListener(newDocumentsPropertyChangeListener);
+		newDocumentsBean = new NewDocumentsBean();
+		newDocumentsBean.addPropertyChangeListener(newDocumentsPropertyChangeListener);
 		
 		// initialize and start the background file scanner
-		FileScanner filescanner = new FileScanner(Main.newDocumentsBean);
+		FileScanner filescanner = new FileScanner(newDocumentsBean);
 		filescanner.setRunnig(true);
 		filescanner.execute("");
 		
@@ -203,12 +204,7 @@ public class Main extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			SQLiteDatabase db = manager.getWritableDatabase();
-			List<File> liste = newDocumentsBean.getNeueDokumente();
-			
-			 DialogFragment newDocumentsDialogFragment = new DokumentEditDialog(newDocumentsBean, manager);
-			 showDialog(newDocumentsDialogFragment);
-			 buildAllDocumentsList();
+			 showDialog();
 		}
 	};
 
@@ -244,8 +240,8 @@ public class Main extends Activity {
        return true;
      }
     
-    void showDialog(DialogFragment newFragment) {
-    	DokumentEditDialog editFragment = new DokumentEditDialog(this.newDocumentsBean, this.manager);
+    void showDialog() {
+    	DokumentEditDialog editFragment = new DokumentEditDialog(this.newDocumentsBean, this.manager, this.editDialogDismissListener);
     	editFragment.show(getFragmentManager(), "editDocumentDialog");
     }
     
