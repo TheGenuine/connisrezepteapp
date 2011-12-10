@@ -12,10 +12,10 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -24,6 +24,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,9 +38,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.reneruck.connisRezepteApp.fragments.DokumentEditDialog;
 
 public class Main extends Activity {
 
+	private static final String TAG = "RezepteApp-Main";
 	private static Context context;
 	private static NewDocumentsBean newDocumentsBean;
 	private DBManager manager;
@@ -61,12 +64,12 @@ public class Main extends Activity {
 		// initialize and start the background file scanner
 		FileScanner filescanner = new FileScanner(Main.newDocumentsBean);
 		filescanner.setRunnig(true);
-		filescanner.doInBackground("");
+		filescanner.execute("");
 		
 		setupSearchBar();
 		
 //		searchView.setOnFocusChangeListener(searchFocusListener);
-		buildDocumentsList();
+		buildAllDocumentsList();
 	}
 
 	/**
@@ -88,16 +91,23 @@ public class Main extends Activity {
 		//setup the search view
 		final AutoCompleteTextView searchView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView1);
 		ArrayAdapter<String> autoCompleteList = new ArrayAdapter<String>(getApplicationContext(), R.layout.autocomplete_list_item);
-		
 		SQLiteDatabase db = manager.getReadableDatabase();
-		Cursor c = db.query(Configurations.table_Rezepte, new String[] { Configurations.rezepte_Name }, null, null, null, null, null);
 		
-		//get all entries from the database
-		for (c.moveToFirst(); c.moveToNext(); c.isAfterLast()) {
-			autoCompleteList.add(c.getString(0));
+		try {
+			Cursor c = db.query(Configurations.table_Rezepte, new String[] { Configurations.rezepte_Name }, null, null, null, null, null);
+			
+			//get all entries from the database
+			for (c.moveToFirst(); c.moveToNext(); c.isAfterLast()) {
+				autoCompleteList.add(c.getString(0));
+			}
+			searchView.setAdapter(autoCompleteList);
+			searchView.setOnEditorActionListener(returnButtonListener);
+		} catch (SQLException e) {
+			Log.e(TAG, e.getLocalizedMessage());
+		} finally {
+			db.close();
 		}
-		searchView.setAdapter(autoCompleteList);
-		searchView.setOnEditorActionListener(returnButtonListener);
+		
 		
 //		OnFocusChangeListener searchFocusListener = new OnFocusChangeListener() {
 //
@@ -121,7 +131,7 @@ public class Main extends Activity {
 	 * Builds an initial list of all Documents in the center list view
 	 * @param db
 	 */
-	private void buildDocumentsList() {
+	private void buildAllDocumentsList() {
 		String query = SQLiteQueryBuilder.buildQueryString(true, Configurations.table_Rezepte, new String[]{"*"}, null, null, null, Configurations.rezepte_Name, null);
 		
 		Map<String, Object> parameter = new HashMap<String, Object>();
@@ -129,7 +139,7 @@ public class Main extends Activity {
 		parameter.put("dbManager", this.manager);
 		parameter.put("query", query);
 		
-		new QueryDocumentList().doInBackground(parameter);
+		new QueryDocumentList().execute(parameter);
 	}
 
 	/**
@@ -165,24 +175,24 @@ public class Main extends Activity {
 	PropertyChangeListener newDocumentsPropertyChangeListener = new PropertyChangeListener() {
 
 		@Override
-		public void propertyChange(PropertyChangeEvent event) {
-			Object newValue =  event.getNewValue();
-			if(newValue instanceof Collection){
-				List<String> newDocuments = (List<String>) newValue;
-				
-				if (newDocuments != null && !newDocuments.isEmpty()) {
+		public void propertyChange(final PropertyChangeEvent event) {
+			runOnUiThread(new Runnable() {
+				public void run() {
+					Object newValue =  event.getNewValue();
+					int number = 1;
+					if(newValue instanceof Collection){
+						final List<File> newDocuments = (List<File>) newValue;
+						if (newDocuments != null && !newDocuments.isEmpty()) {
+							number = newDocuments.size();
+						}
+					}
 					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
-					newDocsIndicator.setText(String.valueOf(newDocuments.size()));
+					newDocsIndicator.setText(String.valueOf(number));
 					newDocsIndicator.setTextColor(Color.RED);
+					newDocsIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.newdocumentindicator_red_64));
 					newDocsIndicator.setOnClickListener(newDocumentsListener);
 				}
-				
-			}else{
-				((TextView) findViewById(R.id.newDocsText)).setText("1");
-				((TextView) findViewById(R.id.newDocsText)).setTextColor(Color.RED);
-				((TextView) findViewById(R.id.newDocsText)).setOnClickListener(newDocumentsListener);
-			}
-			buildDocumentsList();
+			});
 		}
 	};
 
@@ -196,20 +206,16 @@ public class Main extends Activity {
 			SQLiteDatabase db = manager.getWritableDatabase();
 			List<File> liste = newDocumentsBean.getNeueDokumente();
 			
-			 DialogFragment newFragment = new DokumentEditDialog(newDocumentsBean, manager);
-			 showDialog(newFragment);
-			
-//			newDocumentsBean.clearList();
-//			buildDocumentsList(manager.getReadableDatabase());
-//			((TextView) findViewById(R.id.newDocsText)).setOnClickListener(null);
+			 DialogFragment newDocumentsDialogFragment = new DokumentEditDialog(newDocumentsBean, manager);
+			 showDialog(newDocumentsDialogFragment);
+			 buildAllDocumentsList();
 		}
 	};
 
 	/* Creates the menu items */
     public boolean onCreateOptionsMenu(Menu menu) {
     	menu.add(0,  1, 0, "Clear Database").setIcon(R.drawable.settings);
-//    	menu.add(0,  2, 0, "Übersicht").setIcon(R.drawable.about);
-        menu.add(0,  3, 0, "Exit").setIcon(R.drawable.exit);
+        menu.add(0,  2, 0, "Exit").setIcon(R.drawable.exit);
         return true;
     }
 
@@ -225,14 +231,12 @@ public class Main extends Activity {
         		SQLiteDatabase db = manager.getWritableDatabase();
         		db.delete(Configurations.table_Rezepte, null, null);
         		db.close();
-        		buildDocumentsList();
+        		buildAllDocumentsList();
 			} catch (SQLException e) {
 					e.printStackTrace();
 			}
         	break;
         case 2:
-        	break;
-        case 3:
         	this.finish();
         	break;
         default: return false;	
@@ -241,20 +245,17 @@ public class Main extends Activity {
      }
     
     void showDialog(DialogFragment newFragment) {
-
-        // DialogFragment.show() will take care of adding the fragment
-        // in a transaction.  We also want to remove any currently showing
-        // dialog, so make our own transaction and take care of that here.
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        newFragment.show(ft, "dialog");
+    	DokumentEditDialog editFragment = new DokumentEditDialog(this.newDocumentsBean, this.manager);
+    	editFragment.show(getFragmentManager(), "editDocumentDialog");
     }
+    
+    OnDismissListener editDialogDismissListener = new OnDismissListener() {
+		
+		@Override
+		public void onDismiss(DialogInterface dialog) {
+			buildAllDocumentsList();
+		}
+	};
     
     @Override
     protected void onPause() {
