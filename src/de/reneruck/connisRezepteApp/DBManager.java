@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBManager extends SQLiteOpenHelper {
 
-	private static final String CREATE_REZEPTE_DB = "create table " + Configurations.table_Rezepte + " (" + Configurations.rezepte_Id + " integer primary key autoincrement, "
+	private static final String CREATE_REZEPTE_DB = "create table " + Configurations.table_Rezepte + " (" + Configurations.rezepte_Id + " integer primary key, "
 			+ Configurations.rezepte_Name+ " text not null, "
 			+ Configurations.rezepte_DocumentName + " text not null, "
 			+ Configurations.rezepte_DocumentHash + " integer, "
@@ -21,10 +21,12 @@ public class DBManager extends SQLiteOpenHelper {
 	private static final String CREATE_KATEGORIEN_DB = "create table " + Configurations.table_Kategorien+ " (" + Configurations.kategorien_Id + " integer primary key autoincrement, "
 			+ Configurations.kategorien_value + " text not null);"; 
 
-	private static final String CREATE_REZEPT_TO_ZUTATE_DB = "create table " + Configurations.table_Rezept_to_Zutat + " (" + Configurations.rezept_to_zutat_rezeptId+ " integer primary key autoincrement, "
+	private static final String CREATE_REZEPT_TO_ZUTATE_DB = "create table " + Configurations.table_Rezept_to_Zutat + " (" + Configurations.ID + " integer primary key autoincrement, " 
+			+ Configurations.rezept_to_zutat_rezeptId+ " long not null, "
 			+ Configurations.rezept_to_zutat_zutatId + " text not null);"; 
 	
-	private static final String CREATE_REZEPT_TO_KATEGORIE_DB = "create table " + Configurations.table_Rezept_to_Kategorie + " (" + Configurations.rezept_to_kategorie_rezeptId + " integer primary key autoincrement, "
+	private static final String CREATE_REZEPT_TO_KATEGORIE_DB = "create table " + Configurations.table_Rezept_to_Kategorie + " ("  + Configurations.ID + " integer primary key autoincrement, "
+			+ Configurations.rezept_to_kategorie_rezeptId + " long not null, "
 			+ Configurations.rezept_to_kategorie_kategorieId + " text not null);"; 
 	
 	public DBManager(Context context, String name, CursorFactory factory, int version) {
@@ -65,5 +67,4 @@ public class DBManager extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " +Configurations.table_Rezept_to_Zutat + "");
 		onCreate(db);
 	}
-
 }
