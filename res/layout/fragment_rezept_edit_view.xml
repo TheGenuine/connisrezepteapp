@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:windowSoftInputMode="stateHidden">
+    android:orientation="vertical">
 
      <RelativeLayout
         android:id="@+id/navigation_bg"
@@ -92,10 +91,13 @@
 	                android:layout_height="wrap_content"
 	                android:paddingTop="8dip"
 	                android:text="Rezept Name" />
+
 	            <EditText
 	                android:id="@+id/input_rezept_name"
-	                android:layout_width="351dp"
-	                android:layout_height="wrap_content" />
+	                android:layout_width="350dp"
+	                android:layout_height="wrap_content"
+	                android:imeOptions="actionNext"/>
+
 	        </LinearLayout>
 
 	        <LinearLayout
@@ -110,11 +112,13 @@
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:text="Zuereitungsart" />
+
 	            <AutoCompleteTextView
 	                android:id="@+id/input_zubereitung"
 	                android:layout_width="350dp"
 	                android:layout_height="wrap_content"
 	                android:text="Zubereitungsart" />
+
 	        </LinearLayout>
 
 	        <LinearLayout
@@ -133,11 +137,13 @@
 	                android:layout_width="match_parent"
 	                android:layout_height="wrap_content"
 	                android:gravity="center_vertical" >
+
 	                <MultiAutoCompleteTextView
 	                    android:id="@+id/input_kategorie"
 	                    android:layout_width="350dp"
 	                    android:layout_height="wrap_content"
 	                    android:text="Kategorie" />
+
 	                <ImageView
 	                    android:id="@+id/button_plus_kategorie"
 	                    android:layout_width="wrap_content"
