@@ -5,14 +5,11 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -177,26 +174,39 @@ public class Main extends Activity {
 
 		@Override
 		public void propertyChange(final PropertyChangeEvent event) {
-			runOnUiThread(new Runnable() {
-				public void run() {
-					Object newValue =  event.getNewValue();
-					int number = 1;
-					if(newValue instanceof Collection){
-						final List<File> newDocuments = (List<File>) newValue;
-						if (newDocuments != null && !newDocuments.isEmpty()) {
-							number = newDocuments.size();
-						}
-					}
-					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
-					newDocsIndicator.setText(String.valueOf(number));
-					newDocsIndicator.setTextColor(Color.RED);
-					newDocsIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.newdocumentindicator_red_64));
-					newDocsIndicator.setOnClickListener(newDocumentsListener);
-				}
-			});
+			if("neueDokumente".equals(event.getPropertyName())){
+				Object newValue =  event.getNewValue();
+				updateNewDocumentsIndicator(((List<File>) newValue).size());
+			}
 		}
 	};
 
+	/**
+	 * Updates the New Documents Indicator in the top right corner with the given count of new Documents<br>
+	 * If there are no new Documents, just call it with 0
+	 * @param number - the number of new Documents
+	 */
+	private void updateNewDocumentsIndicator(int number) {
+		final int count = number;
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if(count > 0) {
+					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
+					newDocsIndicator.setText(String.valueOf(count));
+					newDocsIndicator.setTextColor(Color.RED);
+					newDocsIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.newdocumentindicator_red_64));
+					newDocsIndicator.setOnClickListener(newDocumentsListener);
+				} else {
+					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
+					newDocsIndicator.setText("");
+					newDocsIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.newdocumentindicator_gray_64));
+					newDocsIndicator.setOnClickListener(null);
+				}
+			}
+		});
+	}
+	
 	/**
 	 * Listener to react on clicks on the new Documents indicator
 	 */
@@ -249,6 +259,7 @@ public class Main extends Activity {
 		
 		@Override
 		public void onDismiss(DialogInterface dialog) {
+			updateNewDocumentsIndicator(newDocumentsBean.getNewDocumentsCount());
 			buildAllDocumentsList();
 		}
 	};
