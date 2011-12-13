@@ -1,5 +1,6 @@
 package de.reneruck.connisRezepteApp;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,9 +18,16 @@ public class Rezept {
 	private List<String> kategorien;
 	private String zubereitungsart;
 	private List<String> zutat;
+	private File originalFile;
 	private boolean stored;
 	
-	public Rezept(String documentName) {
+	public Rezept(String filename) {
+		this(new File(filename));
+	}
+	
+	public Rezept(File document) {
+		String documentName = document.getName();
+		this.originalFile = document;
 		this.id = documentName.hashCode();
 		String[] doucmentSplit = documentName.split("\\.");
 		this.name =doucmentSplit .length > 0 ?doucmentSplit[0] : documentName;
@@ -249,5 +257,8 @@ public class Rezept {
 	public void addZutat(String zutat){
 		this.zutat.add(zutat);
 	}
-	
+
+	public File getOriginalFile() {
+		return originalFile;
+	}
 }

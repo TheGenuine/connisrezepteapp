@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +42,7 @@ public class DokumentEditDialog extends DialogFragment {
 		List<File> liste = bean.getNeueDokumente();
 		this.newDocumentsBean = bean;
 		for (File file : liste) {
-			this.entries.add(new Rezept(file.getName()));
+			this.entries.add(new Rezept(file));
 		}
 		this.manager = manager;
 		this.listener = listener;
@@ -54,14 +56,14 @@ public class DokumentEditDialog extends DialogFragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN); 
-
 		View v = inflater.inflate(R.layout.fragment_rezept_edit_view, container, false);
+		
+		
 		((TextView)v.findViewById(R.id.button_cancel)).setOnClickListener(cancel_listener);
 		((TextView)v.findViewById(R.id.button_ok)).setOnClickListener(ok_listener);
 		((TextView)v.findViewById(R.id.button_left)).setOnClickListener(left_button_listener);
 		((TextView)v.findViewById(R.id.button_right)).setOnClickListener(right_button_listener);
-		this.view = v;
+		view = v;
 		
 		fillInActualEntryData();
 		return v;
@@ -199,10 +201,10 @@ public class DokumentEditDialog extends DialogFragment {
 	public void onDismiss(DialogInterface dialog) {
 		for (Rezept rezept: this.entries) {
 			if (rezept.isStored()) {
-				this.newDocumentsBean.removeEntry(rezept.getDocumentName());
+				this.newDocumentsBean.removeEntry(rezept.getOriginalFile());
 			}
 		}
-		this.listener.onDismiss(null);
+		this.listener.onDismiss(dialog);
 		super.onDismiss(dialog);
 	};
 }
