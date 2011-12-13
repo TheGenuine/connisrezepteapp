@@ -2,14 +2,121 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal|center_vertical"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25dip"
-        android:text="Document Preview coming soon..." />
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:orientation="vertical"
+        android:gravity="center_horizontal|center_vertical"
+        android:paddingBottom="30dip"
+        android:layout_marginTop="20dip">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dip"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:text="Rezept Name" />
+        
+    </LinearLayout>
+    
+    <TableLayout
+        android:id="@+id/tableLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginLeft="25dip">
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="25dip"
+                android:text="Zubereitungsart:"
+                android:textSize="18dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[Zubereitungsart]"
+                android:textSize="15dip" />
+        </TableRow>
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:layout_marginTop="10dip">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kategorie:"
+                android:textSize="18dip"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[Kategorie1]"
+                    android:textSize="15dip" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[Kategorie2]"
+                    android:textSize="15dip" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[Kategorie3]"
+                    android:textSize="15dip" />
+            </LinearLayout>
+        </TableRow>
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" 
+            android:layout_marginTop="10dip">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:maxWidth="100dip"
+                android:layout_height="wrap_content"
+                android:text="Zutaten:"
+                android:textSize="18dip"
+                android:textStyle="bold" />
+            
+                <TextView
+                    android:id="@+id/editText1"
+                    android:maxWidth="280dip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dip"
+                	android:text="Zutat, Zutat, Zutat, Zutat, Zutat, Zutat, Zutat, Zutat, Zutat, Zutat, "/>
+
+        </TableRow>
+
+    </TableLayout>
 
 </LinearLayout>
