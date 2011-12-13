@@ -12,24 +12,19 @@ public class NewDocumentsBean {
 	private List<File> neueDokumente = new LinkedList<File>();
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-	public void putEntry(File entry){
-		this.neueDokumente.add(entry);
-		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, null, null, entry));
-	}
-	
 	public void putAllEntries(Collection<File> collection){
+		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "neueDokumente", this.neueDokumente, collection));
 		this.neueDokumente.addAll(collection);
-		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, null, null, collection));
 	}
 	
-	public void removeEntry(String entry){
+	public void removeEntry(File entry){
+		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "neueDokumente", this.neueDokumente, this.neueDokumente));
 		this.neueDokumente.remove(entry);
-		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "neueDokumente", null, this.neueDokumente));
 	}
 	
 	public void clearList(){
+		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "neueDokumente", this.neueDokumente, this.neueDokumente));
 		this.neueDokumente.clear();
-		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, null, null, this.neueDokumente));
 	}
 	
 	/**
@@ -67,4 +62,8 @@ public class NewDocumentsBean {
 	public void setNeueDokumente(List<File> neueDokumente) {
 		this.neueDokumente = neueDokumente;
 	} 
+	
+	public int getNewDocumentsCount(){
+		return this.neueDokumente.size();
+	}
 }
