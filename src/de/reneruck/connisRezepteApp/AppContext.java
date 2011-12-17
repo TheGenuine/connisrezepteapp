@@ -8,4 +8,9 @@ public class AppContext extends Application {
 	public void onCreate() {
 		super.onCreate();
 	}
+
+	public Rezept getDocument(Long documentId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,6 +38,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.reneruck.connisRezepteApp.fragments.DocumentInfo;
 import de.reneruck.connisRezepteApp.fragments.DokumentEditDialog;
 
 public class Main extends Activity {
@@ -135,6 +138,7 @@ public class Main extends Activity {
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put("listView", (ListView) findViewById(R.id.listView));
 		parameter.put("dbManager", this.manager);
+		parameter.put("listener", this.rezepteListEntyListener);
 		parameter.put("query", query);
 		
 		new QueryDocumentList().execute(parameter);
@@ -148,22 +152,23 @@ public class Main extends Activity {
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view, int arg2, long arg3) {
 			
-			try {
-				Intent intent = new Intent();
-				intent.setAction(android.content.Intent.ACTION_VIEW);
-				File file = new File(Configurations.dirPath + ((TextView) view.findViewById(R.id.toptext)).getText());
-				String mimeType = file.toURL().openConnection().getContentType();
-				intent.setDataAndType(Uri.fromFile(file), mimeType );
-				startActivity(intent); 
-			} catch (ActivityNotFoundException e){
-				Toast.makeText(getApplicationContext(), "Kein Programm zum Öffnen von " + ((TextView) view.findViewById(R.id.toptext)).getText() + " gefunden!", Toast.LENGTH_LONG).show();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			 // Check what fragment is currently shown, replace if needed.
+            DocumentInfo documentInfo = (DocumentInfo) getFragmentManager().findFragmentById(R.id.document_preview);
+            if (documentInfo == null) {
+            	Long documentId = (Long) view.getTag();
+            	
+            	Rezept rezept = ((AppContext)getApplication()).getDocument(documentId);
+            	
+            	// Make new fragment to show this selection.
+                documentInfo = DocumentInfo.newInstance(rezept);
+
+                // Execute a transaction, replacing any existing fragment
+                // with this one inside the frame.
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.document_preview, documentInfo);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+            }
 		}
 	};
 

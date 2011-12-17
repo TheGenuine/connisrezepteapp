@@ -8,17 +8,20 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class QueryDocumentList extends AsyncTask<Map<String, Object>, String, List<Rezept>> {
 
 	private ListView listView;
+	private OnItemClickListener listener;
 
 	@Override
 	protected List<Rezept> doInBackground(Map<String, Object>... params) {
 		Map<String, Object> param = params[0];
 		DBManager manager = (DBManager) param.get("dbManager");
 		String query = (String) param.get("query");
+		this.listener = (OnItemClickListener) param.get("listener");
 		this.listView = (ListView) param.get("listView");
 		
 		List<Rezept> rezepteList = new LinkedList<Rezept>();
@@ -68,6 +71,7 @@ public class QueryDocumentList extends AsyncTask<Map<String, Object>, String, Li
 	protected void onPostExecute(List<Rezept> result) {
 
 		this.listView.setAdapter(new RezepteListAdapter(this.listView.getContext(), result));
+		this.listView.setOnItemClickListener(this.listener);
 //		this.listView.setOnItemClickListener(rezepteListEntyListener);
 	}
 
