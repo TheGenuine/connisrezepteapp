@@ -1,8 +1,6 @@
 package de.reneruck.connisRezepteApp;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,16 +10,19 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class RezepteListAdapter extends BaseAdapter implements Filterable {
 
 	private LayoutInflater mInflater;
 	private List<Rezept> data;
+	private ViewHolder holder;
 
 	public RezepteListAdapter(Context context, List<Rezept> data) {
 		this.data = data;
 		this.mInflater = LayoutInflater.from(context);
+		this.holder = new ViewHolder();
 	}
 
 	/**
@@ -47,22 +48,18 @@ public class RezepteListAdapter extends BaseAdapter implements Filterable {
 			// Creates a ViewHolder and store references to the two children
 			// views
 			// we want to bind data to.
-			holder = new ViewHolder();
-			holder.icon = (ImageView) convertView.findViewById(R.id.icon);
-			holder.toptext = (TextView) convertView.findViewById(R.id.toptext);
-			holder.subtext = (TextView) convertView.findViewById(R.id.subtext);
+			this.holder.icon = (ImageView) convertView.findViewById(R.id.icon);
+			this.holder.toptext = (TextView) convertView.findViewById(R.id.toptext);
+			this.holder.subtext = (TextView) convertView.findViewById(R.id.subtext);
 
-			convertView.setTag(holder);
-		} else {
-
-			// Get the ViewHolder back to get fast access to the TextView
-			// and the ImageView.
-			holder = (ViewHolder) convertView.getTag();
 		}
 
-		holder.toptext.setText(this.data.get(position).getName());
-		holder.subtext.setText(this.data.get(position).getDocumentPath());
+		this.holder.toptext.setText(this.data.get(position).getName());
+		this.holder.subtext.setText(this.data.get(position).getDocumentPath());
 
+//		((LinearLayout)convertView).addView(this.holder.toptext);
+//		((LinearLayout)convertView).addView(this.holder.subtext);
+		((LinearLayout)convertView).setTag(this.data.get(position).hashCode());
 		return convertView;
 	}
 

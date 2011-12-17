@@ -9,7 +9,7 @@ public class AppContext extends Application {
 		super.onCreate();
 	}
 
-	public Rezept getDocument(Long documentId) {
+	public Rezept getDocument(int documentId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

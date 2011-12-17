@@ -3,41 +3,28 @@ package de.reneruck.connisRezepteApp;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.Intent;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import de.reneruck.connisRezepteApp.fragments.DocumentInfo;
 import de.reneruck.connisRezepteApp.fragments.DokumentEditDialog;
 
@@ -67,65 +54,7 @@ public class Main extends Activity {
 		filescanner.setRunnig(true);
 		filescanner.execute("");
 		
-		setupSearchBar();
-		
-//		searchView.setOnFocusChangeListener(searchFocusListener);
 		buildAllDocumentsList();
-	}
-
-	/**
-	 * Initializes the Top search bar with its autocomplete input
-	 */
-	private void setupSearchBar() {
-
-		TextView.OnEditorActionListener returnButtonListener = new TextView.OnEditorActionListener() {
-
-			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				if (actionId == EditorInfo.IME_NULL) {
-					Toast.makeText(getApplicationContext(), "Retrun pressed, now we can search", Toast.LENGTH_SHORT).show();
-				}
-				return true;
-			}
-		};
-		
-		//setup the search view
-		final AutoCompleteTextView searchView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView1);
-		ArrayAdapter<String> autoCompleteList = new ArrayAdapter<String>(getApplicationContext(), R.layout.autocomplete_list_item);
-		SQLiteDatabase db = manager.getReadableDatabase();
-		
-		try {
-			Cursor c = db.query(Configurations.table_Rezepte, new String[] { Configurations.rezepte_Name }, null, null, null, null, null);
-			
-			//get all entries from the database
-			for (c.moveToFirst(); c.moveToNext(); c.isAfterLast()) {
-				autoCompleteList.add(c.getString(0));
-			}
-			searchView.setAdapter(autoCompleteList);
-			searchView.setOnEditorActionListener(returnButtonListener);
-		} catch (SQLException e) {
-			Log.e(TAG, e.getLocalizedMessage());
-		} finally {
-			db.close();
-		}
-		
-		
-//		OnFocusChangeListener searchFocusListener = new OnFocusChangeListener() {
-//
-//			@Override
-//			public void onFocusChange(View v, boolean hasFocus) {
-//				if (hasFocus) {
-//					ArrayAdapter<String> autoCompleteList = new ArrayAdapter<String>(getApplicationContext(), R.layout.autocomplete_list_item);
-//					SQLiteDatabase db = manager.getReadableDatabase();
-//					Cursor c = db.query(Configurations.table_Rezepte, new String[] { Configurations.rezept_Name }, null, null, null, null, null);
-//					for (c.moveToFirst(); c.moveToNext(); c.isAfterLast()) {
-//						autoCompleteList.add(c.getString(0));
-//					}
-//					searchView.setAdapter(autoCompleteList);
-//				}
-//			}
-//		};
-
 	}
 	
 	/**
@@ -154,10 +83,10 @@ public class Main extends Activity {
 			
 			 // Check what fragment is currently shown, replace if needed.
             DocumentInfo documentInfo = (DocumentInfo) getFragmentManager().findFragmentById(R.id.document_preview);
-            if (documentInfo == null) {
-            	Long documentId = (Long) view.getTag();
+            if (documentInfo != null) {
+            	int documentId = (Integer) view.getTag();
             	
-            	Rezept rezept = ((AppContext)getApplication()).getDocument(documentId);
+            	Rezept rezept = ((AppContext)getApplicationContext()).getDocument(documentId);
             	
             	// Make new fragment to show this selection.
                 documentInfo = DocumentInfo.newInstance(rezept);

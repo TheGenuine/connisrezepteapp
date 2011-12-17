@@ -20,9 +20,21 @@ import android.widget.Toast;
 
 public class DocumentInfo extends Fragment {
 
+	private View view;
+
 	public DocumentInfo() {
 	}
 	
+	public DocumentInfo(Rezept rezept) {
+		if(rezept != null){
+			((TextView)this.view.findViewById(R.id.document_info_rezept_name)).setText(rezept.getName());
+			((TextView)this.view.findViewById(R.id.document_info_zubereitung)).setText(rezept.getZubereitungsart());
+			((TextView)this.view.findViewById(R.id.document_info_kategorie)).setText(rezept.getKategorien().get(0));
+			((TextView)this.view.findViewById(R.id.document_info_zutaten)).setText(rezept.getZutaten().toString());
+		}
+	
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,13 +42,12 @@ public class DocumentInfo extends Fragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_document_preview, container);
+		this.view = inflater.inflate(R.layout.fragment_document_preview, container);
 		return view;
 	}
 
 	public static DocumentInfo newInstance(Rezept rezept) {
-		// TODO Auto-generated method stub
-		return null;
+		return new DocumentInfo(rezept);
 	}
 	
 	private void openDocument(String documentName){
