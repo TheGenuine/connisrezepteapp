@@ -73,36 +73,36 @@ public class DokumentEditDialog extends DialogFragment {
 	 * Get the Rezept Object from the entries list and fill the layout with it's data
 	 */
 	private void fillInActualEntryData() {
-		// set the counter on top
-		((TextView) view.findViewById(R.id.num_display)).setText(actualEntry+1 + "/" + entries.size());
-		
-		//fill in data
-		setStorageIndicator(this.entries.get(actualEntry).isStored());
-		((EditText) view.findViewById(R.id.input_rezept_name)).setText(this.entries.get(this.actualEntry).getName());
-		((TextView) view.findViewById(R.id.rezept_document_path)).setText(this.entries.get(this.actualEntry).getDocumentPath());
-		
-		if(this.entries.get(this.actualEntry).getZubereitungsart() == null || this.entries.get(this.actualEntry).getZubereitungsart().length() < 1){
-			tryToPredictZubereitungsart();
-		}else{
-			((TextView) view.findViewById(R.id.input_zubereitung)).setText(this.entries.get(this.actualEntry).getZubereitungsart());
-		}
-		
-		if(this.entries.get(this.actualEntry).getZutaten() == null || this.entries.get(this.actualEntry).getZutaten().size() < 1){
-			tryToPredictZutaten();
-		}else{
-			List<String> zutaten = this.entries.get(this.actualEntry).getZutaten();
-			StringBuilder zutatenBuilder = new StringBuilder();
-			for (String zutat : zutaten) {
-				zutatenBuilder.append(zutat + ",");
-			}
-			((TextView) view.findViewById(R.id.input_zutaten)).setText(zutatenBuilder.toString());
-		}
-		
-		if(this.entries.get(this.actualEntry).getKategorien() == null || this.entries.get(this.actualEntry).getKategorien().size() < 1){
-			tryToPredictKategorie();
-		}else{
-			((TextView) view.findViewById(R.id.input_kategorie)).setText(this.entries.get(this.actualEntry).getKategorien().get(0));
-		}
+//		// set the counter on top
+//		((TextView) view.findViewById(R.id.num_display)).setText(actualEntry+1 + "/" + entries.size());
+//		
+//		//fill in data
+//		setStorageIndicator(this.entries.get(actualEntry).isStored());
+//		((EditText) view.findViewById(R.id.input_rezept_name)).setText(this.entries.get(this.actualEntry).getName());
+//		((TextView) view.findViewById(R.id.rezept_document_path)).setText(this.entries.get(this.actualEntry).getDocumentPath());
+//		
+//		if(this.entries.get(this.actualEntry).getZubereitungsart() == null || this.entries.get(this.actualEntry).getZubereitungsart().length() < 1){
+//			tryToPredictZubereitungsart();
+//		}else{
+//			((TextView) view.findViewById(R.id.input_zubereitung)).setText(this.entries.get(this.actualEntry).getZubereitungsart());
+//		}
+//		
+//		if(this.entries.get(this.actualEntry).getZutaten() == null || this.entries.get(this.actualEntry).getZutaten().size() < 1){
+//			tryToPredictZutaten();
+//		}else{
+//			List<String> zutaten = this.entries.get(this.actualEntry).getZutaten();
+//			StringBuilder zutatenBuilder = new StringBuilder();
+//			for (String zutat : zutaten) {
+//				zutatenBuilder.append(zutat + ",");
+//			}
+//			((TextView) view.findViewById(R.id.input_zutaten)).setText(zutatenBuilder.toString());
+//		}
+//		
+//		if(this.entries.get(this.actualEntry).getKategorien() == null || this.entries.get(this.actualEntry).getKategorien().size() < 1){
+//			tryToPredictKategorie();
+//		}else{
+//			((TextView) view.findViewById(R.id.input_kategorie)).setText(this.entries.get(this.actualEntry).getKategorien().get(0));
+//		}
 
 	}
 	
@@ -122,13 +122,13 @@ public class DokumentEditDialog extends DialogFragment {
 	 * gets all text and so from the gui entries and saves it to the corrosponding object
 	 */
 	private void saveGuiToObject(){
-		Rezept rezept = this.entries.get(this.actualEntry);
-		rezept.setName(((TextView)view.findViewById(R.id.input_rezept_name)).getText().toString());
-		rezept.setZubereitungsart(((TextView)view.findViewById(R.id.input_zubereitung)).getText().toString());
-		List<String> kategorien = new LinkedList<String>();
-		kategorien.add(((TextView)view.findViewById(R.id.input_kategorie)).getText().toString());
-		rezept.setKategorien(kategorien);
-		rezept.setZutaten(((TextView)view.findViewById(R.id.input_zutaten)).getText().toString());
+//		Rezept rezept = this.entries.get(this.actualEntry);
+//		rezept.setName(((TextView)view.findViewById(R.id.input_rezept_name)).getText().toString());
+//		rezept.setZubereitungsart(((TextView)view.findViewById(R.id.input_zubereitung)).getText().toString());
+//		List<String> kategorien = new LinkedList<String>();
+//		kategorien.add(((TextView)view.findViewById(R.id.input_kategorie)).getText().toString());
+//		rezept.setKategorien(kategorien);
+//		rezept.setZutaten(((TextView)view.findViewById(R.id.input_zutaten)).getText().toString());
 	}
 	
 	private OnClickListener cancel_listener = new OnClickListener() {
@@ -149,13 +149,14 @@ public class DokumentEditDialog extends DialogFragment {
 	
 	private void saveToDatabase() {
 		saveGuiToObject();
-		if(this.entries.get(actualEntry).saveToDB(manager.getWritableDatabase())){
+		
+		
 			Toast.makeText(getActivity(), "The Object saved successfully", Toast.LENGTH_SHORT).show();
 			setStorageIndicator(true);
 			entries.get(actualEntry).setStored(true);
-		}else{
+			
+			
 			Toast.makeText(getActivity(), "ERROR on saving object", Toast.LENGTH_SHORT).show();
-		}
 	}
 
 	private void setStorageIndicator(boolean status) {

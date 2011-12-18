@@ -29,7 +29,7 @@ public class DocumentInfo extends Fragment {
 		if(rezept != null){
 			((TextView)this.view.findViewById(R.id.document_info_rezept_name)).setText(rezept.getName());
 			((TextView)this.view.findViewById(R.id.document_info_zubereitung)).setText(rezept.getZubereitungsart());
-			((TextView)this.view.findViewById(R.id.document_info_kategorie)).setText(rezept.getKategorien().get(0));
+			((TextView)this.view.findViewById(R.id.document_info_kategorie)).setText(rezept.getKategorien().get(0).getKategorie());
 			((TextView)this.view.findViewById(R.id.document_info_zutaten)).setText(rezept.getZutaten().toString());
 		}
 	

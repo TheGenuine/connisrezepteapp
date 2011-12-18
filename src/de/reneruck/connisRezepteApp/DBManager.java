@@ -1,70 +1,55 @@
 package de.reneruck.connisRezepteApp;
 
+import java.sql.SQLException;
+
 import android.content.Context;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
-public class DBManager extends SQLiteOpenHelper {
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
 
-	private static final String CREATE_REZEPTE_DB = "create table " + Configurations.table_Rezepte + " (" + Configurations.rezepte_Id + " integer primary key, "
-			+ Configurations.rezepte_Name+ " text not null, "
-			+ Configurations.rezepte_DocumentName + " text not null, "
-			+ Configurations.rezepte_DocumentHash + " integer, "
-			+ Configurations.rezepte_PathToDocument + " text , " 
-			+ Configurations.rezepte_Zubereitung + " text);"; 
-	
-	private static final String CREATE_ZUTATEN_DB = "create table " + Configurations.table_Zutaten+ " (" + Configurations.zutaten_Id + " integer primary key autoincrement, "
-			+ Configurations.zutaten_value + " text not null);";
-	
-	private static final String CREATE_KATEGORIEN_DB = "create table " + Configurations.table_Kategorien+ " (" + Configurations.kategorien_Id + " integer primary key autoincrement, "
-			+ Configurations.kategorien_value + " text not null);"; 
+public class DBManager extends OrmLiteSqliteOpenHelper {
 
-	private static final String CREATE_REZEPT_TO_ZUTATE_DB = "create table " + Configurations.table_Rezept_to_Zutat + " (" + Configurations.ID + " integer primary key autoincrement, " 
-			+ Configurations.rezept_to_zutat_rezeptId+ " long not null, "
-			+ Configurations.rezept_to_zutat_zutatId + " text not null);"; 
-	
-	private static final String CREATE_REZEPT_TO_KATEGORIE_DB = "create table " + Configurations.table_Rezept_to_Kategorie + " ("  + Configurations.ID + " integer primary key autoincrement, "
-			+ Configurations.rezept_to_kategorie_rezeptId + " long not null, "
-			+ Configurations.rezept_to_kategorie_kategorieId + " text not null);"; 
+	private static final String TAG = "DBManager";
+	private Dao<Rezept, Integer> rezeptDao = null;
 	
 	public DBManager(Context context, String name, CursorFactory factory, int version) {
 		super(context, Configurations.databaseName, factory,  Configurations.databaseVersion);
 	}
 
-	/**
-	 * Im moment haben wir nur eine Tabelle:
-	 * Rezepte:
-	 *  - [int] RezeptId <primaryKey>
-	 *  - [String] RezeptName (z.B. Mein tolles Rezept)
-	 *  - [String] Document-name (z.B. Mein-Rezept.doc, ...)
-	 *  - [String] Stichw�örter (z.B. Karotte, Spargel, ...)
-	 *  
-	 */
 	@Override
-	public void onCreate(SQLiteDatabase db) {
+	public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
 		try {
-			db.execSQL(CREATE_REZEPTE_DB);
-			db.execSQL(CREATE_ZUTATEN_DB);
-			db.execSQL(CREATE_KATEGORIEN_DB);
-			db.execSQL(CREATE_REZEPT_TO_ZUTATE_DB);
-			db.execSQL(CREATE_REZEPT_TO_KATEGORIE_DB);
+			TableUtils.createTable(connectionSource, Rezept.class);
 		} catch (SQLException e) {
-			System.err.println(e);
+			Log.e(TAG, e.getLocalizedMessage());
 		}
+		
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
-		/*
-		 * TODO: Here should happen a data migration!!  
-		 */
-		db.execSQL("DROP TABLE IF EXISTS " +Configurations.table_Rezepte + "");
-		db.execSQL("DROP TABLE IF EXISTS " +Configurations.table_Zutaten + "");
-		db.execSQL("DROP TABLE IF EXISTS " +Configurations.table_Kategorien + "");
-		db.execSQL("DROP TABLE IF EXISTS " +Configurations.table_Rezept_to_Kategorie+ "");
-		db.execSQL("DROP TABLE IF EXISTS " +Configurations.table_Rezept_to_Zutat + "");
-		onCreate(db);
+	public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
+		try {
+			TableUtils.dropTable(connectionSource, Rezept.class, false);
+			onCreate(database, connectionSource);
+		} catch (SQLException e) {
+			Log.e(TAG, e.getLocalizedMessage());
+		}
 	}
+	
+	/**
+	 * Returns the Database Access Object (DAO) for our SimpleData class. It will create it or just give the cached
+	 * value.
+	 */
+	public Dao<Rezept, Integer> getDao() throws SQLException {
+		if (this.rezeptDao == null) {
+			this.rezeptDao = getDao(Rezept.class);
+		}
+		return rezeptDao;
+	}
+
 }
