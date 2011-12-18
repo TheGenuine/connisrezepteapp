@@ -21,16 +21,21 @@ import android.widget.Toast;
 public class DocumentInfo extends Fragment {
 
 	private View view;
+	private String zubereitungsart;
+	private String kategorie;
+	private String zutaten;
+	private String name;
 
 	public DocumentInfo() {
 	}
 	
 	public DocumentInfo(Rezept rezept) {
 		if(rezept != null){
-			((TextView)this.view.findViewById(R.id.document_info_rezept_name)).setText(rezept.getName());
-			((TextView)this.view.findViewById(R.id.document_info_zubereitung)).setText(rezept.getZubereitungsart());
-			((TextView)this.view.findViewById(R.id.document_info_kategorie)).setText(rezept.getKategorien().get(0));
-			((TextView)this.view.findViewById(R.id.document_info_zutaten)).setText(rezept.getZutaten().toString());
+			this.name = rezept.getName();
+			this.zubereitungsart = rezept.getZubereitungsart();
+			if(!rezept.getKategorien().isEmpty())this.kategorie = rezept.getKategorien().get(0);
+			else this.kategorie = "";
+			this.zutaten = rezept.getZutaten().toString();
 		}
 	
 	}
@@ -43,6 +48,11 @@ public class DocumentInfo extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		this.view = inflater.inflate(R.layout.fragment_document_preview, container);
+		
+		((TextView)this.view.findViewById(R.id.document_info_rezept_name)).setText(this.name);
+		((TextView)this.view.findViewById(R.id.document_info_zubereitung)).setText(this.zubereitungsart);
+		((TextView)this.view.findViewById(R.id.document_info_kategorie)).setText(this.kategorie);
+		((TextView)this.view.findViewById(R.id.document_info_zutaten)).setText(this.zutaten);
 		return view;
 	}
 

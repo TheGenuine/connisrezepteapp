@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import de.reneruck.connisRezepteApp.fragments.DocumentInfo;
@@ -48,6 +50,8 @@ public class Main extends Activity {
 		this.manager = new DBManager(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
 		newDocumentsBean = new NewDocumentsBean();
 		newDocumentsBean.addPropertyChangeListener(newDocumentsPropertyChangeListener);
+		
+		((AppContext) getApplicationContext()).setManager(this.manager);
 		
 		// initialize and start the background file scanner
 		FileScanner filescanner = new FileScanner(newDocumentsBean);
@@ -86,11 +90,10 @@ public class Main extends Activity {
             if (documentInfo != null) {
             	int documentId = (Integer) view.getTag();
             	
-            	Rezept rezept = ((AppContext)getApplicationContext()).getDocument(documentId);
-            	
-            	// Make new fragment to show this selection.
-                documentInfo = DocumentInfo.newInstance(rezept);
+            	Rezept document = ((AppContext) getApplicationContext()).getDocument(documentId);
 
+            	// Make new fragment to show this selection.
+                documentInfo = DocumentInfo.newInstance(document);
                 // Execute a transaction, replacing any existing fragment
                 // with this one inside the frame.
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
