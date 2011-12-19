@@ -21,10 +21,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import de.reneruck.connisRezepteApp.DBManager;
 import de.reneruck.connisRezepteApp.NewDocumentsBean;
 import de.reneruck.connisRezepteApp.R;
-import de.reneruck.connisRezepteApp.Rezept;
+import de.reneruck.connisRezepteApp.data.Rezept;
+import de.reneruck.connisRezepteApp.db.DBManager;
 
 public class DokumentEditDialog extends DialogFragment {
 

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import de.reneruck.connisRezepteApp.Configurations;
 import de.reneruck.connisRezepteApp.R;
-import de.reneruck.connisRezepteApp.Rezept;
+import de.reneruck.connisRezepteApp.data.Rezept;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package de.reneruck.connisRezepteApp;
+package de.reneruck.connisRezepteApp.db;
 
 import java.sql.SQLException;
 
@@ -11,6 +11,9 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+
+import de.reneruck.connisRezepteApp.Configurations;
+import de.reneruck.connisRezepteApp.data.Rezept;
 
 public class DBManager extends OrmLiteSqliteOpenHelper {
 

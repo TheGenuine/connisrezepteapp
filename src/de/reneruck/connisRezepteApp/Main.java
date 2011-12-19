@@ -25,6 +25,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
+import de.reneruck.connisRezepteApp.data.Rezept;
+import de.reneruck.connisRezepteApp.db.DBManager;
 import de.reneruck.connisRezepteApp.fragments.DocumentInfo;
 import de.reneruck.connisRezepteApp.fragments.DokumentEditDialog;
 

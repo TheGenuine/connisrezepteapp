@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.apache.commons.collections.ListUtils;
 
+import de.reneruck.connisRezepteApp.db.DBManager;
+
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;

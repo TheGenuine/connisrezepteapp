@@ -1,4 +1,4 @@
-package de.reneruck.connisRezepteApp;
+package de.reneruck.connisRezepteApp.db;
 
 import android.content.Intent;
 import android.os.IBinder;

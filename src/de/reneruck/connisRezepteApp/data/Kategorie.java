@@ -1,14 +1,15 @@
-package de.reneruck.connisRezepteApp;
+package de.reneruck.connisRezepteApp.data;
 
 import com.j256.ormlite.field.DatabaseField;
 
-public class Zutat {
-	
+public class Kategorie {
+
 	@DatabaseField(index = true)
 	private int ID;
 	
 	@DatabaseField(canBeNull = false)
-	private String zutat;
+	
+	private String kategorie;
 
 	public int getID() {
 		return ID;
@@ -18,12 +19,12 @@ public class Zutat {
 		ID = iD;
 	}
 
-	public String getZutat() {
-		return zutat;
+	public String getKategorie() {
+		return kategorie;
 	}
 
-	public void setZutat(String zutat) {
-		this.zutat = zutat;
+	public void setKategorie(String kategorie) {
+		this.kategorie = kategorie;
 	}
-
+	
 }

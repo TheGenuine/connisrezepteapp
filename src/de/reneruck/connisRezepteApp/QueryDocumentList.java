@@ -4,6 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.reneruck.connisRezepteApp.data.Rezept;
+import de.reneruck.connisRezepteApp.db.DBManager;
+
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;

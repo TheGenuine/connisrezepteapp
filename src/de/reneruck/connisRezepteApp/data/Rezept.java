@@ -1,4 +1,4 @@
-package de.reneruck.connisRezepteApp;
+package de.reneruck.connisRezepteApp.data;
 
 import java.io.File;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import android.database.Cursor;
 
 import com.j256.ormlite.field.DatabaseField;
+
+import de.reneruck.connisRezepteApp.Configurations;
 
 public class Rezept {
 	

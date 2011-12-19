@@ -2,6 +2,8 @@ package de.reneruck.connisRezepteApp;
 
 import java.util.List;
 
+import de.reneruck.connisRezepteApp.data.Rezept;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
