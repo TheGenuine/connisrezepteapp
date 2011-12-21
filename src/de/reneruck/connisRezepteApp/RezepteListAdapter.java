@@ -44,17 +44,15 @@ public class RezepteListAdapter extends BaseAdapter implements Filterable {
 		// by ListView is null.
 		if (convertView == null) {
 			convertView = mInflater.inflate(R.layout.rezeptelist_entry, null);
-
-			// Creates a ViewHolder and store references to the two children
-			// views
+			// Creates a ViewHolder and store references to the children views
 			// we want to bind data to.
 			this.holder.icon = (ImageView) convertView.findViewById(R.id.icon);
-			this.holder.toptext = (TextView) convertView.findViewById(R.id.toptext);
+			this.holder.toptext = (TextView) convertView.findViewById(R.id.entry_toptext);
 			this.holder.subtext = (TextView) convertView.findViewById(R.id.subtext);
 
 		}
 
-		this.holder.toptext.setText(this.data.get(position).getId() + this.data.get(position).getName());
+		this.holder.toptext.setText(this.data.get(position).getId() + " - " + this.data.get(position).getName());
 		this.holder.subtext.setText(this.data.get(position).getDocumentPath());
 
 //		((LinearLayout)convertView).addView(this.holder.toptext);
