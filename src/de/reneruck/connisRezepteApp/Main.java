@@ -12,18 +12,21 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import de.reneruck.connisRezepteApp.fragments.DocumentInfo;
 import de.reneruck.connisRezepteApp.fragments.DokumentEditDialog;
@@ -56,6 +59,9 @@ public class Main extends Activity {
 		filescanner.setRunnig(true);
 		filescanner.execute("");
 		
+//		setupSearchBar();
+		
+//		searchView.setOnFocusChangeListener(searchFocusListener);
 		buildAllDocumentsList();
 	}
 	
@@ -123,7 +129,9 @@ public class Main extends Activity {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				if(count > 0) {
+			    View item = findViewById(R.id.menu_updated);
+
+			    if(count > 0) {
 					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
 					newDocsIndicator.setText(String.valueOf(count));
 					newDocsIndicator.setTextColor(Color.RED);
@@ -150,10 +158,13 @@ public class Main extends Activity {
 		}
 	};
 
+	
 	/* Creates the menu items */
     public boolean onCreateOptionsMenu(Menu menu) {
-    	menu.add(0,  1, 0, "Clear Database").setIcon(R.drawable.settings);
-        menu.add(0,  2, 0, "Exit").setIcon(R.drawable.exit);
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.actionbar_menu, menu);
+	    SearchView searchView = (SearchView) menu.findItem(R.id.menu_search_action).getActionView();
+
         return true;
     }
 
@@ -164,7 +175,7 @@ public class Main extends Activity {
         
     	switch(item.getItemId()){
     	
-        case 1:
+        case R.id.menu_debug_cleandb:
         	try {
         		SQLiteDatabase db = manager.getWritableDatabase();
         		db.delete(Configurations.table_Rezepte, null, null);
@@ -174,12 +185,23 @@ public class Main extends Activity {
 					e.printStackTrace();
 			}
         	break;
-        case 2:
+        case  R.id.menu_exit:
         	this.finish();
         	break;
-        default: return false;	
+        case R.id.menu_updated:
+        	break;
+        case R.id.menu_search_action:
+        	break;
+        case android.R.id.home:
+            // app icon in action bar clicked; go home
+            Intent intent = new Intent(this, Main.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
     	}
-       return true;
+		return true;
      }
     
     void showDialog() {
