@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,7 +23,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import de.reneruck.connisRezepteApp.fragments.DocumentInfo;
@@ -86,18 +84,15 @@ public class Main extends Activity {
 		public void onItemClick(AdapterView<?> adapter, View view, int arg2, long arg3) {
 			
 			 // Check what fragment is currently shown, replace if needed.
-            DocumentInfo documentInfo = (DocumentInfo) getFragmentManager().findFragmentById(R.id.document_preview);
+            DocumentInfo documentInfo = (DocumentInfo) getFragmentManager().findFragmentById(R.id.document_preview_fragment);
             if (documentInfo != null) {
             	int documentId = (Integer) view.getTag();
-            	
             	Rezept document = ((AppContext) getApplicationContext()).getDocument(documentId);
 
-            	// Make new fragment to show this selection.
                 documentInfo = DocumentInfo.newInstance(document);
-                // Execute a transaction, replacing any existing fragment
-                // with this one inside the frame.
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.document_preview, documentInfo);
+                ft.replace(R.id.document_preview_fragment, documentInfo);
+                ft.addToBackStack(null);
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
             }

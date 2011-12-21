@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import de.reneruck.connisRezepteApp.Configurations;
-import de.reneruck.connisRezepteApp.R;
-import de.reneruck.connisRezepteApp.Rezept;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -15,8 +12,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.reneruck.connisRezepteApp.Configurations;
+import de.reneruck.connisRezepteApp.R;
+import de.reneruck.connisRezepteApp.Rezept;
 
 public class DocumentInfo extends Fragment {
 
@@ -47,12 +48,15 @@ public class DocumentInfo extends Fragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		this.view = inflater.inflate(R.layout.fragment_document_preview, container);
-		
-		((TextView)this.view.findViewById(R.id.document_info_rezept_name)).setText(this.name);
-		((TextView)this.view.findViewById(R.id.document_info_zubereitung)).setText(this.zubereitungsart);
-		((TextView)this.view.findViewById(R.id.document_info_kategorie)).setText(this.kategorie);
-		((TextView)this.view.findViewById(R.id.document_info_zutaten)).setText(this.zutaten);
+		if (container != null) {
+			this.view = inflater.inflate(R.layout.fragment_document_preview, container, false);
+			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setText(this.name);
+			((TextView) this.view.findViewById(R.id.document_info_zubereitung)).setText(this.zubereitungsart);
+			((TextView) this.view.findViewById(R.id.document_info_kategorie)).setText(this.kategorie);
+			((TextView) this.view.findViewById(R.id.document_info_zutaten)).setText(this.zutaten);
+		} else {
+			this.view = new LinearLayout(getActivity());
+		}
 		return view;
 	}
 
