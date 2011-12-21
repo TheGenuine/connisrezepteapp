@@ -3,7 +3,7 @@
     
  <item android:id="@+id/menu_updated"
           android:icon="@drawable/redo"
-          android:showAsAction="always" 
+          android:showAsAction="always|withText" 
           android:title="@string/updated_documents"/>
  
  <item android:id="@+id/menu_search_action" 

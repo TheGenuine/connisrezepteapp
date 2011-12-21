@@ -59,9 +59,6 @@ public class Main extends Activity {
 		filescanner.setRunnig(true);
 		filescanner.execute("");
 		
-//		setupSearchBar();
-		
-//		searchView.setOnFocusChangeListener(searchFocusListener);
 		buildAllDocumentsList();
 	}
 	
@@ -126,25 +123,25 @@ public class Main extends Activity {
 	 */
 	private void updateNewDocumentsIndicator(int number) {
 		final int count = number;
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-			    View item = findViewById(R.id.menu_updated);
-
-			    if(count > 0) {
-					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
-					newDocsIndicator.setText(String.valueOf(count));
-					newDocsIndicator.setTextColor(Color.RED);
-					newDocsIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.newdocumentindicator_red_64));
-					newDocsIndicator.setOnClickListener(newDocumentsListener);
-				} else {
-					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
-					newDocsIndicator.setText("");
-					newDocsIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.newdocumentindicator_gray_64));
-					newDocsIndicator.setOnClickListener(null);
-				}
-			}
-		});
+//		runOnUiThread(new Runnable() {
+//			@Override
+//			public void run() {
+//			    View item = findViewById(R.id.menu_updated);
+//
+//			    if(count > 0) {
+//					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
+//					newDocsIndicator.setText(String.valueOf(count));
+//					newDocsIndicator.setTextColor(Color.RED);
+//					newDocsIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.newdocumentindicator_red_64));
+//					newDocsIndicator.setOnClickListener(newDocumentsListener);
+//				} else {
+//					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
+//					newDocsIndicator.setText("");
+//					newDocsIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.newdocumentindicator_gray_64));
+//					newDocsIndicator.setOnClickListener(null);
+//				}
+//			}
+//		});
 	}
 	
 	/**
@@ -189,6 +186,7 @@ public class Main extends Activity {
         	this.finish();
         	break;
         case R.id.menu_updated:
+        	item.getTitle();
         	break;
         case R.id.menu_search_action:
         	break;
