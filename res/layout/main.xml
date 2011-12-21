@@ -6,42 +6,6 @@
     android:background="#eeeeee"
     android:paddingLeft="5dip"
     android:paddingTop="5dip">
-
-    <RelativeLayout
-        android:id="@+id/head"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#C0C0C0" >
-
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:width="500dip"
-            android:autoText="true" 
-            android:layout_marginLeft="5dip"/>
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/autoCompleteTextView1"
-            android:text="suchen" />        <TextView
-            android:id="@+id/newDocsText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/button1"
-            android:layout_toRightOf="@+id/button1"
-            android:background="@drawable/newdocumentindicator_gray_64"
-            android:gravity="bottom|right"
-            android:textColor="#696969"
-            android:textStyle="bold"
-            android:text=""
-            android:textSize="20dip" />
-
-    </RelativeLayout>
         
 	    <LinearLayout
 	        android:layout_width="match_parent"
