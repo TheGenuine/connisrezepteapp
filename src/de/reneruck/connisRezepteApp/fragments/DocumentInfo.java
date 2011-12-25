@@ -11,7 +11,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,21 +24,17 @@ import de.reneruck.connisRezepteApp.Rezept;
 public class DocumentInfo extends Fragment {
 
 	private View view;
-	private String zubereitungsart;
+	private Rezept rezept;
 	private String kategorie;
-	private String zutaten;
-	private String name;
 
 	public DocumentInfo() {
 	}
 	
 	public DocumentInfo(Rezept rezept) {
 		if(rezept != null){
-			this.name = rezept.getName();
-			this.zubereitungsart = rezept.getZubereitungsart();
+			this.rezept = rezept;
 			if(!rezept.getKategorien().isEmpty())this.kategorie = rezept.getKategorien().get(0);
 			else this.kategorie = "";
-			this.zutaten = rezept.getZutaten().toString();
 		}
 	
 	}
@@ -50,10 +48,12 @@ public class DocumentInfo extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (container != null) {
 			this.view = inflater.inflate(R.layout.fragment_document_preview, container, false);
-			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setText(this.name);
-			((TextView) this.view.findViewById(R.id.document_info_zubereitung)).setText(this.zubereitungsart);
+			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setText(this.rezept.getName());
+			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setOnClickListener(openDocumentClickListener);
+			((TextView) this.view.findViewById(R.id.document_info_zubereitung)).setText(this.rezept.getZubereitungsart());
 			((TextView) this.view.findViewById(R.id.document_info_kategorie)).setText(this.kategorie);
-			((TextView) this.view.findViewById(R.id.document_info_zutaten)).setText(this.zutaten);
+			((TextView) this.view.findViewById(R.id.document_info_zutaten)).setText(this.rezept.getZutaten().toString());
+			((Button) this.view.findViewById(R.id.button_open_document)).setOnClickListener(openDocumentClickListener);
 		} else {
 			this.view = new LinearLayout(getActivity());
 		}
@@ -63,6 +63,14 @@ public class DocumentInfo extends Fragment {
 	public static DocumentInfo newInstance(Rezept rezept) {
 		return new DocumentInfo(rezept);
 	}
+	
+	OnClickListener openDocumentClickListener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			openDocument(rezept.getDocumentName());
+		}
+	};
 	
 	private void openDocument(String documentName){
 		try {
