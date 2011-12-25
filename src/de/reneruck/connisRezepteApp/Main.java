@@ -18,6 +18,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,6 +38,7 @@ public class Main extends Activity {
 	private static Context context;
 	private NewDocumentsBean newDocumentsBean;
 	private DBManager manager;
+	private Menu menu;
 
 	public static Context getContext() {
 		return context;
@@ -123,25 +125,19 @@ public class Main extends Activity {
 	 */
 	private void updateNewDocumentsIndicator(int number) {
 		final int count = number;
-//		runOnUiThread(new Runnable() {
-//			@Override
-//			public void run() {
-//			    View item = findViewById(R.id.menu_updated);
-//
-//			    if(count > 0) {
-//					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
-//					newDocsIndicator.setText(String.valueOf(count));
-//					newDocsIndicator.setTextColor(Color.RED);
-//					newDocsIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.newdocumentindicator_red_64));
-//					newDocsIndicator.setOnClickListener(newDocumentsListener);
-//				} else {
-//					TextView newDocsIndicator = (TextView) findViewById(R.id.newDocsText);
-//					newDocsIndicator.setText("");
-//					newDocsIndicator.setBackgroundDrawable(getResources().getDrawable(R.drawable.newdocumentindicator_gray_64));
-//					newDocsIndicator.setOnClickListener(null);
-//				}
-//			}
-//		});
+		runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				MenuItem item = menu.findItem(R.id.menu_updated);
+				if(count == 0){
+					item.setVisible(false);
+				}else {
+					item.setVisible(true);
+					item.setTitle(count + " neue Dokumente");
+				}
+			}
+		});
 	}
 	
 	/**
@@ -154,14 +150,13 @@ public class Main extends Activity {
 			 showDialog();
 		}
 	};
-
 	
 	/* Creates the menu items */
     public boolean onCreateOptionsMenu(Menu menu) {
     	MenuInflater inflater = getMenuInflater();
     	inflater.inflate(R.menu.actionbar_menu, menu);
 	    SearchView searchView = (SearchView) menu.findItem(R.id.menu_search_action).getActionView();
-
+	    this.menu = menu;
         return true;
     }
 
@@ -186,7 +181,7 @@ public class Main extends Activity {
         	this.finish();
         	break;
         case R.id.menu_updated:
-        	item.getTitle();
+        	showDialog();
         	break;
         case R.id.menu_search_action:
         	break;

@@ -4,7 +4,7 @@
  <item android:id="@+id/menu_updated"
           android:icon="@drawable/redo"
           android:showAsAction="always|withText" 
-          android:title="@string/updated_documents"/>
+          android:title="@string/updated_documents" android:visible="false"/>
  
  <item android:id="@+id/menu_search_action" 
      	android:title="@string/action_menu_search" 

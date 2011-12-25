@@ -52,11 +52,9 @@ public class RezepteListAdapter extends BaseAdapter implements Filterable {
 
 		}
 
-		this.holder.toptext.setText(this.data.get(position).getId() + " - " + this.data.get(position).getName());
+		this.holder.toptext.setText(this.data.get(position).getName());
 		this.holder.subtext.setText(this.data.get(position).getDocumentPath());
 
-//		((LinearLayout)convertView).addView(this.holder.toptext);
-//		((LinearLayout)convertView).addView(this.holder.subtext);
 		((LinearLayout)convertView).setTag(this.data.get(position).getId());
 		return convertView;
 	}
