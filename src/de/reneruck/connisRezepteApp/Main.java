@@ -16,9 +16,7 @@ import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,10 +27,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.TextView;
 import de.reneruck.connisRezepteApp.fragments.DocumentInfo;
 import de.reneruck.connisRezepteApp.fragments.DokumentEditDialog;
-
+/**
+ * 
+ * @author Rene Ruck
+ *
+ */
 public class Main extends Activity {
 
 	private static final String TAG = "RezepteApp-Main";
