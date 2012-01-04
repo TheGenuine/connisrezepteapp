@@ -6,6 +6,7 @@
     <string name="inprogress">Arbeite, bitte warten Sie kurz ...</string>
     <string name="updated_documents">Neue Dokumente</string>
     <string name="debug_cleandb">Clean DB</string>
+    <string name="debug_copydb">Copy DB</string>
     <string name="exit">Schließen</string>
     <string name="action_menu_search">Rezepte durchsuchen</string>
     <string name="search_hint">Nach Rezepten suchen</string>
