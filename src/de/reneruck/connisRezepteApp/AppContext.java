@@ -35,4 +35,8 @@ public class AppContext extends Application {
 	public void setManager(DBManager manager) {
 		this.manager = manager;
 	}
+
+	public DBManager getDBManager() {
+		return this.manager;
+	}
 }
