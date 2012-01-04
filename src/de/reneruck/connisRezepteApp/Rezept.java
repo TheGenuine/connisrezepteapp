@@ -250,7 +250,7 @@ public class Rezept {
 		this.zutat = zutat;
 	}
 	public void setZutaten(String zutaten) {
-		zutaten.replaceAll(" ", "");
+		zutaten.replaceAll("\\s+", "");
 		String[] zutatenSplit = zutaten.split(",");
 		this.zutat = Arrays.asList(zutatenSplit); 
 	}
