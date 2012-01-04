@@ -13,7 +13,8 @@ public class DBManager extends SQLiteOpenHelper {
 			+ Configurations.rezepte_DocumentName + " text not null, "
 			+ Configurations.rezepte_DocumentHash + " integer, "
 			+ Configurations.rezepte_PathToDocument + " text , " 
-			+ Configurations.rezepte_Zubereitung + " text);"; 
+			+ Configurations.rezepte_Zubereitung + " text, " 
+			+ Configurations.rezepte_Zeit + " integer);"; 
 	
 	private static final String CREATE_ZUTATEN_DB = "create table " + Configurations.table_Zutaten+ " (" + Configurations.zutaten_Id + " integer primary key autoincrement, "
 			+ Configurations.zutaten_value + " text not null);";

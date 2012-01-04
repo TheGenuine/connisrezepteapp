@@ -23,6 +23,7 @@ public class Configurations {
 	public static String rezepte_DocumentHash = "hash";
 	public static String rezepte_PathToDocument = "documentPath";	
 	public static String rezepte_Zubereitung = "zubereitung";
+	public static String rezepte_Zeit = "zeit";
 	
 	// Collums of Zutaten
 	public static String zutaten_Id = ID;
