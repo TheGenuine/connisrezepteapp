@@ -18,6 +18,9 @@ public class AppContext extends Application {
 	public Rezept getDocument(int documentId) {
 		SQLiteDatabase db= this.manager.getReadableDatabase();
 		Cursor c = db.query(Configurations.table_Rezepte, new String[]{"*"}, Configurations.rezepte_Id + "=" + documentId, null, null, null, null);
+		String query = "select * from " + Configurations.table_Rezept_to_Zutat + 
+				" JOIN " + Configurations.rezept_to_zutat_rezeptId + " ON (" + Configurations.table_Rezepte + "." + Configurations.rezepte_Id + ")" +
+				"  where " + Configurations.rezept_to_zutat_rezeptId + " = " + documentId;
 		if(c.getCount() > 0){
 			c.moveToFirst();
 			Rezept rezept = new Rezept(c);
