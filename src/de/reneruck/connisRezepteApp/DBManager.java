@@ -34,15 +34,7 @@ public class DBManager extends SQLiteOpenHelper {
 		super(context, Configurations.databaseName, factory,  Configurations.databaseVersion);
 	}
 
-	/**
-	 * Im moment haben wir nur eine Tabelle:
-	 * Rezepte:
-	 *  - [int] RezeptId <primaryKey>
-	 *  - [String] RezeptName (z.B. Mein tolles Rezept)
-	 *  - [String] Document-name (z.B. Mein-Rezept.doc, ...)
-	 *  - [String] Stichw�örter (z.B. Karotte, Spargel, ...)
-	 *  
-	 */
+
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		try {
