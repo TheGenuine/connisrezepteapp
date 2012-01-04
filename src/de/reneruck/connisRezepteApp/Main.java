@@ -180,6 +180,11 @@ public class Main extends Activity {
         
     	switch(item.getItemId()){
     	
+    	case R.id.menu_debug_copydb:
+    		File dbfile = new File("databases/rezepte.db");
+    		File copiedFile = new File("/sdcard/rezepte.db");
+    		dbfile.renameTo(copiedFile);
+    		break;
         case R.id.menu_debug_cleandb:
         	try {
         		SQLiteDatabase db = manager.getWritableDatabase();
