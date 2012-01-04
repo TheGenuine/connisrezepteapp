@@ -3,6 +3,8 @@ package de.reneruck.connisRezepteApp.fragments;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.reneruck.connisRezepteApp.AppContext;
 import de.reneruck.connisRezepteApp.Configurations;
 import de.reneruck.connisRezepteApp.R;
 import de.reneruck.connisRezepteApp.Rezept;
@@ -54,12 +57,30 @@ public class DocumentInfo extends Fragment {
 			((TextView) this.view.findViewById(R.id.document_info_kategorie)).setText(this.kategorie);
 			((TextView) this.view.findViewById(R.id.document_info_zutaten)).setText(this.rezept.getZutaten().toString());
 			((Button) this.view.findViewById(R.id.button_open_document)).setOnClickListener(openDocumentClickListener);
+			((Button) this.view.findViewById(R.id.button_edit_document)).setOnClickListener(editDocumentClickListener);
 		} else {
 			this.view = new LinearLayout(getActivity());
 		}
 		return view;
 	}
+	
+	OnClickListener editDocumentClickListener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			showDialog();
+		}
 
+	};
+
+    void showDialog() {
+    	
+    	List<Rezept> editEntries = new LinkedList<Rezept>();
+    	editEntries.add(this.rezept);
+    	DokumentEditDialog editFragment = new DokumentEditDialog(editEntries, ((AppContext)getActivity().getApplicationContext()).getDBManager(), null);
+    	editFragment.show(getFragmentManager(), "editDocumentDialog");
+    }
+    
 	public static DocumentInfo newInstance(Rezept rezept) {
 		return new DocumentInfo(rezept);
 	}

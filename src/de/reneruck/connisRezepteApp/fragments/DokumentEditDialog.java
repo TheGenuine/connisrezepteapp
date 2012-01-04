@@ -48,6 +48,12 @@ public class DokumentEditDialog extends DialogFragment {
 		this.listener = listener;
 	}
 	
+	public DokumentEditDialog(List<Rezept> rezepte, DBManager manager, OnDismissListener listener) {
+		this.entries = rezepte;
+		this.manager = manager;
+		this.listener = listener;
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -60,6 +66,8 @@ public class DokumentEditDialog extends DialogFragment {
 		
 		
 		((TextView)v.findViewById(R.id.button_cancel)).setOnClickListener(cancel_listener);
+		((TextView)v.findViewById(R.id.button_top_save)).setOnClickListener(ok_listener);
+		((TextView)v.findViewById(R.id.button_top_cancel)).setOnClickListener(cancel_listener);
 		((TextView)v.findViewById(R.id.button_ok)).setOnClickListener(ok_listener);
 		((TextView)v.findViewById(R.id.button_left)).setOnClickListener(left_button_listener);
 		((TextView)v.findViewById(R.id.button_right)).setOnClickListener(right_button_listener);
@@ -199,12 +207,16 @@ public class DokumentEditDialog extends DialogFragment {
 		}
 	};
 	public void onDismiss(DialogInterface dialog) {
-		for (Rezept rezept: this.entries) {
-			if (rezept.isStored()) {
-				this.newDocumentsBean.removeEntry(rezept.getOriginalFile());
+		if(this.newDocumentsBean != null){
+			for (Rezept rezept: this.entries) {
+				if (rezept.isStored()) {
+					this.newDocumentsBean.removeEntry(rezept.getOriginalFile());
+				}
 			}
 		}
-		this.listener.onDismiss(dialog);
+		if(this.listener != null){
+			this.listener.onDismiss(dialog);
+		}
 		super.onDismiss(dialog);
 	};
 }

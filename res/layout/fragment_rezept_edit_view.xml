@@ -31,6 +31,24 @@
             android:gravity="center_horizontal"
             android:textSize="23dip"
             android:text="0/0" />
+
+        <Button
+            android:id="@+id/button_top_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="205dp"
+            android:layout_toRightOf="@+id/num_display"
+            android:text="speichern" />
+
+        <Button
+            android:id="@+id/button_top_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="251dp"
+            android:layout_toRightOf="@+id/button_left"
+            android:text="abbrechen" />
         
     </RelativeLayout>
         
@@ -120,6 +138,26 @@
 	                android:text="Zubereitungsart" />
 
 	        </LinearLayout>
+	        
+	        <LinearLayout
+	            android:id="@+id/linearLayout2"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="5dip"
+	            android:orientation="vertical"
+	            android:paddingTop="10dip" >
+	            <TextView
+	                android:id="@+id/textView2"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="Zubereitungszeit" />
+
+	        </LinearLayout>
+
+	        <TimePicker
+	            android:id="@+id/timePicker1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
 
 	        <LinearLayout
 	            android:layout_width="match_parent"
