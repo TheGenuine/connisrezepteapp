@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -101,6 +102,17 @@ public class Main extends Activity {
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
             }
+		}
+	};
+	
+	/**
+	 * 
+	 */
+	OnItemLongClickListener rezeptListEntryOptionsListener = new OnItemLongClickListener() {
+		@Override
+		public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	};
 
