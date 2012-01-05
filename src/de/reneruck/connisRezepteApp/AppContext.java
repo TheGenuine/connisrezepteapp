@@ -27,6 +27,10 @@ public class AppContext extends Application {
 		/*
 		 * select Zutaten.value from Zutaten, Rezept_Zutat, Rezepte JOIN Rezepte ON (Rezepte.ID = Rezept_Zutat.rezeptId)  JOIN Rezept_Zutat ON (Rezept_Zutat.zutatId = Zutat.ID) where Rezepte.ID = 1891913874
 		 */
+		/*
+		 * 2. Versuch
+		 * select Zutaten.value from Rezept_Zutat JOIN Zutaten ON (Zutaten.ID = Rezept_Zutat.zutatId) where Rezept_Zutat.rezeptId=1234
+		 */
 		c.moveToFirst();
 		if(c.getCount() > 0){
 			c.moveToFirst();
