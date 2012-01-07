@@ -36,8 +36,6 @@ public class DocumentInfo extends Fragment {
 	public DocumentInfo(Rezept rezept) {
 		if(rezept != null){
 			this.rezept = rezept;
-			if(!rezept.getKategorien().isEmpty())this.kategorie = rezept.getKategorien().get(0);
-			else this.kategorie = "";
 		}
 	
 	}
@@ -54,7 +52,7 @@ public class DocumentInfo extends Fragment {
 			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setText(this.rezept.getName());
 			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setOnClickListener(openDocumentClickListener);
 			((TextView) this.view.findViewById(R.id.document_info_zubereitung)).setText(this.rezept.getZubereitungsart());
-			((TextView) this.view.findViewById(R.id.document_info_kategorie)).setText(this.kategorie);
+			((TextView) this.view.findViewById(R.id.document_info_kategorie)).setText(this.rezept.getKategorien().toString());
 			((TextView) this.view.findViewById(R.id.document_info_zutaten)).setText(this.rezept.getZutaten().toString());
 			((Button) this.view.findViewById(R.id.button_open_document)).setOnClickListener(openDocumentClickListener);
 			((Button) this.view.findViewById(R.id.button_edit_document)).setOnClickListener(editDocumentClickListener);

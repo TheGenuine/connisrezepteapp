@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Hello World, ConnisRezepteAppActivity!</string>
-    <string name="app_name">ConnisRezepteApp</string>
+    <string name="app_name">Connis Rezepte</string>
     <string name="inprogress">Arbeite, bitte warten Sie kurz ...</string>
     <string name="updated_documents">Neue Dokumente</string>
     <string name="debug_cleandb">Clean DB</string>

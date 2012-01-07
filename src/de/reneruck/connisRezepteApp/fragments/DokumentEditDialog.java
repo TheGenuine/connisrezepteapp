@@ -19,6 +19,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.reneruck.connisRezepteApp.DBManager;
@@ -34,6 +36,7 @@ public class DokumentEditDialog extends DialogFragment {
 	private DBManager manager;
 	private NewDocumentsBean newDocumentsBean;
 	private OnDismissListener listener;
+	private List<View> kategorien = new LinkedList<View>();
 	
 	 public DokumentEditDialog() {
 	}
@@ -71,6 +74,9 @@ public class DokumentEditDialog extends DialogFragment {
 		((TextView)v.findViewById(R.id.button_ok)).setOnClickListener(ok_listener);
 		((TextView)v.findViewById(R.id.button_left)).setOnClickListener(left_button_listener);
 		((TextView)v.findViewById(R.id.button_right)).setOnClickListener(right_button_listener);
+		((ImageView)v.findViewById(R.id.button_add_kategorie)).setOnClickListener(add_kategorie_listener);
+		((ImageView)v.findViewById(R.id.button_time_plus)).setOnClickListener(time_plus_listener);
+		((ImageView)v.findViewById(R.id.button_time_minus)).setOnClickListener(time_minus_listener);
 		view = v;
 		
 		fillInActualEntryData();
@@ -138,6 +144,43 @@ public class DokumentEditDialog extends DialogFragment {
 		rezept.setKategorien(kategorien);
 		rezept.setZutaten(((TextView)view.findViewById(R.id.input_zutaten)).getText().toString());
 	}
+	
+	private OnClickListener time_plus_listener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			EditText timeField = ((EditText)view.findViewById(R.id.input_time));
+			timeField.setText(String.valueOf(Integer.parseInt(timeField.getText().toString())+1));
+		}
+	};
+	
+	private OnClickListener time_minus_listener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			EditText timeField = ((EditText)view.findViewById(R.id.input_time));
+			int newTime = Integer.parseInt(timeField.getText().toString())-1;
+			if(newTime < 0){
+				newTime = 0;
+			}
+			timeField.setText(String.valueOf(newTime));
+			
+		}
+	};
+	
+	private OnClickListener add_kategorie_listener = new OnClickListener() {
+		
+
+		@Override
+		public void onClick(View v) {
+			
+			view.findViewById(R.id.button_add_kategorie).setVisibility(View.GONE);
+			LinearLayout kategorien_parent = ((LinearLayout)view.findViewById(R.id.kategorien_layout));
+			View newkategorie = view.inflate(getActivity(), R.layout.kategorie_input_template, kategorien_parent);
+			((ImageView)newkategorie.findViewById(R.id.button_add_kategorie)).setOnClickListener(add_kategorie_listener);
+			kategorien.add(newkategorie);
+		}
+	};
 	
 	private OnClickListener cancel_listener = new OnClickListener() {
 		

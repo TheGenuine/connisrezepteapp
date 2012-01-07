@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    style="@style/text_appearance">
 
      <RelativeLayout
         android:id="@+id/navigation_bg"
@@ -68,14 +69,20 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:orientation="horizontal" >
-
+	 <ScrollView
+	     android:id="@+id/scrollView1"
+	     android:layout_width="wrap_content"
+	     android:layout_height="fill_parent" 
+	     android:layout_weight="1"
+	     android:paddingLeft="5dip">
+	     
 	    <LinearLayout
 	        android:id="@+id/linearLayout2"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="5dip"
-	        android:orientation="vertical" 
-	        android:layout_weight="1">
+	        android:orientation="vertical" >
+
 
 	        <LinearLayout
 	            android:layout_width="match_parent"
@@ -153,16 +160,48 @@
 	                android:text="Zubereitungszeit" />
 
 	        </LinearLayout>
-
-	        <EditText
-	            android:id="@+id/editText1"
-	            android:layout_width="350dp"
-	            android:layout_height="wrap_content" >
-
-	            <requestFocus />
-	        </EditText>
 
 	        <LinearLayout
+	            android:id="@+id/linearLayout1"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal"
+	            android:gravity="center_vertical" >
+
+	            <ImageView
+	                android:id="@+id/button_time_minus"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:paddingLeft="5dip"
+	                android:src="@drawable/plus" />
+
+	            <EditText
+	                android:id="@+id/input_time"
+	                android:layout_width="100dp"
+	                android:layout_height="wrap_content" 
+	                android:text="0"
+	                android:inputType="time"
+	                android:layout_marginLeft="5dip"
+	                />
+
+	            <TextView
+	                android:id="@+id/text"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+					android:text="min"
+					android:layout_marginRight="5dip"/>
+
+	            <ImageView
+	                android:id="@+id/button_time_plus"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:paddingLeft="5dip"
+	                android:src="@drawable/plus" />
+
+	        </LinearLayout>
+
+	        <LinearLayout
+				android:id="@+id/kategorien_layout"
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
 	            android:layout_marginTop="5dip"
@@ -173,8 +212,8 @@
 	                android:layout_height="wrap_content"
 	                android:paddingTop="8dip"
 	                android:text="Kategorie" />
+
 	            <LinearLayout
-	                android:id="@+id/linearLayout4"
 	                android:layout_width="match_parent"
 	                android:layout_height="wrap_content"
 	                android:gravity="center_vertical" >
@@ -186,7 +225,7 @@
 	                    android:text="Kategorie" />
 
 	                <ImageView
-	                    android:id="@+id/button_plus_kategorie"
+	                    android:id="@+id/button_add_kategorie"
 	                    android:layout_width="wrap_content"
 	                    android:layout_height="wrap_content"
 	                    android:paddingLeft="5dip"
@@ -233,9 +272,8 @@
 	                android:layout_height="wrap_content"
 	                android:background="@drawable/ic_ok" />
 	        </LinearLayout>
-	        
 	    </LinearLayout>
-
+	   </ScrollView>
 	    <LinearLayout
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"

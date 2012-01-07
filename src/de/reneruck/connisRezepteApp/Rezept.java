@@ -2,6 +2,7 @@ package de.reneruck.connisRezepteApp;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -17,7 +18,8 @@ public class Rezept {
 	private String documentPath;
 	private List<String> kategorien;
 	private String zubereitungsart;
-	private List<String> zutat;
+	private List<String> zutaten;
+	private int zeit;
 	private File originalFile;
 	private boolean stored;
 	
@@ -41,6 +43,7 @@ public class Rezept {
 		this.documentName = cursor.getString(cursor.getColumnIndex(Configurations.rezepte_DocumentName));
 		this.documentPath = Configurations.dirPath+this.documentName;
 		this.zubereitungsart = cursor.getString(cursor.getColumnIndex(Configurations.rezepte_Zubereitung));
+		this.zeit = cursor.getInt(cursor.getColumnIndex(Configurations.rezepte_Zeit));
 		this.stored = true;
 	}
 	/**
@@ -143,7 +146,7 @@ public class Rezept {
 		db.beginTransaction();
 		boolean success = true;
 		boolean success2 = true;
-		for (String zutat : this.zutat) {
+		for (String zutat : this.zutaten) {
 			ContentValues values = new ContentValues(2);
 			values.put(Configurations.zutaten_Id, zutat.hashCode());
 			values.put(Configurations.zutaten_value, zutat);
@@ -237,6 +240,12 @@ public class Rezept {
 	public void setKategorien(List<String> kategorien) {
 		this.kategorien = kategorien;
 	}
+	public void addKategorie(String kategorie) {
+		if(this.kategorien == null) {
+			this.kategorien = new LinkedList<String>();
+		}
+		this.kategorien.add(kategorie);
+	}
 	public String getZubereitungsart() {
 		return zubereitungsart;
 	}
@@ -244,21 +253,32 @@ public class Rezept {
 		this.zubereitungsart = zubereitungsart;
 	}
 	public List<String> getZutaten() {
-		return zutat;
+		return zutaten;
 	}
 	public void setZutaten(List<String> zutat) {
-		this.zutat = zutat;
+		this.zutaten = zutat;
 	}
 	public void setZutaten(String zutaten) {
 		zutaten.replaceAll("\\s+", "");
 		String[] zutatenSplit = zutaten.split(",");
-		this.zutat = Arrays.asList(zutatenSplit); 
+		this.zutaten = Arrays.asList(zutatenSplit); 
 	}
-	public void addZutat(String zutat){
-		this.zutat.add(zutat);
+	public void addZutat(String zutat) {
+		if(this.zutaten == null) {
+			this.zutaten = new LinkedList<String>();
+		}
+		this.zutaten.add(zutat);
 	}
 
 	public File getOriginalFile() {
 		return originalFile;
+	}
+
+	public int getZeit() {
+		return zeit;
+	}
+
+	public void setZeit(int zeit) {
+		this.zeit = zeit;
 	}
 }
