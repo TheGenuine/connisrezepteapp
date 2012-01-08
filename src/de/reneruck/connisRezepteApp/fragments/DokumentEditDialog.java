@@ -94,17 +94,22 @@ public class DokumentEditDialog extends DialogFragment {
 		// set the counter on top
 		((TextView) view.findViewById(R.id.num_display)).setText(actualEntry+1 + "/" + entries.size());
 		
-		//fill in data
+		//allgemeine daten
 		setStorageIndicator(this.entries.get(actualEntry).isStored());
 		((EditText) view.findViewById(R.id.input_rezept_name)).setText(this.entries.get(this.actualEntry).getName());
 		((TextView) view.findViewById(R.id.rezept_document_path)).setText(this.entries.get(this.actualEntry).getDocumentPath());
 		
+		// Zubereitungsart
 		if(this.entries.get(this.actualEntry).getZubereitungsart() == null || this.entries.get(this.actualEntry).getZubereitungsart().length() < 1){
 			tryToPredictZubereitungsart();
 		}else{
 			((TextView) view.findViewById(R.id.input_zubereitung)).setText(this.entries.get(this.actualEntry).getZubereitungsart());
 		}
 		
+		// Zeit
+		((TextView) view.findViewById(R.id.input_time)).setText(String.valueOf(this.entries.get(this.actualEntry).getZeit()));
+	
+		// Zutaten
 		if(this.entries.get(this.actualEntry).getZutaten() == null || this.entries.get(this.actualEntry).getZutaten().size() < 1){
 			tryToPredictZutaten();
 		}else{
@@ -116,6 +121,7 @@ public class DokumentEditDialog extends DialogFragment {
 			((TextView) view.findViewById(R.id.input_zutaten)).setText(zutatenBuilder.toString());
 		}
 		
+		// Kategorien
 		if(this.entries.get(this.actualEntry).getKategorien() == null || this.entries.get(this.actualEntry).getKategorien().size() < 1){
 			tryToPredictKategorie();
 		}else{
@@ -142,6 +148,7 @@ public class DokumentEditDialog extends DialogFragment {
 	private void saveGuiToObject(){
 		Rezept rezept = this.entries.get(this.actualEntry);
 		rezept.setName(((TextView)view.findViewById(R.id.input_rezept_name)).getText().toString());
+		rezept.setZeit(Integer.parseInt(((TextView)view.findViewById(R.id.input_time)).getText().toString()));
 		rezept.setZubereitungsart(((TextView)view.findViewById(R.id.input_zubereitung)).getText().toString());
 		List<String> kategorien = new LinkedList<String>();
 		kategorien.add(((TextView)view.findViewById(R.id.input_kategorie)).getText().toString());
@@ -189,7 +196,7 @@ public class DokumentEditDialog extends DialogFragment {
 			view.findViewById(R.id.button_add_kategorie).setVisibility(View.GONE);
 			LinearLayout kategorien_parent = ((LinearLayout)view.findViewById(R.id.kategorien_layout));
 			View newkategorie = view.inflate(getActivity(), R.layout.kategorie_input_template, kategorien_parent);
-			((ImageView)newkategorie.findViewById(R.id.button_add_kategorie)).setOnClickListener(add_kategorie_listener);
+			((ImageView)view.findViewById(R.id.button_add_kategorie)).setOnClickListener(add_kategorie_listener);
 			kategorien.add(newkategorie);
 		}
 	};
@@ -232,6 +239,7 @@ public class DokumentEditDialog extends DialogFragment {
 		
 		@Override
 		public void onClick(View arg0) {
+			saveGuiToObject();
 			if(actualEntry == 0){
 				actualEntry = entries.size()-1;
 			}else{
@@ -244,6 +252,7 @@ public class DokumentEditDialog extends DialogFragment {
 		
 		@Override
 		public void onClick(View arg0) {
+			saveGuiToObject();
 			if(actualEntry == entries.size()-1){
 				actualEntry = 0;
 			}else{

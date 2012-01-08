@@ -34,6 +34,7 @@ public class Rezept {
 		String[] doucmentSplit = documentName.split("\\.");
 		this.name =doucmentSplit .length > 0 ?doucmentSplit[0] : documentName;
 		this.documentName = documentName;
+		this.zeit = 0;
 		this.documentPath = Configurations.dirPath+documentName;
 	}
 	
@@ -63,6 +64,7 @@ public class Rezept {
 		values.put(Configurations.rezepte_PathToDocument, this.documentPath);
 		values.put(Configurations.rezepte_DocumentName, this.documentName);
 		values.put(Configurations.rezepte_Zubereitung, this.zubereitungsart);
+		values.put(Configurations.rezepte_Zeit, this.zeit);
 		long rezeptId = -1;
 		if(this.stored){
 			rezeptId = db.update(Configurations.table_Rezepte, values, Configurations.rezepte_Id + "=" + this.id ,null);
