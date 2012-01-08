@@ -14,13 +14,17 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.reneruck.connisRezepteApp.DBManager;
@@ -68,15 +72,15 @@ public class DokumentEditDialog extends DialogFragment {
 		View v = inflater.inflate(R.layout.fragment_rezept_edit_view, container, false);
 		
 		
-		((TextView)v.findViewById(R.id.button_cancel)).setOnClickListener(cancel_listener);
 		((TextView)v.findViewById(R.id.button_top_save)).setOnClickListener(ok_listener);
 		((TextView)v.findViewById(R.id.button_top_cancel)).setOnClickListener(cancel_listener);
-		((TextView)v.findViewById(R.id.button_ok)).setOnClickListener(ok_listener);
 		((TextView)v.findViewById(R.id.button_left)).setOnClickListener(left_button_listener);
 		((TextView)v.findViewById(R.id.button_right)).setOnClickListener(right_button_listener);
 		((ImageView)v.findViewById(R.id.button_add_kategorie)).setOnClickListener(add_kategorie_listener);
-		((ImageView)v.findViewById(R.id.button_time_plus)).setOnClickListener(time_plus_listener);
-		((ImageView)v.findViewById(R.id.button_time_minus)).setOnClickListener(time_minus_listener);
+		((TextView)v.findViewById(R.id.button_time_plus)).setOnClickListener(time_plus_listener);
+		((TextView)v.findViewById(R.id.button_time_plus)).setOnLongClickListener(time_plus_longClick_listener);
+		((TextView)v.findViewById(R.id.button_time_minus)).setOnClickListener(time_minus_listener);
+		
 		view = v;
 		
 		fillInActualEntryData();
@@ -144,6 +148,14 @@ public class DokumentEditDialog extends DialogFragment {
 		rezept.setKategorien(kategorien);
 		rezept.setZutaten(((TextView)view.findViewById(R.id.input_zutaten)).getText().toString());
 	}
+	
+	private OnLongClickListener time_plus_longClick_listener = new OnLongClickListener() {
+
+		@Override
+		public boolean onLongClick(View arg0) {
+			return true;
+		}
+	};
 	
 	private OnClickListener time_plus_listener = new OnClickListener() {
 		

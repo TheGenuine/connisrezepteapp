@@ -168,12 +168,15 @@
 	            android:orientation="horizontal"
 	            android:gravity="center_vertical" >
 
-	            <ImageView
+	            <TextView
 	                android:id="@+id/button_time_minus"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                android:paddingLeft="5dip"
-	                android:src="@drawable/plus" />
+	                android:paddingLeft="10dip"
+	                android:paddingRight="10dip"
+	               	android:textSize="40dip"
+	                android:textStyle="bold"
+	                android:text="-" />
 
 	            <EditText
 	                android:id="@+id/input_time"
@@ -191,12 +194,14 @@
 					android:text="min"
 					android:layout_marginRight="5dip"/>
 
-	            <ImageView
+	            <TextView
 	                android:id="@+id/button_time_plus"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:paddingLeft="5dip"
-	                android:src="@drawable/plus" />
+	                android:textSize="40dip"
+	                android:textStyle="bold"
+	                android:text="+" />
 
 	        </LinearLayout>
 
@@ -258,9 +263,9 @@
 	            android:paddingTop="20dip" >
 	            <TextView
 	                android:id="@+id/button_cancel"
-	                android:layout_width="wrap_content"
+	                android:layout_width="20dip"
 	                android:layout_height="wrap_content"
-	                android:background="@drawable/ic_cancle" />
+	                />
 	            <View
 	                android:id="@+id/view2"
 	                android:layout_width="wrap_content"
@@ -268,9 +273,9 @@
 	                android:layout_weight="1" />
 	            <TextView
 	                android:id="@+id/button_ok"
-	                android:layout_width="wrap_content"
+	                android:layout_width="20dip"
 	                android:layout_height="wrap_content"
-	                android:background="@drawable/ic_ok" />
+	               />
 	        </LinearLayout>
 	    </LinearLayout>
 	   </ScrollView>
