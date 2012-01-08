@@ -261,15 +261,17 @@ public class Rezept {
 		this.zutaten = zutat;
 	}
 	public void setZutaten(String zutaten) {
-		zutaten.replaceAll("\\s+", "");
 		String[] zutatenSplit = zutaten.split(",");
-		this.zutaten = Arrays.asList(zutatenSplit); 
+		this.zutaten.clear();
+		for (String string : zutatenSplit) {
+			this.zutaten.add(string.trim());
+		}
 	}
 	public void addZutat(String zutat) {
 		if(this.zutaten == null) {
 			this.zutaten = new LinkedList<String>();
 		}
-		this.zutaten.add(zutat);
+		this.zutaten.add(zutat.trim());
 	}
 
 	public File getOriginalFile() {
