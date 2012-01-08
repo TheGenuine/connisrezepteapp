@@ -76,7 +76,7 @@ public class DokumentEditDialog extends DialogFragment {
 		((TextView)v.findViewById(R.id.button_top_cancel)).setOnClickListener(cancel_listener);
 		((TextView)v.findViewById(R.id.button_left)).setOnClickListener(left_button_listener);
 		((TextView)v.findViewById(R.id.button_right)).setOnClickListener(right_button_listener);
-		((ImageView)v.findViewById(R.id.button_add_kategorie)).setOnClickListener(add_kategorie_listener);
+//		((ImageView)v.findViewById(R.id.button_add_kategorie)).setOnClickListener(add_kategorie_listener);
 		((TextView)v.findViewById(R.id.button_time_plus)).setOnClickListener(time_plus_listener);
 		((TextView)v.findViewById(R.id.button_time_plus)).setOnLongClickListener(time_plus_longClick_listener);
 		((TextView)v.findViewById(R.id.button_time_minus)).setOnClickListener(time_minus_listener);
@@ -150,9 +150,11 @@ public class DokumentEditDialog extends DialogFragment {
 		rezept.setName(((TextView)view.findViewById(R.id.input_rezept_name)).getText().toString());
 		rezept.setZeit(Integer.parseInt(((TextView)view.findViewById(R.id.input_time)).getText().toString()));
 		rezept.setZubereitungsart(((TextView)view.findViewById(R.id.input_zubereitung)).getText().toString());
-		List<String> kategorien = new LinkedList<String>();
-		kategorien.add(((TextView)view.findViewById(R.id.input_kategorie)).getText().toString());
-		rezept.setKategorien(kategorien);
+		
+		List<String> kategorienStrings = new LinkedList<String>();
+		kategorienStrings.add(((TextView)view.findViewById(R.id.input_kategorie)).getText().toString());		
+		rezept.setKategorien(kategorienStrings);
+		
 		rezept.setZutaten(((TextView)view.findViewById(R.id.input_zutaten)).getText().toString());
 	}
 	
@@ -197,6 +199,7 @@ public class DokumentEditDialog extends DialogFragment {
 			LinearLayout kategorien_parent = ((LinearLayout)view.findViewById(R.id.kategorien_layout));
 			View newkategorie = view.inflate(getActivity(), R.layout.kategorie_input_template, kategorien_parent);
 			((ImageView)view.findViewById(R.id.button_add_kategorie)).setOnClickListener(add_kategorie_listener);
+			kategorien.add(view.findViewById(R.id.input_kategorie));
 			kategorien.add(newkategorie);
 		}
 	};

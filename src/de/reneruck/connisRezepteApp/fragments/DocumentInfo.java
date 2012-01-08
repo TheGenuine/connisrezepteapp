@@ -52,8 +52,14 @@ public class DocumentInfo extends Fragment {
 			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setText(this.rezept.getName());
 			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setOnClickListener(openDocumentClickListener);
 			((TextView) this.view.findViewById(R.id.document_info_zubereitung)).setText(this.rezept.getZubereitungsart());
-			((TextView) this.view.findViewById(R.id.document_info_kategorie)).setText(this.rezept.getKategorien().toString());
 			((TextView) this.view.findViewById(R.id.document_info_zutaten)).setText(this.rezept.getZutaten().toString());
+			
+			for (String kategorie : this.rezept.getKategorien()) {
+				TextView textview = new TextView(getActivity());
+				textview.setTextSize(15);
+				textview.setText(kategorie);
+				((LinearLayout) this.view.findViewById(R.id.kategorien_container)).addView(textview);
+			}
 			((Button) this.view.findViewById(R.id.button_open_document)).setOnClickListener(openDocumentClickListener);
 			((Button) this.view.findViewById(R.id.button_edit_document)).setOnClickListener(editDocumentClickListener);
 		} else {
