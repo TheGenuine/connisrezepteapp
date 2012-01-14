@@ -10,6 +10,7 @@ import java.util.List;
 
 public class NewDocumentsBean {
 	private List<File> neueDokumente = new LinkedList<File>();
+	private List<Rezept> neueRezepte = new LinkedList<Rezept>();
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
 	public void putAllEntries(Collection<File> collection){
@@ -57,13 +58,28 @@ public class NewDocumentsBean {
 		return neueDokumente;
 	}
 
-
-
 	public void setNeueDokumente(List<File> neueDokumente) {
 		this.neueDokumente = neueDokumente;
+		this.neueRezepte.clear();
+		for (File file : neueDokumente) {
+			this.neueRezepte.add(new Rezept(file));
+		}
 	} 
+	
+	public void addNeuesDokument(File neuesDokument){
+		this.neueDokumente.add(neuesDokument);
+		this.neueRezepte.add(new Rezept(neuesDokument));
+	}
 	
 	public int getNewDocumentsCount(){
 		return this.neueDokumente.size();
+	}
+
+	public List<Rezept> getNeueRezepte() {
+		return neueRezepte;
+	}
+
+	public void setNeueRezepte(List<Rezept> neueRezepte) {
+		this.neueRezepte = neueRezepte;
 	}
 }

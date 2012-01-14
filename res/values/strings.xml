@@ -10,5 +10,6 @@
     <string name="exit">Schließen</string>
     <string name="action_menu_search">Rezepte durchsuchen</string>
     <string name="search_hint">Nach Rezepten suchen</string>
+    <string name="error_save_to_db">Beim Speichern der Änderungen ist ein Fehler aufgetreten, es wurden keine Daten gespeichert</string>
 
 </resources>

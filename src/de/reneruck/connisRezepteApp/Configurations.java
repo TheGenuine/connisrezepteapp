@@ -43,4 +43,11 @@ public class Configurations {
 	public static String rezept_to_zutat_rezeptId= "rezeptId";
 	public static String rezept_to_zutat_zutatId= "zutatId";
 	
+	
+	// Communication Entries
+	public static final String LIST_SOURCE = "ListSource";
+	public static final int NEW_DOCUMENTS = 0;
+	public static final int CUSTOM_LIST = 1;
+
+	
 }

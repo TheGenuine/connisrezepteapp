@@ -37,8 +37,8 @@ import de.reneruck.connisRezepteApp.fragments.DokumentEditDialog;
 public class Main extends Activity {
 
 	private static final String TAG = "RezepteApp-Main";
+	protected static final int DOCUMENT_EDIT = 0;
 	private static Context context;
-	private NewDocumentsBean newDocumentsBean;
 	private DBManager manager;
 	private Menu menu;
 
@@ -53,10 +53,11 @@ public class Main extends Activity {
 
 		setContentView(R.layout.main);
 		this.manager = new DBManager(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
-		newDocumentsBean = new NewDocumentsBean();
+		NewDocumentsBean newDocumentsBean = new NewDocumentsBean();
 		newDocumentsBean.addPropertyChangeListener(newDocumentsPropertyChangeListener);
 		
 		((AppContext) getApplicationContext()).setManager(this.manager);
+		((AppContext) getApplicationContext()).setNewDocumentsBean(newDocumentsBean);
 		
 		// initialize and start the background file scanner
 		FileScanner filescanner = new FileScanner(newDocumentsBean);
@@ -142,7 +143,7 @@ public class Main extends Activity {
 			
 			@Override
 			public void run() {
-				MenuItem item = menu.findItem(R.id.menu_updated);
+				MenuItem item = menu.findItem(R.id.menu_updated_documents);
 				if(count == 0){
 					item.setVisible(false);
 				}else {
@@ -152,17 +153,6 @@ public class Main extends Activity {
 			}
 		});
 	}
-	
-	/**
-	 * Listener to react on clicks on the new Documents indicator
-	 */
-	OnClickListener newDocumentsListener = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			 showDialog();
-		}
-	};
 	
 	/* Creates the menu items */
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -198,8 +188,10 @@ public class Main extends Activity {
         case  R.id.menu_exit:
         	this.finish();
         	break;
-        case R.id.menu_updated:
-        	showDialog();
+        case R.id.menu_updated_documents:
+			Intent i = new Intent(getApplicationContext(), DocumentEditActivity.class);
+			i.putExtra(Configurations.LIST_SOURCE, Configurations.NEW_DOCUMENTS);
+			startActivityForResult(i, DOCUMENT_EDIT);
         	break;
         case R.id.menu_search_action:
         	break;
@@ -214,20 +206,6 @@ public class Main extends Activity {
     	}
 		return true;
      }
-    
-    void showDialog() {
-    	DokumentEditDialog editFragment = new DokumentEditDialog(this.newDocumentsBean, this.manager, this.editDialogDismissListener);
-    	editFragment.show(getFragmentManager(), "editDocumentDialog");
-    }
-    
-    OnDismissListener editDialogDismissListener = new OnDismissListener() {
-		
-		@Override
-		public void onDismiss(DialogInterface dialog) {
-			updateNewDocumentsIndicator(newDocumentsBean.getNewDocumentsCount());
-			buildAllDocumentsList();
-		}
-	};
     
     @Override
     protected void onPause() {

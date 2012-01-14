@@ -1,6 +1,7 @@
 package de.reneruck.connisRezepteApp;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import android.app.Application;
 import android.database.Cursor;
@@ -9,6 +10,8 @@ import android.database.sqlite.SQLiteDatabase;
 public class AppContext extends Application {
 
 	private DBManager manager;
+	private NewDocumentsBean newDocumentsBean;
+	private List<Rezept> customDocumentsBean;
 	
 	@Override
 	public void onCreate() {
@@ -80,5 +83,21 @@ public class AppContext extends Application {
 
 	public DBManager getDBManager() {
 		return this.manager;
+	}
+
+	public NewDocumentsBean getNewDocumentsBean() {
+		return this.newDocumentsBean;
+	}
+
+	public void setNewDocumentsBean(NewDocumentsBean newDocumentsBean) {
+		this.newDocumentsBean = newDocumentsBean;
+	}
+
+	public List<Rezept> getCustomDocumentsBean() {
+		return this.customDocumentsBean;
+	}
+
+	public void setCustomDocumentsBean(List<Rezept> customDocumentsBean) {
+		this.customDocumentsBean = customDocumentsBean;
 	}
 }
