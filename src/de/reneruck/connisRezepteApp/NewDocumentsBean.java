@@ -16,6 +16,10 @@ public class NewDocumentsBean {
 	public void putAllEntries(Collection<File> collection){
 		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "neueDokumente", this.neueDokumente, collection));
 		this.neueDokumente.addAll(collection);
+		this.neueRezepte.clear();
+		for (File file : collection) {
+			this.neueRezepte.add(new Rezept(file));
+		}
 	}
 	
 	public void removeEntry(File entry){
