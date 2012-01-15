@@ -22,6 +22,7 @@ public class DocumentEditActivity extends Activity{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_rezept_edit_view);
 		AppContext appContext = (AppContext)getApplicationContext();
 		this.manager = appContext.getDBManager();

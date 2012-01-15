@@ -27,6 +27,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
+import de.reneruck.connisRezepteApp.development.DatabaseOverview;
 import de.reneruck.connisRezepteApp.fragments.DocumentInfo;
 import de.reneruck.connisRezepteApp.fragments.DokumentEditDialog;
 /**
@@ -170,20 +171,9 @@ public class Main extends Activity {
         
     	switch(item.getItemId()){
     	
-    	case R.id.menu_debug_copydb:
-    		File dbfile = new File("databases/rezepte.db");
-    		File copiedFile = new File("/sdcard/rezepte.db");
-    		dbfile.renameTo(copiedFile);
-    		break;
-        case R.id.menu_debug_cleandb:
-        	try {
-        		SQLiteDatabase db = manager.getWritableDatabase();
-        		db.delete(Configurations.table_Rezepte, null, null);
-        		db.close();
-        		buildAllDocumentsList();
-			} catch (SQLException e) {
-					e.printStackTrace();
-			}
+        case R.id.menu_debug_showdb:
+			Intent dbintent = new Intent(getApplicationContext(), DatabaseOverview.class);
+			startActivity(dbintent);
         	break;
         case  R.id.menu_exit:
         	this.finish();
