@@ -1,7 +1,6 @@
 package de.reneruck.connisRezepteApp;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,9 +15,9 @@ public class Rezept {
 	private String name;
 	private String documentName;
 	private String documentPath;
-	private List<String> kategorien;
+	private List<String> kategorien = new LinkedList<String>();
 	private String zubereitungsart;
-	private List<String> zutaten;
+	private List<String> zutaten = new LinkedList<String>();
 	private int zeit;
 	private File originalFile;
 	private boolean stored;
