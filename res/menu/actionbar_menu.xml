@@ -14,7 +14,7 @@
  
  <item android:id="@+id/menu_debug_showdb"
           android:showAsAction="never" 
-          android:title="@string/debug_cleandb"/>
+          android:title="@string/debug_db_view"/>
  
  <item android:id="@+id/menu_exit"
           android:showAsAction="never" 

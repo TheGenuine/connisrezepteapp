@@ -4,44 +4,39 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
-            <LinearLayout
-                android:id="@+id/linearLayout1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
 	            <TextView
 	                android:id="@+id/field_id"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                style="@style/table_head"/>
+	                android:text=""/>
 	            <TextView
 	                android:id="@+id/field_rezept_name"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                style="@style/table_head" />
+	                android:text=""/>
 	            <TextView
 	                android:id="@+id/field_document_name"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                style="@style/table_head"/>
+	                android:text=""/>
 	            <TextView
 	                android:id="@+id/field_hash"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                style="@style/table_head"/>
+	                android:text=""/>
 	            <TextView
 	                android:id="@+id/field_document_path"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                style="@style/table_head"/>
+	                android:text=""/>
 	            <TextView
 	                android:id="@+id/field_zubereitung"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                style="@style/table_head"/>
+	                android:text=""/>
 	            <TextView
 	                android:id="@+id/field_zeit"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                style="@style/table_head"/>
-            </LinearLayout>
+	                android:text=""/>
         </TableRow>

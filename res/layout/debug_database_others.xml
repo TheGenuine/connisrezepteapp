@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+     >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" 
+        android:orientation="horizontal"
+        android:weightSum="4">
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent" 
+	        android:orientation="vertical"
+			android:layout_weight="1">	
+			    <TextView
+	                android:id="@+id/textView2"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:text="Kategorien" 
+	                android:textStyle="bold"
+	                android:gravity="center_horizontal"/>    
+		  <TableLayout
+	        android:id="@+id/debug_table_kategorien"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" 
+	        android:stretchColumns="0,1">
+	
+	        <TableRow
+	            android:id="@+id/tableRow1"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content" >
+	            <!--             Kategorien -->
+	            <TextView
+	                android:id="@+id/textView1"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="ID" 
+	                style="@style/table_head"/>
+
+	            
+
+	            <TextView
+	                android:id="@+id/textView1"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="Name"
+	                style="@style/table_head" />
+            </TableRow>
+           </TableLayout>
+	        
+	    </LinearLayout>
+	    <LinearLayout android:layout_width="1dip" android:layout_height="fill_parent" android:layout_marginRight="5dip" android:background="#000000"></LinearLayout>
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent" 
+	        android:orientation="vertical"
+	        android:layout_weight="1">
+		  	<TextView
+	            android:id="@+id/textView2"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text="Zutaten" 
+	            android:textStyle="bold"
+	            android:gravity="center_horizontal"/>  
+		  <TableLayout
+	        android:id="@+id/debug_table_zutaten"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" 
+	        android:stretchColumns="0,1">
+	
+	        <TableRow
+	            android:id="@+id/tableRow1"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content" >
+	            <!-- 	          Zutaten -->
+	            <TextView
+	                android:id="@+id/textView1"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="ID" 
+	                style="@style/table_head"/>
+	            <TextView
+	                android:id="@+id/textView1"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="Name" 
+	                style="@style/table_head"/>
+            </TableRow>
+           </TableLayout>
+	        
+	    </LinearLayout>
+	    <LinearLayout android:layout_width="1dip" android:layout_height="fill_parent" android:layout_marginRight="5dip" android:background="#000000"></LinearLayout>
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent" 
+	        android:orientation="vertical"
+	        android:layout_weight="1">
+		  <TextView
+	            android:id="@+id/textView2"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text="Rezept -> Kategorie" 
+	            android:textStyle="bold"
+	            android:gravity="center_horizontal"/> 
+	      <TableLayout
+	        android:id="@+id/debug_table_rezept_to_kategorien"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" 
+	        android:stretchColumns="0,1">
+	
+	        <TableRow
+	            android:id="@+id/tableRow1"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content" >
+	            <!-- 	          Rezept to Kategorie -->
+	            <TextView
+	                android:id="@+id/textView1"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="ID" 
+	                style="@style/table_head"/>
+	            <TextView
+	                android:id="@+id/textView1"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="Rezept ID" 
+	                style="@style/table_head"/>
+	            <TextView
+	                android:id="@+id/textView1"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="Kategorie ID" 
+	                style="@style/table_head"/>
+            </TableRow>
+           </TableLayout>
+           
+	    </LinearLayout>
+	    <LinearLayout android:layout_width="1dip" android:layout_height="fill_parent" android:layout_marginRight="5dip" android:background="#000000"></LinearLayout>
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent" 
+	        android:orientation="vertical"
+	        android:layout_weight="1">
+	      		  <TextView
+	            android:id="@+id/textView2"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text="Rezept -> Zutat" 
+	            android:textStyle="bold"
+	            android:gravity="center_horizontal"/> 
+	      <TableLayout
+	        android:id="@+id/debug_table_rezept_to_zutat"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" 
+	        android:stretchColumns="0,1">
+	
+	        <TableRow
+	            android:id="@+id/tableRow1"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content" >
+	            <!-- 	          Rezept to Zutat -->
+	            <TextView
+	                android:id="@+id/textView1"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="ID" 
+	                style="@style/table_head"/>
+	            <TextView
+	                android:id="@+id/textView1"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="Rezept ID" 
+	                style="@style/table_head"/>
+	            <TextView
+	                android:id="@+id/textView1"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="Zutat ID" 
+	                style="@style/table_head"/>
+            </TableRow>
+           </TableLayout>
+           
+	    </LinearLayout>
+    </LinearLayout>
+
+  </ScrollView>
+ </LinearLayout>
