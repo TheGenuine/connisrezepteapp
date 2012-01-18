@@ -51,6 +51,29 @@
                 android:text="-"
                 android:textSize="15dip" />
         </TableRow>
+        
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" 
+			android:layout_marginTop="10dip">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="25dip"
+                android:text="Zeit:"
+                android:textSize="18dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/document_info_zeit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textSize="15dip" />
+        </TableRow>
         <TableRow
             android:id="@+id/tableRow1"
             android:layout_width="wrap_content"

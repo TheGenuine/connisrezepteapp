@@ -52,6 +52,7 @@ public class DocumentInfo extends Fragment {
 			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setText(this.rezept.getName());
 			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setOnClickListener(openDocumentClickListener);
 			((TextView) this.view.findViewById(R.id.document_info_zubereitung)).setText(this.rezept.getZubereitungsart());
+			((TextView) this.view.findViewById(R.id.document_info_zeit)).setText(this.rezept.getZeit() + " min");
 			((TextView) this.view.findViewById(R.id.document_info_zutaten)).setText(this.rezept.getZutaten().toString());
 			
 			for (String kategorie : this.rezept.getKategorien()) {
