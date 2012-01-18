@@ -66,8 +66,6 @@ public class DokumentEditDialog extends DialogFragment {
 		View v = inflater.inflate(R.layout.fragment_rezept_edit_view, container, false);
 		
 		
-		((TextView)v.findViewById(R.id.button_top_save)).setOnClickListener(ok_listener);
-		((TextView)v.findViewById(R.id.button_top_cancel)).setOnClickListener(cancel_listener);
 		((TextView)v.findViewById(R.id.button_left)).setOnClickListener(left_button_listener);
 		((TextView)v.findViewById(R.id.button_right)).setOnClickListener(right_button_listener);
 //		((ImageView)v.findViewById(R.id.button_add_kategorie)).setOnClickListener(add_kategorie_listener);

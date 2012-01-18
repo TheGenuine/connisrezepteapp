@@ -3,9 +3,15 @@ package de.reneruck.connisRezepteApp;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ActionBar.Tab;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -24,6 +30,8 @@ public class DocumentEditActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_rezept_edit_view);
+		setUpActionbar();
+		
 		AppContext appContext = (AppContext)getApplicationContext();
 		this.manager = appContext.getDBManager();
 		
@@ -36,8 +44,6 @@ public class DocumentEditActivity extends Activity{
 				break;
 		}
 		
-		((TextView)findViewById(R.id.button_top_save)).setOnClickListener(ok_listener);
-		((TextView)findViewById(R.id.button_top_cancel)).setOnClickListener(cancel_listener);
 		((TextView)findViewById(R.id.button_left)).setOnClickListener(left_button_listener);
 		((TextView)findViewById(R.id.button_right)).setOnClickListener(right_button_listener);
 //		((ImageView.findViewById(R.id.button_add_kategorie)).setOnClickListener(add_kategorie_listener);
@@ -48,6 +54,35 @@ public class DocumentEditActivity extends Activity{
 		fillInActualEntryData();
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.new_document_actionbar, menu);
+	    return true;
+	}
+	
+	private void setUpActionbar() {
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case android.R.id.home:
+	            Intent intent = new Intent(this, Main.class);
+	            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	            startActivity(intent);
+	            return true;
+	        case R.id.menu_save:
+				saveToDatabase();
+	        	return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
 	/**
 	 * Get the Rezept Object from the entries list and fill the layout with it's data
 	 */
@@ -200,25 +235,6 @@ public class DocumentEditActivity extends Activity{
 //			((ImageView) findViewById(R.id.button_add_kategorie)).setOnClickListener(add_kategorie_listener);
 //			kategorien.add(findViewById(R.id.input_kategorie));
 //			kategorien.add(newkategorie);
-		}
-	};
-	
-	/**
-	 * Listens for the cancel Button and closes this Activity without saving
-	 */
-	private OnClickListener cancel_listener = new OnClickListener() {
-		
-		@Override
-		public void onClick(View arg0) {
-
-		}
-	};
-	
-	private OnClickListener ok_listener = new OnClickListener() {
-		
-		@Override
-		public void onClick(View arg0) {
-			saveToDatabase();
 		}
 	};
 	

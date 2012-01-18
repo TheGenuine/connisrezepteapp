@@ -158,7 +158,7 @@ public class Main extends Activity {
 	/* Creates the menu items */
     public boolean onCreateOptionsMenu(Menu menu) {
     	MenuInflater inflater = getMenuInflater();
-    	inflater.inflate(R.menu.actionbar_menu, menu);
+    	inflater.inflate(R.menu.main_actionbar, menu);
 	    SearchView searchView = (SearchView) menu.findItem(R.id.menu_search_action).getActionView();
 	    this.menu = menu;
         return true;
