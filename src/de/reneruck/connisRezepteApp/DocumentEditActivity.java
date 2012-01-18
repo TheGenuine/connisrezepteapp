@@ -151,7 +151,7 @@ public class DocumentEditActivity extends Activity{
 	private void saveToDatabase() {
 		saveGuiToObject();
 		if(this.entries.get(actualEntry).saveToDB(manager.getWritableDatabase())){
-			Toast.makeText(getApplicationContext(), "The Object saved successfully", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), R.string.save_successfull, Toast.LENGTH_SHORT).show();
 			setStorageIndicator(true);
 			entries.get(actualEntry).setStored(true);
 		}else{
