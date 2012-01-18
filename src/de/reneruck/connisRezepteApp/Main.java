@@ -144,6 +144,7 @@ public class Main extends Activity {
 			
 			@Override
 			public void run() {
+				//FIXME crashed wenn display gedreht wird (nullpointer)
 				MenuItem item = menu.findItem(R.id.menu_updated_documents);
 				if(count == 0){
 					item.setVisible(false);
