@@ -7,14 +7,4 @@
         android:actionViewClass="android.widget.SearchView"
      	android:icon="@drawable/magnify"/>
  
- <group android:id="@+id/menu_debug_dblist">
-	 <item android:id="@+id/menu_exit"
-	          android:title="@string/exit"/>
-	 <item android:id="@+id/menu_search_action" 
-	     	android:title="@string/action_menu_search" 
-	     	android:icon="@drawable/magnify"/>
-     
- </group>
- 
- 
 </menu>
