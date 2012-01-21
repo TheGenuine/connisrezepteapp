@@ -1,7 +1,10 @@
 package de.reneruck.connisRezepteApp;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+
+import de.reneruck.connisRezepteApp.DB.DBManager;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -9,6 +12,7 @@ import android.app.ActionBar.Tab;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,25 +26,35 @@ import android.widget.Toast;
 public class DocumentEditActivity extends Activity{
 
 	
+	private static final String TAG = "Document Edit Activity";
 	private int actualEntry = 0;
 	private List<Rezept> entries = new LinkedList<Rezept>();
 	private DBManager manager;
+	private AppContext appContext;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d(TAG, "------------- onStart --------------");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_rezept_edit_view);
 		setUpActionbar();
 		
-		AppContext appContext = (AppContext)getApplicationContext();
+		this.appContext = (AppContext)getApplicationContext();
 		this.manager = appContext.getDBManager();
 		
 		switch(getIntent().getIntExtra(Configurations.LIST_SOURCE, Configurations.NEW_DOCUMENTS)){
 			case  Configurations.NEW_DOCUMENTS:
-				this.entries = appContext.getNewDocumentsBean().getNeueRezepte();
+				List<File> neueDokumente = appContext.getDocumentsBean().getNeueDokumente();
+				if(neueDokumente.size() > 0){
+					for (File file : neueDokumente) {
+						this.entries.add(new Rezept(file));
+					}
+				} else {
+					showDialog(Configurations.DIALOG_NO_NEW_DOCUMENTS);
+				}
 				break;
 			case Configurations.CUSTOM_LIST:
-				this.entries = appContext.getCustomDocumentsBean();
+				this.entries = appContext.getDocumentsBean().getCustomDocumentsList();
 				break;
 		}
 		
@@ -150,7 +164,7 @@ public class DocumentEditActivity extends Activity{
 	 */
 	private void saveToDatabase() {
 		saveGuiToObject();
-		if(this.entries.get(actualEntry).saveToDB(manager.getWritableDatabase())){
+		if(this.appContext.getDatabaseAbstraction().saveToDB(this.entries.get(actualEntry))){
 			Toast.makeText(getApplicationContext(), R.string.save_successfull, Toast.LENGTH_SHORT).show();
 			setStorageIndicator(true);
 			entries.get(actualEntry).setStored(true);
@@ -183,7 +197,23 @@ public class DocumentEditActivity extends Activity{
 		}
 	}
 	
+	@Override
+	protected void onPause() {
+		Log.d(TAG, "------------- onPause --------------");
+		super.onPause();
+	}
 	
+	@Override
+	protected void onStop() {
+		Log.d(TAG, "------------- onStop --------------");
+		super.onStop();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		Log.d(TAG, "------------- onDestroy --------------");
+		super.onDestroy();
+	}
 	/*
 	 *  ---------------------------------------------------------------------------------------
 	 *  

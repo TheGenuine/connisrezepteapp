@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.reneruck.connisRezepteApp.DB.DBManager;
+
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -36,7 +38,7 @@ public class QueryDocumentList extends AsyncTask<Map<String, Object>, String, Li
 				do {
 					Rezept rezept = new Rezept(c);
 					
-					queryZutaten(db, rezept);
+//					queryZutaten(db, rezept);
 					queryKateorien(db, rezept);
 					
 					rezepteList.add(rezept);
@@ -46,7 +48,6 @@ public class QueryDocumentList extends AsyncTask<Map<String, Object>, String, Li
 		} catch (SQLException e) {
 			e.fillInStackTrace();
 		}
-		
 		return rezepteList;
 	}
 	

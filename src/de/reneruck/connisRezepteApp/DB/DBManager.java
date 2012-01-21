@@ -1,5 +1,6 @@
-package de.reneruck.connisRezepteApp;
+package de.reneruck.connisRezepteApp.DB;
 
+import de.reneruck.connisRezepteApp.Configurations;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;

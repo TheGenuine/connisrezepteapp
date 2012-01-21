@@ -18,9 +18,9 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import de.reneruck.connisRezepteApp.AppContext;
 import de.reneruck.connisRezepteApp.Configurations;
-import de.reneruck.connisRezepteApp.DBManager;
 import de.reneruck.connisRezepteApp.Main;
 import de.reneruck.connisRezepteApp.R;
+import de.reneruck.connisRezepteApp.DB.DBManager;
 
 public class DatabaseOverview extends Activity implements TabListener {
 

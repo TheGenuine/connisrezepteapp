@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import de.reneruck.connisRezepteApp.AppContext;
 import de.reneruck.connisRezepteApp.Configurations;
+import de.reneruck.connisRezepteApp.DocumentEditActivity;
 import de.reneruck.connisRezepteApp.R;
 import de.reneruck.connisRezepteApp.Rezept;
 
@@ -28,7 +29,7 @@ public class DocumentInfo extends Fragment {
 
 	private View view;
 	private Rezept rezept;
-	private String kategorie;
+	private AppContext context;
 
 	public DocumentInfo() {
 	}
@@ -37,7 +38,7 @@ public class DocumentInfo extends Fragment {
 		if(rezept != null){
 			this.rezept = rezept;
 		}
-	
+		this.context = ((AppContext)getActivity().getApplicationContext());
 	}
 
 	@Override
@@ -82,8 +83,9 @@ public class DocumentInfo extends Fragment {
     	
     	List<Rezept> editEntries = new LinkedList<Rezept>();
     	editEntries.add(this.rezept);
-    	DokumentEditDialog editFragment = new DokumentEditDialog(editEntries, ((AppContext)getActivity().getApplicationContext()).getDBManager(), null);
-    	editFragment.show(getFragmentManager(), "editDocumentDialog");
+    	this.context.getDocumentsBean().setCustomDocumentsList(editEntries);
+    	Intent i = new Intent(getActivity(), DocumentEditActivity.class);
+    	i.putExtra(Configurations.LIST_SOURCE, Configurations.CUSTOM_LIST);
     }
     
 	public static DocumentInfo newInstance(Rezept rezept) {

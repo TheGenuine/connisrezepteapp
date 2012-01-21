@@ -5,31 +5,51 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-public class NewDocumentsBean {
-	private List<File> neueDokumente = new LinkedList<File>();
-	private List<Rezept> neueRezepte = new LinkedList<Rezept>();
+public class DocumentsBean {
+	private Map<Integer,File> neueDokumente = new HashMap<Integer,File>();
+	private List<Rezept> customDocumentList = new LinkedList<Rezept>();
+
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
 	public void putAllEntries(Collection<File> collection){
 		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "neueDokumente", this.neueDokumente, collection));
-		this.neueDokumente.addAll(collection);
-		this.neueRezepte.clear();
 		for (File file : collection) {
-			this.neueRezepte.add(new Rezept(file));
+			this.neueDokumente.put(file.hashCode(), file);
 		}
 	}
 	
-	public void removeEntry(File entry){
+	public void removeEntry(int hash){
 		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "neueDokumente", this.neueDokumente, this.neueDokumente));
-		this.neueDokumente.remove(entry);
+		this.neueDokumente.remove(hash);
 	}
 	
 	public void clearList(){
 		this.propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "neueDokumente", this.neueDokumente, this.neueDokumente));
 		this.neueDokumente.clear();
+	}
+
+	public List<Rezept> getCustomDocumentsList() {
+		return this.customDocumentList;
+	}
+
+	public void setCustomDocumentsList(List<Rezept> list) {
+		this.customDocumentList.clear();
+		this.customDocumentList.addAll(list);
+	}
+
+	public int getNewDocumentsCount(){
+		return this.neueDokumente.size();
+	}
+
+	public List<File> getNeueDokumente() {
+		return new LinkedList<File>(this.neueDokumente.values());
 	}
 	
 	/**
@@ -39,11 +59,11 @@ public class NewDocumentsBean {
 	 * 
 	 * @param listener
 	 */
-    public void addPropertyChangeListener(PropertyChangeListener listener)
-    {
-        this.propertyChangeSupport.addPropertyChangeListener(listener);
-    }
-
+	public void addPropertyChangeListener(PropertyChangeListener listener)
+	{
+		this.propertyChangeSupport.addPropertyChangeListener(listener);
+	}
+	
 	/**
 	 * Method that all JavaBeans class need to implement to be able to inform
 	 * PropertyChangeListeners when an attribute has been changed. This method
@@ -51,39 +71,9 @@ public class NewDocumentsBean {
 	 * 
 	 * @param listener
 	 */
-    public void removePropertyChangeListener(PropertyChangeListener listener)
-    {
-        this.propertyChangeSupport.removePropertyChangeListener(listener);
-    }
-
-
-
-	public List<File> getNeueDokumente() {
-		return neueDokumente;
+	public void removePropertyChangeListener(PropertyChangeListener listener)
+	{
+		this.propertyChangeSupport.removePropertyChangeListener(listener);
 	}
 
-	public void setNeueDokumente(List<File> neueDokumente) {
-		this.neueDokumente = neueDokumente;
-		this.neueRezepte.clear();
-		for (File file : neueDokumente) {
-			this.neueRezepte.add(new Rezept(file));
-		}
-	} 
-	
-	public void addNeuesDokument(File neuesDokument){
-		this.neueDokumente.add(neuesDokument);
-		this.neueRezepte.add(new Rezept(neuesDokument));
-	}
-	
-	public int getNewDocumentsCount(){
-		return this.neueDokumente.size();
-	}
-
-	public List<Rezept> getNeueRezepte() {
-		return neueRezepte;
-	}
-
-	public void setNeueRezepte(List<Rezept> neueRezepte) {
-		this.neueRezepte = neueRezepte;
-	}
 }

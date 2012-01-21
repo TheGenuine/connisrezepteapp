@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.apache.commons.collections.ListUtils;
 
+import de.reneruck.connisRezepteApp.DB.DBManager;
+
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,16 +18,17 @@ import android.util.Log;
 
 public class FileScanner extends AsyncTask<String, Integer, Object>{
 
-	private NewDocumentsBean newDocumentBean;
+	private DocumentsBean newDocumentBean;
 	private boolean isRunnig = false;
+	private DBManager manager;
 	
-	public FileScanner(NewDocumentsBean newDocumentBean) {
+	public FileScanner(DocumentsBean newDocumentBean, DBManager manager) {
 		this.newDocumentBean = newDocumentBean;
+		this.manager = manager;
 	}
 	
 	@Override
 	protected List<String> doInBackground(String... arg0) {
-		DBManager manager = new DBManager(Main.getContext(),Configurations.databaseName, null,Configurations.databaseVersion);
 		final SQLiteDatabase db = manager.getReadableDatabase();
 		File rezepteDictionary = new File(Configurations.dirPath);
 
