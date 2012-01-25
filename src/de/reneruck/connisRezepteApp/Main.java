@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -37,12 +39,15 @@ public class Main extends Activity {
 	private static final String TAG = "RezepteApp-Main";
 	protected static final int DOCUMENT_EDIT = 0;
 	private Menu menu;
-
+	private AppContext context;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.d(TAG, "------------- onStart --------------");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		
+		this.context = (AppContext) getApplicationContext();
 		
 		DBManager manager = new DBManager(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
 		DocumentsBean documentsBean = new DocumentsBean();
@@ -50,14 +55,9 @@ public class Main extends Activity {
 		
 		DatabaseAbstraction dal = new DatabaseAbstraction(manager);
 		
-		((AppContext) getApplicationContext()).setManager(manager);
-		((AppContext) getApplicationContext()).setDocumentsBean(documentsBean);
-		((AppContext) getApplicationContext()).setDatabaseAbstraction(dal);
-		
-		// initialize and start the background file scanner
-		FileScanner filescanner = new FileScanner(documentsBean, manager);
-		filescanner.setRunnig(true);
-		filescanner.execute("");
+		this.context.setManager(manager);
+		this.context.setDocumentsBean(documentsBean);
+		this.context.setDatabaseAbstraction(dal);
 		
 		buildAllDocumentsList();
 	}
@@ -67,16 +67,23 @@ public class Main extends Activity {
 	 * @param db
 	 */
 	private void buildAllDocumentsList() {
-		String query = SQLiteQueryBuilder.buildQueryString(true, Configurations.table_Rezepte, new String[]{"*"}, null, null, null, Configurations.rezepte_Name, null);
-		
-		Map<String, Object> parameter = new HashMap<String, Object>();
-		parameter.put("listView", (ListView) findViewById(R.id.listView));
-		parameter.put("listener", this.rezepteListEntyListener);
-		parameter.put("query", query);
-		
-		new QueryDocumentList().execute(parameter);
-	}
+		this.context.getDatabaseAbstraction().getAllDocuments(new DatabaseCallback() {			
+			@Override
+			public void onsSelectCallback(List<?> result) {
+				if(result.get(0) instanceof Rezept){
+					dismissDialog(Configurations.DIALOG_WAITING_FOR_QUERY);
+					((ListView) findViewById(R.id.listView)).setAdapter(new RezepteListAdapter(getApplicationContext(),(List<Rezept>)result));
+					((ListView) findViewById(R.id.listView)).setOnItemClickListener(rezepteListEntyListener);
+				}
+			}
 
+			@Override
+			public void onStoreCallback(boolean result) {}
+		});
+		showDialog(Configurations.DIALOG_WAITING_FOR_QUERY);
+	}
+	
+	
 	/**
 	 * All the listeners are implemented here
 	 */
@@ -129,12 +136,16 @@ public class Main extends Activity {
 			@Override
 			public void run() {
 				//FIXME crashed wenn display gedreht wird (nullpointer)
-				MenuItem item = menu.findItem(R.id.menu_updated_documents);
-				if(count == 0){
-					item.setVisible(false);
-				}else {
-					item.setVisible(true);
-					item.setTitle(count + " neue Dokumente");
+				if(menu != null) {
+					MenuItem item = menu.findItem(R.id.menu_updated_documents);
+					if(count == 0) {
+						item.setVisible(false);
+					} else {
+						item.setVisible(true);
+						item.setTitle(count + " neue Dokumente");
+					}
+				} else {
+					Log.d(TAG, "Menu was null: " + menu);
 				}
 			}
 		});
@@ -142,14 +153,27 @@ public class Main extends Activity {
 	
 	/* Creates the menu items */
     public boolean onCreateOptionsMenu(Menu menu) {
+    	Log.d(TAG, "------------- onCreateMenue --------------");
     	MenuInflater inflater = getMenuInflater();
     	inflater.inflate(R.menu.main_actionbar, menu);
 	    SearchView searchView = (SearchView) menu.findItem(R.id.menu_search_action).getActionView();
 	    this.menu = menu;
+	    startFileScanner();
         return true;
     }
 
-    /* 
+    /**
+     * Initializes and starts the background Filescanner
+     * ATM ONLY ONE TIME SCAN, LATER BACKGROUND SERVICE AND ALWASY SCANNING
+     */
+    private void startFileScanner() {
+		// initialize and start the background file scanner
+		FileScanner filescanner = new FileScanner(((AppContext)getApplicationContext()).getDocumentsBean(), ((AppContext)getApplicationContext()).getDBManager());
+		filescanner.setRunnig(true);
+		filescanner.execute("");		
+	}
+
+	/* 
      * Menü Items
      */
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -164,9 +188,9 @@ public class Main extends Activity {
         	this.finish();
         	break;
         case R.id.menu_updated_documents:
-			Intent i = new Intent(getApplicationContext(), DocumentEditActivity.class);
+			Intent i = new Intent(getApplicationContext(), DocumentEdit.class);
 			i.putExtra(Configurations.LIST_SOURCE, Configurations.NEW_DOCUMENTS);
-			startActivityForResult(i, DOCUMENT_EDIT);
+			startActivityIfNeeded(i, DOCUMENT_EDIT);
         	break;
         case R.id.menu_search_action:
         	break;
@@ -182,10 +206,30 @@ public class Main extends Activity {
 		return true;
      }
     
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Log.d(TAG, "------------- onCreateDialog --------------");
+		switch (id) {
+			case Configurations.DIALOG_WAITING_FOR_QUERY:
+				ProgressDialog dialog  = ProgressDialog.show(Main.this, "Bitte warten", "suche nach Dokumenten");
+				return dialog;
+			default:
+				break;
+		}
+		
+		return super.onCreateDialog(id);
+	}    
+	
     @Override
     protected void onResume() {
     	Log.d(TAG, "------------- onResume --------------");
     	super.onResume();
+    }
+    
+    @Override
+    protected void onStop() {
+    	Log.d(TAG, "------------- onStop --------------");
+    	super.onStop();
     }
     
     @Override
