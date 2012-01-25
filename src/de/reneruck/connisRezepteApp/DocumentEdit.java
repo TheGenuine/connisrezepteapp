@@ -4,11 +4,10 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.reneruck.connisRezepteApp.DB.DBManager;
-
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ActionBar.Tab;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,11 +21,12 @@ import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.reneruck.connisRezepteApp.DB.DBManager;
 
-public class DocumentEditActivity extends Activity{
+public class DocumentEdit extends Activity{
 
 	
-	private static final String TAG = "Document Edit Activity";
+	private static final String TAG = "Document Edit";
 	private int actualEntry = 0;
 	private List<Rezept> entries = new LinkedList<Rezept>();
 	private DBManager manager;
@@ -164,17 +164,29 @@ public class DocumentEditActivity extends Activity{
 	 */
 	private void saveToDatabase() {
 		saveGuiToObject();
-		if(this.appContext.getDatabaseAbstraction().saveToDB(this.entries.get(actualEntry))){
-			Toast.makeText(getApplicationContext(), R.string.save_successfull, Toast.LENGTH_SHORT).show();
-			setStorageIndicator(true);
-			entries.get(actualEntry).setStored(true);
-		}else{
-			Toast.makeText(getApplicationContext(), R.string.error_save_to_db, Toast.LENGTH_SHORT).show();
-		}
+		this.appContext.getDatabaseAbstraction().storeRezept(this.entries.get(actualEntry), new DatabaseCallback() {
+			
+			@Override
+			public void onsSelectCallback(List<?> result) {}
+			
+			@Override
+			public void onStoreCallback(boolean result) {
+				dismissDialog(Configurations.DIALOG_WAITING_FOR_QUERY);
+				if(result) {
+					Toast.makeText(getApplicationContext(), R.string.save_successfull, Toast.LENGTH_SHORT).show();
+					setStorageIndicator(true);
+					entries.get(actualEntry).setStored(true);
+				} else {
+					Toast.makeText(getApplicationContext(), R.string.error_save_to_db, Toast.LENGTH_SHORT).show();
+				}
+			}
+			
+		});
+		showDialog(Configurations.DIALOG_WAITING_FOR_QUERY);
 	}
 	
 	/**
-	 * gets all texts and so from the gui entries and saves it to the corresponding object
+	 * gets all texts and inputs from the gui entries and saves it to the corresponding object
 	 */
 	private void saveGuiToObject(){
 		Rezept rezept = this.entries.get(this.actualEntry);
@@ -189,6 +201,11 @@ public class DocumentEditActivity extends Activity{
 		rezept.setZutaten(((TextView) findViewById(R.id.input_zutaten)).getText().toString());
 	}
 	
+	/**
+	 * Colors the Storage Indicator Bar Green or Gray depending of the input
+	 * 
+	 * @param status - true -> the status bar gets green <br> false -> the status bar gets gray
+	 */
 	private void setStorageIndicator(boolean status) {
 		if(status) {
 			findViewById(R.id.line).setBackgroundColor(Color.GREEN);
@@ -197,9 +214,41 @@ public class DocumentEditActivity extends Activity{
 		}
 	}
 	
+	/**
+	 * Removes all stored Entries from the newDocumentsBean
+	 */
+	private void removeSavedDocumentes() {
+		for (Rezept entry : this.entries) {
+			if(entry.isStored()){
+				this.appContext.getDocumentsBean().removeEntry(entry.getId());
+			}
+		}
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Log.d(TAG, "------------- onCreateDialog --------------");
+		switch (id) {
+			case Configurations.DIALOG_WAITING_FOR_QUERY:
+				ProgressDialog dialog  = ProgressDialog.show(DocumentEdit.this, "Bitte warten", "speichere Dokument");
+				return dialog;
+			default:
+				break;
+		}
+		
+		return super.onCreateDialog(id);
+	} 
+	
+	@Override
+	protected void onResume() {
+		Log.d(TAG, "------------- onResume --------------");
+		super.onResume();
+	}
+	
 	@Override
 	protected void onPause() {
 		Log.d(TAG, "------------- onPause --------------");
+		removeSavedDocumentes();
 		super.onPause();
 	}
 	
@@ -209,11 +258,13 @@ public class DocumentEditActivity extends Activity{
 		super.onStop();
 	}
 	
+
 	@Override
 	protected void onDestroy() {
 		Log.d(TAG, "------------- onDestroy --------------");
 		super.onDestroy();
 	}
+	
 	/*
 	 *  ---------------------------------------------------------------------------------------
 	 *  
