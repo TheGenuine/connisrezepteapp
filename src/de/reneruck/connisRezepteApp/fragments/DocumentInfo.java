@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import de.reneruck.connisRezepteApp.AppContext;
 import de.reneruck.connisRezepteApp.Configurations;
-import de.reneruck.connisRezepteApp.DocumentEditActivity;
+import de.reneruck.connisRezepteApp.DocumentEdit;
 import de.reneruck.connisRezepteApp.R;
 import de.reneruck.connisRezepteApp.Rezept;
 
@@ -29,7 +29,6 @@ public class DocumentInfo extends Fragment {
 
 	private View view;
 	private Rezept rezept;
-	private AppContext context;
 
 	public DocumentInfo() {
 	}
@@ -38,7 +37,6 @@ public class DocumentInfo extends Fragment {
 		if(rezept != null){
 			this.rezept = rezept;
 		}
-		this.context = ((AppContext)getActivity().getApplicationContext());
 	}
 
 	@Override
@@ -74,18 +72,21 @@ public class DocumentInfo extends Fragment {
 		
 		@Override
 		public void onClick(View v) {
-			showDialog();
+			startDocumentEdit();
 		}
 
 	};
 
-    void showDialog() {
-    	
+	/**
+	 * Starts the Document Edit Activity with the actual Rezept as Parameter
+	 */
+    void startDocumentEdit() {
     	List<Rezept> editEntries = new LinkedList<Rezept>();
     	editEntries.add(this.rezept);
-    	this.context.getDocumentsBean().setCustomDocumentsList(editEntries);
-    	Intent i = new Intent(getActivity(), DocumentEditActivity.class);
+    	((AppContext)getActivity().getApplicationContext()).getDocumentsBean().setCustomDocumentsList(editEntries);
+    	Intent i = new Intent(getActivity(), DocumentEdit.class);
     	i.putExtra(Configurations.LIST_SOURCE, Configurations.CUSTOM_LIST);
+    	startActivity(i);
     }
     
 	public static DocumentInfo newInstance(Rezept rezept) {
