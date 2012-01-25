@@ -1,12 +1,19 @@
 package de.reneruck.connisRezepteApp.DB;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.os.AsyncTask;
+import android.util.Log;
 import de.reneruck.connisRezepteApp.Configurations;
+import de.reneruck.connisRezepteApp.DatabaseCallback;
 import de.reneruck.connisRezepteApp.Rezept;
 
 /**
@@ -88,157 +95,281 @@ public class DatabaseAbstraction {
 	 * @return true, if the operation was successful, false if not
 	 * @throws SQLException
 	 */
-	public boolean saveToDB(Rezept rezept) throws SQLException{
-		SQLiteDatabase db = this.manager.getWritableDatabase();
-		db.beginTransaction();
-		boolean success = false;
-		ContentValues values = new ContentValues();
-		values.put(Configurations.rezepte_Id, rezept.getId());
-		values.put(Configurations.rezepte_Name, rezept.getName());
-		values.put(Configurations.rezepte_DocumentHash, rezept.getId());
-		values.put(Configurations.rezepte_PathToDocument, rezept.getDocumentPath());
-		values.put(Configurations.rezepte_DocumentName, rezept.getDocumentName());
-		values.put(Configurations.rezepte_Zubereitung, rezept.getZubereitungsart());
-		values.put(Configurations.rezepte_Zeit, rezept.getZeit());
-		long rezeptId = -1;
-		if(rezept.isStored()){
-			rezeptId = db.update(Configurations.table_Rezepte, values, Configurations.rezepte_Id + "=" + rezept.getId() ,null);
-		}else{
-			rezeptId = db.insert(Configurations.table_Rezepte, null, values);
-		}		
-		boolean statusZutaten = storeZutaten(rezeptId, db, rezept);
-		boolean statusKategorien = storeKategorien(rezeptId, db, rezept);
-		if (rezeptId != -1){
-			success = true;
-			db.setTransactionSuccessful();
-		}
-		db.endTransaction();
-		db.close();
-		return success & statusKategorien & statusZutaten;
+	public void storeRezept(Rezept rezept, DatabaseCallback callback) throws SQLException{
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put("callback", callback);
+		parameter.put("rezept", rezept);
+		new StoreRezept().execute(parameter);		
 	}
 
-	/**
-	 * Stores all the Kategories inserted into the form to the Database
-	 * @param rezeptId
-	 * @param db
-	 * @return
-	 */
-	private boolean storeKategorien(long rezeptId, SQLiteDatabase db, Rezept rezept) {
-		db.beginTransaction();
-		boolean success = true;
-		boolean success2 = true;
-		for (String kategorie : rezept.getKategorien()) {
-			ContentValues values = new ContentValues(2);
-			values.put(Configurations.kategorien_Id, kategorie.hashCode());
-			values.put(Configurations.kategorien_value, kategorie);
-			
-			if(!exists(db, Configurations.table_Kategorien, Configurations.kategorien_Id + " = " + kategorie.hashCode())){
-				long kategorieId = db.insertWithOnConflict(Configurations.table_Kategorien, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
-				if(kategorieId != -1){
-					success = true & success;
-					success2 = success2 & storeRezeptToKategorie(rezeptId, kategorieId, db);
-				} else {
-					success = false;
-				}
-			} else {
-				success = true & success;
-				success2 = success2 & storeRezeptToKategorie(rezeptId, kategorie.hashCode(), db);
-			}
-			
-		}
-		if(success) db.setTransactionSuccessful();
-		db.endTransaction();
-		return success & success2;
+	
+
+	public void getAllDocuments(DatabaseCallback allDocumentsCallback) {
+		
+		String query = SQLiteQueryBuilder.buildQueryString(true, Configurations.table_Rezepte, new String[]{"*"}, null, null, null, Configurations.rezepte_Name, null);
+		
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put("callback", allDocumentsCallback);
+		parameter.put("query", query);
+		
+		new QueryDocumentList().execute(parameter);		
 	}
 	
 	
-	private boolean storeRezeptToKategorie(long rezeptId, long kategorieId, SQLiteDatabase db) {
-		db.beginTransaction();
-		boolean success = false;
-		if(!exists(db, Configurations.table_Rezept_to_Kategorie, 
-				Configurations.rezept_to_kategorie_rezeptId + " = " + rezeptId +
-				" and " + Configurations.rezept_to_kategorie_kategorieId + " = " + kategorieId)){
-			
-			ContentValues values = new ContentValues(2);
-			values.put(Configurations.rezept_to_kategorie_rezeptId, rezeptId);
-			values.put(Configurations.rezept_to_kategorie_kategorieId, kategorieId);
-			
-			if(db.insert(Configurations.table_Rezept_to_Kategorie, null, values) != -1){
-				success = true;
-			}
-			
-		} else {
-			success = true;
-		}
-		if(success)db.setTransactionSuccessful();
-		db.endTransaction();
-		return success;
-	}
-	/**
-	 * 
-	 * @param rezeptId
-	 * @param db
-	 * @return true if the transaction was successful, false if an error occurred
-	 */
-	private boolean storeZutaten(long rezeptId, SQLiteDatabase db, Rezept rezept) throws SQLException{
-		db.beginTransaction();
-		boolean success = true;
-		boolean success2 = true;
-		for (String zutat : rezept.getZutaten()) {
-			ContentValues values = new ContentValues(2);
-			values.put(Configurations.zutaten_Id, zutat.hashCode());
-			values.put(Configurations.zutaten_value, zutat);
-			
-			if(!exists(db, Configurations.table_Zutaten, Configurations.zutaten_Id + " = " + zutat.hashCode())){
-				long zutatId = db.insertWithOnConflict(Configurations.table_Zutaten, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
-				if(zutatId != -1){
-					success = true & success;
-					success2 = success2 & storeRezeptToZutat(rezeptId, zutatId, db);
-				} else {
-					success = false;
-				}
-			} else {
-				success = true & success;
-				success2 = success2 & storeRezeptToZutat(rezeptId, zutat.hashCode(), db);
-			}
-		}
-		if(success) db.setTransactionSuccessful();
-		db.endTransaction();
-		return success & success2;
-	}
 	
 	/**
 	 * 
-	 * @param rezeptId
-	 * @param zutatId
-	 * @param db
-	 * @return true if the transaction was successful, false if an error occurred
+	 * @author Rene
+	 *
 	 */
-	private boolean storeRezeptToZutat(long rezeptId, long zutatId, SQLiteDatabase db) {
-		db.beginTransaction();
-		boolean success = false;
-		if(!exists(db, Configurations.table_Rezept_to_Zutat, 
-				Configurations.rezept_to_zutat_rezeptId + " = " + rezeptId +
-				" and " + Configurations.rezept_to_zutat_zutatId + " = " + zutatId)){
+	public class QueryDocumentList extends AsyncTask<Map<String, Object>, String, List<Rezept>> {
+
+		private static final String TAG = "QueryDocumentList Task";
+		private DatabaseCallback listener;
+
+		@Override
+		protected List<Rezept> doInBackground(Map<String, Object>... params) {
+			Map<String, Object> param = params[0];
+			String query = (String) param.get("query");
+			this.listener = (DatabaseCallback) param.get("callback");
 			
-			ContentValues values = new ContentValues(2);
-			values.put(Configurations.rezept_to_zutat_rezeptId, rezeptId);
-			values.put(Configurations.rezept_to_zutat_zutatId, zutatId);
-			
-			if(db.insert(Configurations.table_Rezept_to_Zutat, null, values) != -1){
-				success = true;
+			List<Rezept> rezepteList = new LinkedList<Rezept>();
+			try {
+				SQLiteDatabase db = manager.getReadableDatabase();
+				Cursor c = db.rawQuery(query, null);
+
+				if (c.getCount() == 0) {
+					rezepteList.add(new Rezept("Keine Rezepte gefunden"));
+				} else {
+					c.moveToFirst();
+					do {
+						Rezept rezept = new Rezept(c);
+						
+//						queryZutaten(db, rezept);
+						queryKateorien(db, rezept);
+						
+						rezepteList.add(rezept);
+					} while (c.moveToNext());
+				}
+				try {
+					db.close();
+				} catch (IllegalStateException e) {
+					Log.e(TAG, e.getLocalizedMessage());
+				}
+			} catch (SQLException e) {
+				e.fillInStackTrace();
 			}
-			
-		} else {
-			success = true;
+			return rezepteList;
 		}
-		if(success)db.setTransactionSuccessful();
-		db.endTransaction();
-		return success;
+		
+
+		private void queryZutaten(SQLiteDatabase db, Rezept rezept) {
+			String query = "select " + Configurations.zutaten_value+ " from " + Configurations.table_Zutaten + ", " + Configurations.table_Rezept_to_Zutat
+					+ " where " + Configurations.table_Rezept_to_Zutat+ "." + Configurations.rezept_to_zutat_rezeptId + "=" + rezept.getId()
+					+ " and " + Configurations.table_Zutaten + "." + Configurations.zutaten_Id + " = " + Configurations.table_Rezept_to_Zutat + "." + Configurations.rezept_to_zutat_rezeptId;
+
+			Cursor c = db.rawQuery(query, null);
+			if(c.getCount() > 0){
+				
+			}
+		}
+		
+		private void queryKateorien(SQLiteDatabase db, Rezept rezept) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		protected void onPostExecute(List<Rezept> result) {
+			this.listener.onsSelectCallback(result);
+		}
+
 	}
 	
-	public static boolean exists(SQLiteDatabase db, String table, String where){
-		Cursor c = db.query(table, new String[]{"*"}, where, null, null, null,null);
-		return c.getCount() > 0 ? true : false;
+	/**
+	 * Async Task to store a given Rezept Object to the Database or update an
+	 * existing Rezept Entry
+	 * 
+	 * @author Rene
+	 * 
+	 */
+	public class StoreRezept extends AsyncTask<Map<String, Object>, Void, Boolean> {
+
+		private static final String TAG = "StoreRezept AsyncTask";
+		private DatabaseCallback callback;
+		private SQLiteDatabase db;
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			this.callback.onStoreCallback(result);
+		}
+		
+		@Override
+		protected Boolean doInBackground(Map<String, Object>... params) {
+			this.callback = (DatabaseCallback) params[0].get("callback");
+			Rezept rezept = (Rezept) params[0].get("rezept");
+			
+			if(callback != null && rezept != null) {
+				
+				this.db = manager.getWritableDatabase();
+				this.db.beginTransaction();
+				boolean success = false;
+				ContentValues values = new ContentValues();
+				values.put(Configurations.rezepte_Id, rezept.getId());
+				values.put(Configurations.rezepte_Name, rezept.getName());
+				values.put(Configurations.rezepte_DocumentHash, rezept.getId());
+				values.put(Configurations.rezepte_PathToDocument, rezept.getDocumentPath());
+				values.put(Configurations.rezepte_DocumentName, rezept.getDocumentName());
+				values.put(Configurations.rezepte_Zubereitung, rezept.getZubereitungsart());
+				values.put(Configurations.rezepte_Zeit, rezept.getZeit());
+				long rezeptId = -1;
+				if(rezept.isStored()){
+					rezeptId = this.db.update(Configurations.table_Rezepte, values, Configurations.rezepte_Id + "=" + rezept.getId() ,null);
+				}else{
+					rezeptId = this.db.insert(Configurations.table_Rezepte, null, values);
+				}		
+				boolean statusZutaten = storeZutaten(rezept);
+				boolean statusKategorien = storeKategorien(rezept);
+				if (rezeptId != -1){
+					success = true;
+					this.db.setTransactionSuccessful();
+				}
+				this.db.endTransaction();
+				this.db.close();
+				return success & statusKategorien & statusZutaten;
+			} else {
+				Log.e(TAG, "Callback or rezept param is NULL!");
+				return false;
+			}
+		}
+		
+		/**
+		 * Stores all the Kategories inserted into the form to the Database
+		 * @param rezeptId
+		 * @param db
+		 * @return
+		 */
+		private boolean storeKategorien(Rezept rezept) {
+			db.beginTransaction();
+			boolean success = true;
+			boolean success2 = true;
+			for (String kategorie : rezept.getKategorien()) {
+				ContentValues values = new ContentValues(2);
+				values.put(Configurations.kategorien_Id, kategorie.hashCode());
+				values.put(Configurations.kategorien_value, kategorie);
+				
+				if(!exists(Configurations.table_Kategorien, Configurations.kategorien_Id + " = " + kategorie.hashCode())){
+					long kategorieId = db.insertWithOnConflict(Configurations.table_Kategorien, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
+					if(kategorieId != -1){
+						success = true & success;
+						success2 = success2 & storeRezeptToKategorie(rezept.getId(), kategorieId, db);
+					} else {
+						success = false;
+					}
+				} else {
+					success = true & success;
+					success2 = success2 & storeRezeptToKategorie(rezept.getId(), kategorie.hashCode(), db);
+				}
+				
+			}
+			if(success) db.setTransactionSuccessful();
+			db.endTransaction();
+			return success & success2;
+		}
+		
+		
+		private boolean storeRezeptToKategorie(long rezeptId, long kategorieId, SQLiteDatabase db) {
+			db.beginTransaction();
+			boolean success = false;
+			if(!exists(Configurations.table_Rezept_to_Kategorie, 
+					Configurations.rezept_to_kategorie_rezeptId + " = " + rezeptId +
+					" and " + Configurations.rezept_to_kategorie_kategorieId + " = " + kategorieId)){
+				
+				ContentValues values = new ContentValues(2);
+				values.put(Configurations.rezept_to_kategorie_rezeptId, rezeptId);
+				values.put(Configurations.rezept_to_kategorie_kategorieId, kategorieId);
+				
+				if(db.insert(Configurations.table_Rezept_to_Kategorie, null, values) != -1){
+					success = true;
+				}
+				
+			} else {
+				success = true;
+			}
+			if(success)db.setTransactionSuccessful();
+			db.endTransaction();
+			return success;
+		}
+		/**
+		 * 
+		 * @param rezeptId
+		 * @param db
+		 * @return true if the transaction was successful, false if an error occurred
+		 */
+		private boolean storeZutaten(Rezept rezept) throws SQLException{
+			db.beginTransaction();
+			boolean success = true;
+			boolean success2 = true;
+			for (String zutat : rezept.getZutaten()) {
+				ContentValues values = new ContentValues(2);
+				values.put(Configurations.zutaten_Id, zutat.hashCode());
+				values.put(Configurations.zutaten_value, zutat);
+				
+				if(!exists(Configurations.table_Zutaten, Configurations.zutaten_Id + " = " + zutat.hashCode())){
+					long zutatId = db.insertWithOnConflict(Configurations.table_Zutaten, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
+					if(zutatId != -1){
+						success = true & success;
+						success2 = success2 & storeRezeptToZutat(rezept.getId(), zutatId, db);
+					} else {
+						success = false;
+					}
+				} else {
+					success = true & success;
+					success2 = success2 & storeRezeptToZutat(rezept.getId(), zutat.hashCode(), db);
+				}
+			}
+			if(success) db.setTransactionSuccessful();
+			db.endTransaction();
+			return success & success2;
+		}
+		
+		/**
+		 * 
+		 * @param rezeptId
+		 * @param zutatId
+		 * @param db
+		 * @return true if the transaction was successful, false if an error occurred
+		 */
+		private boolean storeRezeptToZutat(long rezeptId, long zutatId, SQLiteDatabase db) {
+			db.beginTransaction();
+			boolean success = false;
+			if(!exists(Configurations.table_Rezept_to_Zutat, 
+					Configurations.rezept_to_zutat_rezeptId + " = " + rezeptId +
+					" and " + Configurations.rezept_to_zutat_zutatId + " = " + zutatId)){
+				
+				ContentValues values = new ContentValues(2);
+				values.put(Configurations.rezept_to_zutat_rezeptId, rezeptId);
+				values.put(Configurations.rezept_to_zutat_zutatId, zutatId);
+				
+				if(db.insert(Configurations.table_Rezept_to_Zutat, null, values) != -1){
+					success = true;
+				}
+				
+			} else {
+				success = true;
+			}
+			if(success)db.setTransactionSuccessful();
+			db.endTransaction();
+			return success;
+		}
+		
+		public boolean exists(String table, String where){
+			SQLiteDatabase db = manager.getReadableDatabase();
+			Cursor c = db.query(table, new String[]{"*"}, where, null, null, null,null);
+			return c.getCount() > 0 ? true : false;
+		}
+
 	}
+
 }
