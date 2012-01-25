@@ -1,5 +1,13 @@
 package de.reneruck.connisRezepteApp.development;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.apache.http.util.ByteArrayBuffer;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
@@ -7,8 +15,10 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,6 +74,39 @@ public class DatabaseOverview extends Activity implements TabListener {
 	            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	            startActivity(intent);
 	            return true;
+	            
+	    	case R.id.menu_debug_copydb:
+	    		File dbfile = new File("/data/data/de.reneruck.connisRezepteApp/databases/rezepte.db");
+	    		File copiedFile = new File("/sdcard/rezepte.db");
+	    		if (copiedFile.exists()) {
+					copiedFile = new File("/sdcard/rezepte-"+System.currentTimeMillis()+".db");
+				}
+				try {
+					FileInputStream fileInputStream = new FileInputStream(dbfile);
+					FileOutputStream fileOutputStream = new FileOutputStream(copiedFile);
+					byte[] buffer = new ByteArrayBuffer((int) dbfile.length()).toByteArray();
+					fileInputStream.read(buffer);
+					fileOutputStream.write(buffer);
+					fileOutputStream.flush();
+					fileInputStream.close();
+					fileOutputStream.close();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	            return true;
+	            
+	        case R.id.menu_debug_cleandb:
+	        	try {
+	        		SQLiteDatabase db = this.dbManager.getWritableDatabase();
+	        		db.delete(Configurations.table_Rezepte, null, null);
+	        		db.close();
+	        		
+				} catch (SQLException e) {
+						e.printStackTrace();
+				}
+	        	return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
