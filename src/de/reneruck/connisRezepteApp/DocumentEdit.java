@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,7 +67,21 @@ public class DocumentEdit extends Activity{
 		((TextView)findViewById(R.id.button_time_plus)).setOnLongClickListener(time_plus_longClick_listener);
 		((TextView)findViewById(R.id.button_time_minus)).setOnClickListener(time_minus_listener);
 		
+		setKategorienAutocomplete();
+		setZubereitungAutocomplete();
 		fillInActualEntryData();
+	}
+
+	private void setZubereitungAutocomplete() {
+		String[] entries = (String[]) this.appContext.getDatabaseAbstraction().getAllZubereitungen().toArray();
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, entries);
+		((AutoCompleteTextView)findViewById(R.id.input_zubereitung)).setAdapter(adapter);		
+	}
+
+	private void setKategorienAutocomplete() {
+		String[] entries = (String[]) this.appContext.getDatabaseAbstraction().getAllKategorien().toArray();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, entries);
+        ((AutoCompleteTextView)findViewById(R.id.input_kategorie)).setAdapter(adapter);		
 	}
 
 	@Override

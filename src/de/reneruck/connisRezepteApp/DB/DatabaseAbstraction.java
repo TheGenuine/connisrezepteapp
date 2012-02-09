@@ -372,4 +372,28 @@ public class DatabaseAbstraction {
 
 	}
 
+	public List<String> getAllKategorien() {
+		 SQLiteDatabase db = this.manager.getReadableDatabase();
+		 Cursor query = db.query(Configurations.table_Kategorien, new String[]{Configurations.kategorien_value}, null, null, null, null, "asc");
+		 List<String> results = new LinkedList<String>();
+		 if(query.getCount() > 0){
+			 for (query.moveToFirst(); query.isAfterLast(); query.moveToNext()){
+				results.add(query.getString(0));
+			}
+		 }
+		return results;
+	}
+
+	public List<String> getAllZubereitungen() {
+		 SQLiteDatabase db = this.manager.getReadableDatabase();
+		 Cursor query = db.query(Configurations.table_Rezepte, new String[]{Configurations.rezepte_Zubereitung}, null, null, null, null, "asc");
+		 List<String> results = new LinkedList<String>();
+		 if(query.getCount() > 0){
+			 for (query.moveToFirst(); query.isAfterLast(); query.moveToNext()){
+				results.add(query.getString(0));
+			}
+		 }
+		return results;
+	}
+
 }
