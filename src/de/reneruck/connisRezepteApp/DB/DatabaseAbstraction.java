@@ -42,7 +42,6 @@ public class DatabaseAbstraction {
 			Rezept rezept = new Rezept(c);
 			fillZutaten(rezept, documentId, db);
 			fillKategorien(rezept, documentId, db);
-			rezept.setKategorien(new LinkedList<String>());
 			db.close();
 			return rezept;
 		}
