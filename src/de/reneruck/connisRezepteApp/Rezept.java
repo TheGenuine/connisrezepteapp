@@ -104,10 +104,12 @@ public class Rezept {
 		this.zutaten = zutat;
 	}
 	public void setZutaten(String zutaten) {
-		String[] zutatenSplit = zutaten.split(",");
-		this.zutaten.clear();
-		for (String string : zutatenSplit) {
-			this.zutaten.add(string.trim());
+		if(!zutaten.isEmpty() && zutaten.length() > 0){
+			String[] zutatenSplit = zutaten.split(",");
+			this.zutaten.clear();
+			for (String string : zutatenSplit) {
+				this.zutaten.add(string.trim());
+			}
 		}
 	}
 	public void addZutat(String zutat) {

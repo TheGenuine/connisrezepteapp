@@ -125,8 +125,10 @@ public class DocumentEdit extends Activity{
 		}else{
 			List<String> zutaten = this.entries.get(this.actualEntry).getZutaten();
 			StringBuilder zutatenBuilder = new StringBuilder();
-			for (String zutat : zutaten) {
-				zutatenBuilder.append(zutat + ",");
+			if(!zutaten.isEmpty()){
+				for (String zutat : zutaten) {
+					zutatenBuilder.append(zutat + ",");
+				}
 			}
 			((TextView) findViewById(R.id.input_zutaten)).setText(zutatenBuilder.toString());
 		}
