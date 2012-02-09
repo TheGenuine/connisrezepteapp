@@ -25,6 +25,13 @@ import de.reneruck.connisRezepteApp.DocumentEdit;
 import de.reneruck.connisRezepteApp.R;
 import de.reneruck.connisRezepteApp.Rezept;
 
+/**
+ * Zeigt eine Zusammenfassung aller Informationen an, die über dieses Rezept
+ * gespeichert sind.
+ * 
+ * @author Rene
+ * 
+ */
 public class DocumentInfo extends Fragment {
 
 	private View view;
