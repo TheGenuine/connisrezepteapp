@@ -255,23 +255,24 @@ public class DatabaseAbstraction {
 			boolean success = true;
 			boolean success2 = true;
 			for (String kategorie : rezept.getKategorien()) {
-				ContentValues values = new ContentValues(2);
-				values.put(Configurations.kategorien_Id, kategorie.hashCode());
-				values.put(Configurations.kategorien_value, kategorie);
-				
-				if(!exists(Configurations.table_Kategorien, Configurations.kategorien_Id + " = " + kategorie.hashCode())){
-					long kategorieId = db.insertWithOnConflict(Configurations.table_Kategorien, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
-					if(kategorieId != -1){
-						success = true & success;
-						success2 = success2 & storeRezeptToKategorie(rezept.getId(), kategorieId, db);
+				if(!kategorie.isEmpty() && kategorie.length() > 0){
+					ContentValues values = new ContentValues(2);
+					values.put(Configurations.kategorien_Id, kategorie.hashCode());
+					values.put(Configurations.kategorien_value, kategorie);
+					
+					if(!exists(Configurations.table_Kategorien, Configurations.kategorien_Id + " = " + kategorie.hashCode())){
+						long kategorieId = db.insertWithOnConflict(Configurations.table_Kategorien, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
+						if(kategorieId != -1){
+							success = true & success;
+							success2 = success2 & storeRezeptToKategorie(rezept.getId(), kategorieId, db);
+						} else {
+							success = false;
+						}
 					} else {
-						success = false;
+						success = true & success;
+						success2 = success2 & storeRezeptToKategorie(rezept.getId(), kategorie.hashCode(), db);
 					}
-				} else {
-					success = true & success;
-					success2 = success2 & storeRezeptToKategorie(rezept.getId(), kategorie.hashCode(), db);
 				}
-				
 			}
 			if(success) db.setTransactionSuccessful();
 			db.endTransaction();
