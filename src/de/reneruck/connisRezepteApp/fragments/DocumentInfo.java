@@ -53,7 +53,7 @@ public class DocumentInfo extends Fragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		if (container != null) {
+		if (container != null && this.rezept != null) {
 			this.view = inflater.inflate(R.layout.fragment_document_preview, container, false);
 			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setText(this.rezept.getName());
 			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setOnClickListener(openDocumentClickListener);
