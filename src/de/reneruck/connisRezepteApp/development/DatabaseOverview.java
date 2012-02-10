@@ -1,10 +1,6 @@
 package de.reneruck.connisRezepteApp.development;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
@@ -30,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import de.reneruck.connisRezepteApp.AppContext;
 import de.reneruck.connisRezepteApp.Configurations;
 import de.reneruck.connisRezepteApp.Main;

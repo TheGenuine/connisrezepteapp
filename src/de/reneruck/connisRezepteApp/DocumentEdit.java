@@ -1,6 +1,8 @@
 package de.reneruck.connisRezepteApp;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -73,13 +75,15 @@ public class DocumentEdit extends Activity{
 	}
 
 	private void setZubereitungAutocomplete() {
-		String[] entries = (String[]) this.appContext.getDatabaseAbstraction().getAllZubereitungen().toArray();
+		Object[] query = this.appContext.getDatabaseAbstraction().getAllZubereitungen().toArray();
+		String[] entries = Arrays.copyOf(query, query.length, String[].class);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, entries);
 		((AutoCompleteTextView)findViewById(R.id.input_zubereitung)).setAdapter(adapter);		
 	}
 
 	private void setKategorienAutocomplete() {
-		String[] entries = (String[]) this.appContext.getDatabaseAbstraction().getAllKategorien().toArray();
+		Object[] query = this.appContext.getDatabaseAbstraction().getAllKategorien().toArray();
+		String[] entries = Arrays.copyOf(query, query.length, String[].class);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, entries);
         ((AutoCompleteTextView)findViewById(R.id.input_kategorie)).setAdapter(adapter);		
 	}
