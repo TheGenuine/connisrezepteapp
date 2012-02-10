@@ -7,6 +7,7 @@
     <string name="updated_documents">Neue Dokumente</string>
     <string name="debug_cleandb">Clean DB</string>
     <string name="debug_copydb">Export DB</string>
+    <string name="debug_importdb">Import DB</string>
     <string name="debug_db_view">Database Debugging</string>
     <string name="exit">Schließen</string>
     <string name="action_menu_search">Rezepte durchsuchen</string>
@@ -14,5 +15,6 @@
     <string name="save">Rezept speichern</string>
     <string name="error_save_to_db">Beim Speichern der Änderungen ist ein Fehler aufgetreten, es wurden keine Daten gespeichert</string>
     <string name="save_successfull">Das Rezept wurde gespeichert</string>
+    <string name="import_database">Sind Sie sich sicher diese Datenbank zu importieren, es koennten alte Daten verlohren gehen!</string>
 
 </resources>
