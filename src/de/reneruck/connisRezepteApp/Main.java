@@ -235,6 +235,9 @@ public class Main extends Activity {
     
 	protected void onDestroy() {
 		Log.d(TAG, "------------- onDestroy --------------");
+		Utils.copyFile(new File("/data/data/de.reneruck.connisRezepteApp/databases/rezepte.db"), 
+				new File("/sdcard/ConnisRezepteApp/rezepte-"+System.currentTimeMillis()+".db.backup"));
+
 		super.onDestroy();
 	}
 }
