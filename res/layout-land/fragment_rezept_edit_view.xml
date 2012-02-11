@@ -48,17 +48,9 @@
 <!-- 		            android:name="android.app.DialogFragment" /> -->
 		
 	<LinearLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
-	        android:orientation="vertical" 
-	        android:layout_weight="1">
-<!-- 	        <fragment -->
-<!-- 	            android:id="@+id/fragment2" -->
-<!-- 	            android:layout_width="match_parent" -->
-<!-- 	            android:layout_height="match_parent" -->
-<!-- 	            android:name="de.reneruck.connisRezepteApp.fragments.DocumentPreview" > -->
-<!-- 	        </fragment> -->
-	    </LinearLayout>
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="horizontal" >
 	 <ScrollView
 	     android:id="@+id/scrollView1"
 	     android:layout_width="wrap_content"
@@ -269,5 +261,18 @@
 	        </LinearLayout>
 	    </LinearLayout>
 	   </ScrollView>
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:orientation="vertical" 
+	        android:layout_weight="1.618">
+<!-- 	        <fragment -->
+<!-- 	            android:id="@+id/fragment2" -->
+<!-- 	            android:layout_width="match_parent" -->
+<!-- 	            android:layout_height="match_parent" -->
+<!-- 	            android:name="de.reneruck.connisRezepteApp.fragments.DocumentPreview" > -->
+<!-- 	        </fragment> -->
+	    </LinearLayout>
+	</LinearLayout>
 
 </LinearLayout>

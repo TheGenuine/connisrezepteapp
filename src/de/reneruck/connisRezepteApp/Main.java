@@ -93,6 +93,11 @@ public class Main extends Activity {
             	int documentId = (Integer) view.getTag();
             	Rezept document = ((AppContext) getApplicationContext()).getDatabaseAbstraction().getDocument(documentId);
 
+            	View fragment_container = findViewById(R.id.fragment_container);
+            	if( fragment_container != null && fragment_container.getVisibility() == View.GONE) {
+            		fragment_container.setVisibility(View.VISIBLE);
+            	}
+            	
                 documentInfo = DocumentInfo.newInstance(document);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.document_preview_fragment, documentInfo);
