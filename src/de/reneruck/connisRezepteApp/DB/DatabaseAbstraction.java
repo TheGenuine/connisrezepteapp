@@ -62,6 +62,7 @@ public class DatabaseAbstraction {
 				rezept.addKategorie(kategorien.getString(0));
 			}while(kategorien.moveToNext());
 		}
+		kategorien.close();
 	}
 
 	/**
@@ -85,6 +86,7 @@ public class DatabaseAbstraction {
 				rezept.addZutat(zutaten.getString(zutaten.getColumnIndex(Configurations.zutaten_value)));
 			}while(zutaten.moveToNext());
 		}
+		zutaten.close();
 	}
 	
 	/**
@@ -143,14 +145,11 @@ public class DatabaseAbstraction {
 					c.moveToFirst();
 					do {
 						Rezept rezept = new Rezept(c);
-						
-//						queryZutaten(db, rezept);
-						queryKateorien(db, rezept);
-						
 						rezepteList.add(rezept);
 					} while (c.moveToNext());
 				}
 				try {
+					c.close();
 					db.close();
 				} catch (IllegalStateException e) {
 					Log.e(TAG, e.getLocalizedMessage());
@@ -173,11 +172,6 @@ public class DatabaseAbstraction {
 			}
 		}
 		
-		private void queryKateorien(SQLiteDatabase db, Rezept rezept) {
-			// TODO Auto-generated method stub
-			
-		}
-
 		@Override
 		protected void onPostExecute(List<Rezept> result) {
 			this.listener.onsSelectCallback(result);
@@ -367,7 +361,10 @@ public class DatabaseAbstraction {
 		public boolean exists(String table, String where){
 			SQLiteDatabase db = manager.getReadableDatabase();
 			Cursor c = db.query(table, new String[]{"*"}, where, null, null, null,null);
-			return c.getCount() > 0 ? true : false;
+			boolean result = c.getCount() > 0 ? true : false;
+			c.close();
+			db.close();
+			return result;
 		}
 
 	}
@@ -381,6 +378,8 @@ public class DatabaseAbstraction {
 				results.add(query.getString(0));
 			}
 		 }
+		 query.close();
+		 db.close();
 		return results;
 	}
 
@@ -393,6 +392,8 @@ public class DatabaseAbstraction {
 				results.add(query.getString(0));
 			}
 		 }
+		 query.close();
+		 db.close();
 		return results;
 	}
 
