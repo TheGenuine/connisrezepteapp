@@ -1,7 +1,6 @@
 package de.reneruck.connisRezepteApp;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +24,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import de.reneruck.connisRezepteApp.DB.DBManager;
 
 public class DocumentEdit extends Activity{
 
@@ -33,7 +31,6 @@ public class DocumentEdit extends Activity{
 	private static final String TAG = "Document Edit";
 	private int actualEntry = 0;
 	private List<Rezept> entries = new LinkedList<Rezept>();
-	private DBManager manager;
 	private AppContext appContext;
 	
 	@Override
@@ -44,7 +41,6 @@ public class DocumentEdit extends Activity{
 		setUpActionbar();
 		
 		this.appContext = (AppContext)getApplicationContext();
-		this.manager = appContext.getDBManager();
 		
 		switch(getIntent().getIntExtra(Configurations.LIST_SOURCE, Configurations.NEW_DOCUMENTS)){
 			case  Configurations.NEW_DOCUMENTS:
