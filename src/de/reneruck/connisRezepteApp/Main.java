@@ -8,6 +8,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -35,8 +36,10 @@ public class Main extends Activity {
 
 	private static final String TAG = "RezepteApp-Main";
 	protected static final int DOCUMENT_EDIT = 0;
+	private static final String FRAGMENT_TAG_DIALOG = "dialog";
 	private Menu menu;
 	private AppContext context;
+	private Bundle savedInstanceState;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class Main extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
+		this.savedInstanceState = savedInstanceState;
 		this.context = (AppContext) getApplicationContext();
 		
 		DBManager manager = new DBManager(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
@@ -68,7 +72,10 @@ public class Main extends Activity {
 			@Override
 			public void onsSelectCallback(List<?> result) {
 				if(result.get(0) instanceof Rezept){
-					dismissDialog(Configurations.DIALOG_WAITING_FOR_QUERY);
+					DialogFragment dialog = (DialogFragment) getFragmentManager().findFragmentByTag(FRAGMENT_TAG_DIALOG);
+					if(dialog != null){
+						dialog.dismiss();
+					}
 					((ListView) findViewById(R.id.listView)).setAdapter(new RezepteListAdapter(getApplicationContext(),(List<Rezept>)result));
 					((ListView) findViewById(R.id.listView)).setOnItemClickListener(rezepteListEntyListener);
 				}
@@ -79,7 +86,6 @@ public class Main extends Activity {
 		});
 		showDialog();
 	}
-	
 	
 	/**
 	 * All the listeners are implemented here
@@ -210,7 +216,7 @@ public class Main extends Activity {
     
 	void showDialog() {
 		DialogFragment newFragment = WaitingDialog.newInstance(R.string.inprogress);
-	    newFragment.show(getFragmentManager(), "dialog");
+	    newFragment.show(getFragmentManager(), FRAGMENT_TAG_DIALOG);
 	}
 
 	@Override
