@@ -7,9 +7,11 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -75,7 +77,7 @@ public class Main extends Activity {
 			@Override
 			public void onStoreCallback(boolean result) {}
 		});
-		showDialog(Configurations.DIALOG_WAITING_FOR_QUERY);
+		showDialog();
 	}
 	
 	
@@ -206,19 +208,15 @@ public class Main extends Activity {
 		return true;
      }
     
+	void showDialog() {
+		DialogFragment newFragment = WaitingDialog.newInstance(R.string.inprogress);
+	    newFragment.show(getFragmentManager(), "dialog");
+	}
+
 	@Override
-	protected Dialog onCreateDialog(int id) {
-		Log.d(TAG, "------------- onCreateDialog --------------");
-		switch (id) {
-			case Configurations.DIALOG_WAITING_FOR_QUERY:
-				ProgressDialog dialog  = ProgressDialog.show(Main.this, "Bitte warten", "suche nach Dokumenten");
-				return dialog;
-			default:
-				break;
-		}
-		
-		return super.onCreateDialog(id);
-	}    
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
 	
     @Override
     protected void onResume() {
