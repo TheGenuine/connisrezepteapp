@@ -19,8 +19,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import de.reneruck.connisRezepteApp.DB.DBManager;
@@ -94,27 +96,42 @@ public class Main extends Activity {
 
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view, int arg2, long arg3) {
+			int documentId = (Integer) view.getTag();
 			
-			 // Check what fragment is currently shown, replace if needed.
-            DocumentInfo documentInfo = (DocumentInfo) getFragmentManager().findFragmentById(R.id.document_preview_fragment);
-            if (documentInfo != null) {
-            	int documentId = (Integer) view.getTag();
-            	Rezept document = ((AppContext) getApplicationContext()).getDatabaseAbstraction().getDocument(documentId);
-
-            	View fragment_container = findViewById(R.id.fragment_container);
-            	if( fragment_container != null && fragment_container.getVisibility() == View.GONE) {
-            		fragment_container.setVisibility(View.VISIBLE);
-            	}
-            	
-                documentInfo = DocumentInfo.newInstance(document);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.document_preview_fragment, documentInfo);
-                ft.addToBackStack(null);
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.commit();
-            }
+			//Check what fragment is currently shown, replace if needed.
+			if(((LinearLayout)findViewById(R.id.fragment_container)).getChildCount() > 0) {
+				Fragment fragment = getFragmentManager().findFragmentByTag(String.valueOf(documentId));
+				if(fragment == null) { // No Fragment with the actual documentId found 
+					replaceDocumentInfoFragment(documentId);
+				} else if(!fragment.isAdded()) {
+					replaceDocumentInfoFragment(fragment);
+				}
+			} else { // if no DocumentInfo Fragment has been set, add it initialy
+	        	Rezept rezept = ((AppContext) getApplicationContext()).getDatabaseAbstraction().getDocument(documentId);
+				DocumentInfo documentInfo = new DocumentInfo(rezept);
+				FragmentTransaction transaction = getFragmentManager().beginTransaction();
+			    transaction.add(R.id.fragment_container, documentInfo, String.valueOf(documentId));
+			    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			    transaction.commit();
+			}
+		    
 		}
 	};
+	
+	private void replaceDocumentInfoFragment(int documentId){
+    	Rezept rezept = ((AppContext) getApplicationContext()).getDatabaseAbstraction().getDocument(documentId);
+		DocumentInfo documentInfo = new DocumentInfo(rezept);
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+	    transaction.replace(R.id.fragment_container, documentInfo, String.valueOf(documentId));
+	    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+	    transaction.commit();
+	}	
+	private void replaceDocumentInfoFragment(Fragment fragment){
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.fragment_container, fragment);
+		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		transaction.commit();
+	}	
 	
 	/**
 	 * Listens on changes of the

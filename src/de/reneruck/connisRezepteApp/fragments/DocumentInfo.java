@@ -132,4 +132,8 @@ public class DocumentInfo extends Fragment {
 			e.printStackTrace();
 		}
 	}
+
+	public Rezept getRezept() {
+		return rezept;
+	}
 }

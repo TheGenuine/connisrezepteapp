@@ -40,12 +40,6 @@
 	        android:layout_height="match_parent"
 	        android:layout_weight="1.618" >
 
-	        <fragment
-	            android:id="@+id/document_preview_fragment"
-	            android:layout_width="match_parent"
-	            android:layout_height="match_parent"
-	            android:name="de.reneruck.connisRezepteApp.fragments.DocumentInfo" />
-		    
 	    </LinearLayout>
 
     </LinearLayout>
