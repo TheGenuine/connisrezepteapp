@@ -59,7 +59,6 @@ public class FileScanner extends AsyncTask<String, Integer, Object>{
 			Log.e("FileScanner", "Rezepte Path: " + Configurations.dirPath
 					+ "is no Directory or was not found");
 		}
-		db.close();
 
 		return null;
 	}
@@ -86,6 +85,7 @@ public class FileScanner extends AsyncTask<String, Integer, Object>{
 				docsInDatabase.add(documentsCursor.getInt(0));
 			}
 		}
+		documentsCursor.close();
 		return docsInDatabase;
 	}
 	

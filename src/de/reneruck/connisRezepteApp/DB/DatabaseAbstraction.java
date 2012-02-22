@@ -42,10 +42,8 @@ public class DatabaseAbstraction {
 			Rezept rezept = new Rezept(c);
 			fillZutaten(rezept, documentId, db);
 			fillKategorien(rezept, documentId, db);
-			db.close();
 			return rezept;
 		}
-		db.close();
 		return null;
 	}
 
@@ -150,7 +148,6 @@ public class DatabaseAbstraction {
 				}
 				try {
 					c.close();
-					db.close();
 				} catch (IllegalStateException e) {
 					Log.e(TAG, e.getLocalizedMessage());
 				}
