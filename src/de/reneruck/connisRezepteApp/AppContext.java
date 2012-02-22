@@ -15,6 +15,7 @@ public class AppContext extends Application {
 	private DBManager manager;
 	private DocumentsBean newDocumentsBean;
 	private DatabaseAbstraction dal;
+	private int actualInfoItem = 0;
 	
 	@Override
 	public void onCreate() {
@@ -47,5 +48,13 @@ public class AppContext extends Application {
 
 	public void setDatabaseAbstraction(DatabaseAbstraction dal) {
 		this.dal = dal;
+	}
+
+	public int getActualInfoItem() {
+		return actualInfoItem;
+	}
+
+	public void setActualInfoItem(int actualInfoItem) {
+		this.actualInfoItem = actualInfoItem;
 	}
 }

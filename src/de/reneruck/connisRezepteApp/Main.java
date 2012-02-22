@@ -63,6 +63,9 @@ public class Main extends Activity {
 		this.context.setDatabaseAbstraction(dal);
 		
 		buildAllDocumentsList();
+		if(this.context.getActualInfoItem() != 0){
+			addFragment(this.context.getActualInfoItem());
+		}
 	}
 	
 	/**
@@ -103,34 +106,44 @@ public class Main extends Activity {
 				Fragment fragment = getFragmentManager().findFragmentByTag(String.valueOf(documentId));
 				if(fragment == null) { // No Fragment with the actual documentId found 
 					replaceDocumentInfoFragment(documentId);
-				} else if(!fragment.isAdded()) {
+				} else if(context.getActualInfoItem() != documentId) {
 					replaceDocumentInfoFragment(fragment);
 				}
 			} else { // if no DocumentInfo Fragment has been set, add it initialy
-	        	Rezept rezept = ((AppContext) getApplicationContext()).getDatabaseAbstraction().getDocument(documentId);
-				DocumentInfo documentInfo = new DocumentInfo(rezept);
-				FragmentTransaction transaction = getFragmentManager().beginTransaction();
-			    transaction.add(R.id.fragment_container, documentInfo, String.valueOf(documentId));
-			    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			    transaction.commit();
+				addFragment(documentId);
 			}
 		    
 		}
+
 	};
 	
+	private void addFragment(int documentId) {
+		Rezept rezept = ((AppContext) getApplicationContext()).getDatabaseAbstraction().getDocument(documentId);
+		DocumentInfo documentInfo = new DocumentInfo(rezept);
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.add(R.id.fragment_container, documentInfo, String.valueOf(documentId));
+		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		transaction.commit();
+		this.context.setActualInfoItem(documentId);
+	}
+	
 	private void replaceDocumentInfoFragment(int documentId){
+		((ViewGroup)findViewById(R.id.fragment_container)).removeAllViews();
     	Rezept rezept = ((AppContext) getApplicationContext()).getDatabaseAbstraction().getDocument(documentId);
 		DocumentInfo documentInfo = new DocumentInfo(rezept);
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 	    transaction.replace(R.id.fragment_container, documentInfo, String.valueOf(documentId));
 	    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 	    transaction.commit();
+	    this.context.setActualInfoItem(documentId);
 	}	
 	private void replaceDocumentInfoFragment(Fragment fragment){
+		((ViewGroup)findViewById(R.id.fragment_container)).removeAllViews();
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.fragment_container, fragment);
+		transaction.replace(R.id.fragment_container, fragment, fragment.getTag());
 		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		transaction.commit();
+		this.context.setActualInfoItem(Integer.getInteger(fragment.getTag()));
 	}	
 	
 	/**
@@ -261,8 +274,8 @@ public class Main extends Activity {
     
 	protected void onDestroy() {
 		Log.d(TAG, "------------- onDestroy --------------");
-		Utils.copyFile(new File("/data/data/de.reneruck.connisRezepteApp/databases/rezepte.db"), 
-				new File("/sdcard/ConnisRezepteApp/rezepte-"+System.currentTimeMillis()+".db.backup"));
+//		Utils.copyFile(new File("/data/data/de.reneruck.connisRezepteApp/databases/rezepte.db"), 
+//				new File("/sdcard/ConnisRezepteApp/rezepte-"+System.currentTimeMillis()+".db.backup"));
 
 		super.onDestroy();
 	}
