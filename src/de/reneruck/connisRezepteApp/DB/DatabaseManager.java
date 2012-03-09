@@ -23,12 +23,12 @@ import de.reneruck.connisRezepteApp.Rezept;
  * @author Rene
  *
  */
-public class DatabaseAbstraction {
+public class DatabaseManager {
 	
-	private DBManager manager;
+	private DatabaseHelper manager;
 
 	
-	public DatabaseAbstraction(DBManager manager) {
+	public DatabaseManager(DatabaseHelper manager) {
 		this.manager = manager;
 	}
 

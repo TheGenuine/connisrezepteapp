@@ -31,11 +31,11 @@ import de.reneruck.connisRezepteApp.Configurations;
 import de.reneruck.connisRezepteApp.Main;
 import de.reneruck.connisRezepteApp.R;
 import de.reneruck.connisRezepteApp.Utils;
-import de.reneruck.connisRezepteApp.DB.DBManager;
+import de.reneruck.connisRezepteApp.DB.DatabaseHelper;
 
 public class DatabaseOverview extends Activity implements TabListener {
 
-	private DBManager dbManager;
+	private DatabaseHelper dbManager;
     private String BACKUP_DIR = "/sdcard/ConnisRezepteApp/";
 
 	@Override

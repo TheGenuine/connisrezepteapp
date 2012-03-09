@@ -1,8 +1,8 @@
 package de.reneruck.connisRezepteApp;
 
 import android.app.Application;
-import de.reneruck.connisRezepteApp.DB.DBManager;
-import de.reneruck.connisRezepteApp.DB.DatabaseAbstraction;
+import de.reneruck.connisRezepteApp.DB.DatabaseHelper;
+import de.reneruck.connisRezepteApp.DB.DatabaseManager;
 
 /**
  * Application Context extension to hold beans and references for all Activities
@@ -12,9 +12,9 @@ import de.reneruck.connisRezepteApp.DB.DatabaseAbstraction;
  */
 public class AppContext extends Application {
 
-	private DBManager manager;
+	private DatabaseHelper manager;
 	private DocumentsBean newDocumentsBean;
-	private DatabaseAbstraction dal;
+	private DatabaseManager dal;
 	private int actualInfoItem = 0;
 	
 	@Override
@@ -22,15 +22,15 @@ public class AppContext extends Application {
 		super.onCreate();
 	}
 
-	public DBManager getManager() {
+	public DatabaseHelper getManager() {
 		return manager;
 	}
 
-	public void setManager(DBManager manager) {
+	public void setManager(DatabaseHelper manager) {
 		this.manager = manager;
 	}
 
-	public DBManager getDBManager() {
+	public DatabaseHelper getDBManager() {
 		return this.manager;
 	}
 
@@ -42,11 +42,11 @@ public class AppContext extends Application {
 		this.newDocumentsBean = newDocumentsBean;
 	}
 
-	public DatabaseAbstraction getDatabaseAbstraction() {
+	public DatabaseManager getDatabaseAbstraction() {
 		return dal;
 	}
 
-	public void setDatabaseAbstraction(DatabaseAbstraction dal) {
+	public void setDatabaseAbstraction(DatabaseManager dal) {
 		this.dal = dal;
 	}
 

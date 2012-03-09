@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DBManager extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String CREATE_REZEPTE_DB = "create table " + Configurations.table_Rezepte + " (" + Configurations.rezepte_Id + " integer primary key, "
 			+ Configurations.rezepte_Name+ " text not null, "
@@ -31,7 +31,7 @@ public class DBManager extends SQLiteOpenHelper {
 			+ Configurations.rezept_to_kategorie_rezeptId + " long not null, "
 			+ Configurations.rezept_to_kategorie_kategorieId + " text not null);"; 
 	
-	public DBManager(Context context, String name, CursorFactory factory, int version) {
+	public DatabaseHelper(Context context, String name, CursorFactory factory, int version) {
 		super(context, Configurations.databaseName, factory,  Configurations.databaseVersion);
 	}
 

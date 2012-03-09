@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.ListUtils;
 
-import de.reneruck.connisRezepteApp.DB.DBManager;
+import de.reneruck.connisRezepteApp.DB.DatabaseHelper;
 
 import android.database.Cursor;
 import android.database.SQLException;
@@ -20,9 +20,9 @@ public class FileScanner extends AsyncTask<String, Integer, Object>{
 
 	private DocumentsBean newDocumentBean;
 	private boolean isRunnig = false;
-	private DBManager manager;
+	private DatabaseHelper manager;
 	
-	public FileScanner(DocumentsBean newDocumentBean, DBManager manager) {
+	public FileScanner(DocumentsBean newDocumentBean, DatabaseHelper manager) {
 		this.newDocumentBean = newDocumentBean;
 		this.manager = manager;
 	}

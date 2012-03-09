@@ -25,8 +25,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
-import de.reneruck.connisRezepteApp.DB.DBManager;
-import de.reneruck.connisRezepteApp.DB.DatabaseAbstraction;
+import de.reneruck.connisRezepteApp.DB.DatabaseHelper;
+import de.reneruck.connisRezepteApp.DB.DatabaseManager;
 import de.reneruck.connisRezepteApp.development.DatabaseOverview;
 import de.reneruck.connisRezepteApp.fragments.DocumentInfo;
 /**
@@ -52,11 +52,11 @@ public class Main extends Activity {
 		this.savedInstanceState = savedInstanceState;
 		this.context = (AppContext) getApplicationContext();
 		
-		DBManager manager = new DBManager(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
+		DatabaseHelper manager = new DatabaseHelper(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
 		DocumentsBean documentsBean = new DocumentsBean();
 		documentsBean.addPropertyChangeListener(this.newDocumentsPropertyChangeListener);
 		
-		DatabaseAbstraction dal = new DatabaseAbstraction(manager);
+		DatabaseManager dal = new DatabaseManager(manager);
 		
 		this.context.setManager(manager);
 		this.context.setDocumentsBean(documentsBean);
