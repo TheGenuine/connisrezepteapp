@@ -1,7 +1,6 @@
 package de.reneruck.connisRezepteApp;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,11 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.reneruck.connisRezepteApp.DB.DatabaseStorageCallback;
 
 public class DocumentEdit extends Activity{
 
@@ -71,17 +69,17 @@ public class DocumentEdit extends Activity{
 	}
 
 	private void setZubereitungAutocomplete() {
-		Object[] query = this.appContext.getDatabaseAbstraction().getAllZubereitungen().toArray();
-		String[] entries = Arrays.copyOf(query, query.length, String[].class);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, entries);
-		((AutoCompleteTextView)findViewById(R.id.input_zubereitung)).setAdapter(adapter);		
+//		Object[] query = this.appContext.getDatabaseManager().getAllZubereitungen().toArray();
+//		String[] entries = Arrays.copyOf(query, query.length, String[].class);
+//		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, entries);
+//		((AutoCompleteTextView)findViewById(R.id.input_zubereitung)).setAdapter(adapter);		
 	}
 
 	private void setKategorienAutocomplete() {
-		Object[] query = this.appContext.getDatabaseAbstraction().getAllKategorien().toArray();
-		String[] entries = Arrays.copyOf(query, query.length, String[].class);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, entries);
-        ((AutoCompleteTextView)findViewById(R.id.input_kategorie)).setAdapter(adapter);		
+//		Object[] query = this.appContext.getDatabaseManager().getAllKategorien().toArray();
+//		String[] entries = Arrays.copyOf(query, query.length, String[].class);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, entries);
+//        ((AutoCompleteTextView)findViewById(R.id.input_kategorie)).setAdapter(adapter);		
 	}
 
 	@Override
@@ -182,10 +180,7 @@ public class DocumentEdit extends Activity{
 	 */
 	private void saveToDatabase() {
 		saveGuiToObject();
-		this.appContext.getDatabaseAbstraction().storeRezept(this.entries.get(actualEntry), new DatabaseCallback() {
-			
-			@Override
-			public void onsSelectCallback(List<?> result) {}
+		this.appContext.getDatabaseManager().storeRezept(this.entries.get(actualEntry), new DatabaseStorageCallback() {
 			
 			@Override
 			public void onStoreCallback(boolean result) {

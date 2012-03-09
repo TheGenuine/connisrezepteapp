@@ -8,28 +8,27 @@ import java.util.Map;
 
 import org.apache.commons.collections.ListUtils;
 
-import de.reneruck.connisRezepteApp.DB.DatabaseHelper;
-
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
+import de.reneruck.connisRezepteApp.DB.DatabaseManager;
 
 public class FileScanner extends AsyncTask<String, Integer, Object>{
 
 	private DocumentsBean newDocumentBean;
 	private boolean isRunnig = false;
-	private DatabaseHelper manager;
+	private DatabaseManager manager;
 	
-	public FileScanner(DocumentsBean newDocumentBean, DatabaseHelper manager) {
+	public FileScanner(DocumentsBean newDocumentBean, DatabaseManager manager) {
 		this.newDocumentBean = newDocumentBean;
 		this.manager = manager;
 	}
 	
 	@Override
 	protected List<String> doInBackground(String... arg0) {
-		final SQLiteDatabase db = manager.getReadableDatabase();
+		final SQLiteDatabase db = this.manager.getDbHelper().getReadableDatabase();
 		File rezepteDictionary = new File(Configurations.dirPath);
 
 		// check if the directory is existent

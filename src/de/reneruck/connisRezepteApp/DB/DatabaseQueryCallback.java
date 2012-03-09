@@ -1,8 +1,8 @@
-package de.reneruck.connisRezepteApp;
+package de.reneruck.connisRezepteApp.DB;
 
 import java.util.List;
 
-public interface DatabaseCallback {
+public interface DatabaseQueryCallback extends DatabaseCallback {
 
 	/**
 	 * Will be called when a Database Query is finished.<br>
@@ -13,14 +13,4 @@ public interface DatabaseCallback {
 	 *            - a List of Results or null
 	 */
 	public void onsSelectCallback(List<?> result);
-	
-	/**
-	 * Will be called when a Database query is finished.<br>
-	 * Returns if the Store Query was successful or not
-	 * 
-	 * @param result
-	 *            - true of Query was successful, false if not
-	 */
-	public void onStoreCallback(boolean result);
-		
 }

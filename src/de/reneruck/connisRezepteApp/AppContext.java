@@ -14,12 +14,13 @@ public class AppContext extends Application {
 
 	private DatabaseHelper manager;
 	private DocumentsBean newDocumentsBean;
-	private DatabaseManager dal;
+	private DatabaseManager databaseManager;
 	private int actualInfoItem = 0;
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		this.databaseManager = new DatabaseManager(this);
 	}
 
 	public DatabaseHelper getManager() {
@@ -42,12 +43,8 @@ public class AppContext extends Application {
 		this.newDocumentsBean = newDocumentsBean;
 	}
 
-	public DatabaseManager getDatabaseAbstraction() {
-		return dal;
-	}
-
-	public void setDatabaseAbstraction(DatabaseManager dal) {
-		this.dal = dal;
+	public DatabaseManager getDatabaseManager() {
+		return databaseManager;
 	}
 
 	public int getActualInfoItem() {

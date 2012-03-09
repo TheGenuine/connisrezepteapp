@@ -6,11 +6,9 @@ import java.io.File;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -25,8 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
-import de.reneruck.connisRezepteApp.DB.DatabaseHelper;
-import de.reneruck.connisRezepteApp.DB.DatabaseManager;
+import de.reneruck.connisRezepteApp.DB.DatabaseQueryCallback;
 import de.reneruck.connisRezepteApp.development.DatabaseOverview;
 import de.reneruck.connisRezepteApp.fragments.DocumentInfo;
 /**
@@ -52,15 +49,10 @@ public class Main extends Activity {
 		this.savedInstanceState = savedInstanceState;
 		this.context = (AppContext) getApplicationContext();
 		
-		DatabaseHelper manager = new DatabaseHelper(getApplicationContext(), Configurations.databaseName, null, Configurations.databaseVersion);
 		DocumentsBean documentsBean = new DocumentsBean();
 		documentsBean.addPropertyChangeListener(this.newDocumentsPropertyChangeListener);
 		
-		DatabaseManager dal = new DatabaseManager(manager);
-		
-		this.context.setManager(manager);
 		this.context.setDocumentsBean(documentsBean);
-		this.context.setDatabaseAbstraction(dal);
 		
 		buildAllDocumentsList();
 		if(this.context.getActualInfoItem() != 0){
@@ -73,7 +65,7 @@ public class Main extends Activity {
 	 * @param db
 	 */
 	private void buildAllDocumentsList() {
-		this.context.getDatabaseAbstraction().getAllDocuments(new DatabaseCallback() {			
+		this.context.getDatabaseManager().getAllDocuments(new DatabaseQueryCallback() {			
 			@Override
 			public void onsSelectCallback(List<?> result) {
 				if(result.get(0) instanceof Rezept){
@@ -85,9 +77,6 @@ public class Main extends Activity {
 					((ListView) findViewById(R.id.listView)).setOnItemClickListener(rezepteListEntyListener);
 				}
 			}
-
-			@Override
-			public void onStoreCallback(boolean result) {}
 		});
 		showDialog();
 	}
@@ -118,8 +107,7 @@ public class Main extends Activity {
 	};
 	
 	private void addFragment(int documentId) {
-		Rezept rezept = ((AppContext) getApplicationContext()).getDatabaseAbstraction().getDocument(documentId);
-		DocumentInfo documentInfo = new DocumentInfo(rezept);
+		DocumentInfo documentInfo = new DocumentInfo(documentId);
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.add(R.id.fragment_container, documentInfo, String.valueOf(documentId));
 		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -129,8 +117,7 @@ public class Main extends Activity {
 	
 	private void replaceDocumentInfoFragment(int documentId){
 		((ViewGroup)findViewById(R.id.fragment_container)).removeAllViews();
-    	Rezept rezept = ((AppContext) getApplicationContext()).getDatabaseAbstraction().getDocument(documentId);
-		DocumentInfo documentInfo = new DocumentInfo(rezept);
+		DocumentInfo documentInfo = new DocumentInfo(documentId);
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 	    transaction.replace(R.id.fragment_container, documentInfo, String.valueOf(documentId));
 	    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -206,7 +193,7 @@ public class Main extends Activity {
      */
     private void startFileScanner() {
 		// initialize and start the background file scanner
-		FileScanner filescanner = new FileScanner(((AppContext)getApplicationContext()).getDocumentsBean(), ((AppContext)getApplicationContext()).getDBManager());
+		FileScanner filescanner = new FileScanner(this.context.getDocumentsBean(), this.context.getDatabaseManager());
 		filescanner.setRunnig(true);
 		filescanner.execute("");		
 	}

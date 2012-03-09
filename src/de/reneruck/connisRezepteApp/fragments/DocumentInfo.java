@@ -24,6 +24,7 @@ import de.reneruck.connisRezepteApp.Configurations;
 import de.reneruck.connisRezepteApp.DocumentEdit;
 import de.reneruck.connisRezepteApp.R;
 import de.reneruck.connisRezepteApp.Rezept;
+import de.reneruck.connisRezepteApp.DB.DatabaseQueryCallback;
 
 /**
  * Zeigt eine Zusammenfassung aller Informationen an, die über dieses Rezept
@@ -32,53 +33,54 @@ import de.reneruck.connisRezepteApp.Rezept;
  * @author Rene
  * 
  */
-public class DocumentInfo extends Fragment {
+public class DocumentInfo extends Fragment implements DatabaseQueryCallback {
 
-	private View view;
 	private Rezept rezept;
+	private int documentId;
+	private View view;
 
 	public DocumentInfo() {
 	}
 	
-	public DocumentInfo(Rezept rezept) {
-		if(rezept != null){
-			this.rezept = rezept;
-		}
+	public DocumentInfo(int documentId) {
+		this.documentId = documentId;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		((AppContext)getActivity().getApplicationContext()).getDatabaseManager().getDocument(this.documentId, this);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		if (container != null && this.rezept != null) {
-			this.view = inflater.inflate(R.layout.fragment_document_preview, container, false);
-			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setText(this.rezept.getName());
-			((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setOnClickListener(openDocumentClickListener);
-			((TextView) this.view.findViewById(R.id.document_info_zubereitung)).setText(!this.rezept.getZubereitungsart().isEmpty() ? this.rezept.getZubereitungsart() : "-");
-			((TextView) this.view.findViewById(R.id.document_info_zeit)).setText(this.rezept.getZeit() + " min");
-			((TextView) this.view.findViewById(R.id.document_info_zutaten)).setText(!this.rezept.getZutaten().isEmpty() ? this.rezept.getZutaten().toString() : "-");
-			if(this.rezept.getKategorien().isEmpty()) {
+		this.view = inflater.inflate(R.layout.fragment_document_preview, container, false);
+		return this.view;
+	}
+
+	private void fillGui() {
+		((LinearLayout)this.view.findViewById(R.id.waiting_layout)).setVisibility(View.GONE);
+		((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setText(this.rezept.getName());
+		((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setOnClickListener(openDocumentClickListener);
+		((TextView) this.view.findViewById(R.id.document_info_zubereitung)).setText(!this.rezept.getZubereitungsart().isEmpty() ? this.rezept.getZubereitungsart() : "-");
+		((TextView) this.view.findViewById(R.id.document_info_zeit)).setText(this.rezept.getZeit() + " min");
+		((TextView) this.view.findViewById(R.id.document_info_zutaten)).setText(!this.rezept.getZutaten().isEmpty() ? this.rezept.getZutaten().toString() : "-");
+		if(this.rezept.getKategorien().isEmpty()) {
+			TextView textview = new TextView(getActivity());
+			textview.setTextSize(15);
+			textview.setText("-");
+			((LinearLayout) view.findViewById(R.id.kategorien_container)).addView(textview);
+		} else {
+			for (String kategorie : this.rezept.getKategorien()) {
 				TextView textview = new TextView(getActivity());
 				textview.setTextSize(15);
-				textview.setText("-");
-				((LinearLayout) this.view.findViewById(R.id.kategorien_container)).addView(textview);
-			} else {
-				for (String kategorie : this.rezept.getKategorien()) {
-					TextView textview = new TextView(getActivity());
-					textview.setTextSize(15);
-					textview.setText(kategorie);
-					((LinearLayout) this.view.findViewById(R.id.kategorien_container)).addView(textview);
-				}
+				textview.setText(kategorie);
+				((LinearLayout) view.findViewById(R.id.kategorien_container)).addView(textview);
 			}
-			((Button) this.view.findViewById(R.id.button_open_document)).setOnClickListener(openDocumentClickListener);
-			((Button) this.view.findViewById(R.id.button_edit_document)).setOnClickListener(editDocumentClickListener);
-		} else {
-			this.view = new LinearLayout(getActivity());
 		}
-		return view;
+		((Button) view.findViewById(R.id.button_open_document)).setOnClickListener(openDocumentClickListener);
+		((Button) view.findViewById(R.id.button_edit_document)).setOnClickListener(editDocumentClickListener);
+		((LinearLayout)this.view.findViewById(R.id.data_layout)).setVisibility(View.VISIBLE);
 	}
 	
 	OnClickListener editDocumentClickListener = new OnClickListener() {
@@ -102,10 +104,6 @@ public class DocumentInfo extends Fragment {
     	startActivity(i);
     }
     
-	public static DocumentInfo newInstance(Rezept rezept) {
-		return new DocumentInfo(rezept);
-	}
-	
 	OnClickListener openDocumentClickListener = new OnClickListener() {
 		
 		@Override
@@ -125,15 +123,21 @@ public class DocumentInfo extends Fragment {
 		} catch (ActivityNotFoundException e){
 			Toast.makeText(getActivity().getApplicationContext(), "Kein Programm zum Öffnen von " + documentName + " gefunden!", Toast.LENGTH_LONG).show();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public Rezept getRezept() {
 		return rezept;
+	}
+
+	@Override
+	public void onsSelectCallback(List<?> result) {
+		if(result.size() > 0) {
+			this.rezept = (Rezept) result.get(0);
+			fillGui();
+		}
 	}
 }
