@@ -4,9 +4,12 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.artifex.mupdf.MuPDFActivity;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -66,6 +69,17 @@ public class DocumentEdit extends Activity{
 		setKategorienAutocomplete();
 		setZubereitungAutocomplete();
 		fillInActualEntryData();
+	}
+
+	/**
+	 * Creates a new {@link MuPDFActivity} Fragment and replaces the old one if
+	 * present
+	 */
+	private void setPdfPreview() {
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Rezept rezept = entries.get(actualEntry);
+		ft.replace(R.id.fragment_container, MuPDFActivity.newInstance(rezept.getDocumentPath()), String.valueOf(rezept.getId()));
+		ft.commit();
 	}
 
 	private void setZubereitungAutocomplete() {
@@ -153,6 +167,7 @@ public class DocumentEdit extends Activity{
 		}else{
 			((TextView) findViewById(R.id.input_kategorie)).setText(this.entries.get(this.actualEntry).getKategorien().get(0));
 		}
+		setPdfPreview();
 	}
 	
 	private void tryToPredictKategorie() {
