@@ -2,8 +2,6 @@ package de.reneruck.connisRezepteApp;
 
 import java.util.List;
 
-import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,13 +13,11 @@ import android.widget.TextView;
 
 public class RezepteListAdapter extends BaseAdapter implements Filterable {
 
-	private LayoutInflater mInflater;
 	private List<Rezept> data;
 	private ViewHolder holder;
 
-	public RezepteListAdapter(Context context, List<Rezept> data) {
+	public RezepteListAdapter(List<Rezept> data) {
 		this.data = data;
-		this.mInflater = LayoutInflater.from(context);
 		this.holder = new ViewHolder();
 	}
 
@@ -32,18 +28,13 @@ public class RezepteListAdapter extends BaseAdapter implements Filterable {
 	 *      android.view.ViewGroup)
 	 */
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		// A ViewHolder keeps references to children views to avoid
-		// unneccessary calls
-		// to findViewById() on each row.
-		ViewHolder holder;
-
 		// When convertView is not null, we can reuse it directly, there is
 		// no need
 		// to reinflate it. We only inflate a new View when the convertView
 		// supplied
 		// by ListView is null.
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.rezeptelist_entry, null);
+			convertView = View.inflate(parent.getContext(), R.layout.rezeptelist_entry, null);
 			// Creates a ViewHolder and store references to the children views
 			// we want to bind data to.
 			this.holder.icon = (ImageView) convertView.findViewById(R.id.icon);
