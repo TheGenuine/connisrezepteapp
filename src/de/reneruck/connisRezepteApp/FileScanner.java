@@ -17,6 +17,7 @@ import de.reneruck.connisRezepteApp.DB.DatabaseManager;
 
 public class FileScanner extends AsyncTask<String, Integer, Object>{
 
+	private static final String TAG = "FileScanner";
 	private DocumentsBean newDocumentBean;
 	private boolean isRunnig = false;
 	private DatabaseManager manager;
@@ -33,7 +34,11 @@ public class FileScanner extends AsyncTask<String, Integer, Object>{
 
 		// check if the directory is existent
 		// without it, there woun't be any documents
-		if (rezepteDictionary.exists() && rezepteDictionary.isDirectory()) {
+		if(!rezepteDictionary.exists()) {
+			Log.d(TAG, "Rezepte Dir: " + Configurations.dirPath +  " not existent, creatig it");
+			rezepteDictionary.mkdirs();
+		}
+		if (rezepteDictionary.isDirectory()) {
 
 			List<Integer> documentsInDatabase = getDocsInDatabase(db);
 
@@ -55,8 +60,8 @@ public class FileScanner extends AsyncTask<String, Integer, Object>{
 
 				this.newDocumentBean.putAllEntries(list);
 		} else {
-			Log.e("FileScanner", "Rezepte Path: " + Configurations.dirPath
-					+ "is no Directory or was not found");
+			Log.e(TAG, "Rezepte Path: " + Configurations.dirPath
+					+ "is no Directory");
 		}
 
 		return null;
