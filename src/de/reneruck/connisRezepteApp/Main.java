@@ -68,14 +68,17 @@ public class Main extends Activity {
 		this.context.getDatabaseManager().getAllDocuments(new DatabaseQueryCallback() {			
 			@Override
 			public void onsSelectCallback(List<?> result) {
-				if(result.get(0) instanceof Rezept){
-					DialogFragment dialog = (DialogFragment) getFragmentManager().findFragmentByTag(FRAGMENT_TAG_DIALOG);
-					if(dialog != null){
-						dialog.dismiss();
-					}
-					((ListView) findViewById(R.id.listView)).setAdapter(new RezepteListAdapter(getApplicationContext(),(List<Rezept>)result));
-					((ListView) findViewById(R.id.listView)).setOnItemClickListener(rezepteListEntyListener);
+				List<Rezept> rezepte = (List<Rezept>) result;
+				if(rezepte.size() == 0) {
+					String string = getResources().getString(R.string.keine_rezepte_gefunden);
+					rezepte.add(new Rezept(string));
 				}
+				DialogFragment dialog = (DialogFragment) getFragmentManager().findFragmentByTag(FRAGMENT_TAG_DIALOG);
+				if(dialog != null){
+					dialog.dismiss();
+				}
+				((ListView) findViewById(R.id.listView)).setAdapter(new RezepteListAdapter(rezepte));
+				((ListView) findViewById(R.id.listView)).setOnItemClickListener(rezepteListEntyListener);
 			}
 		});
 		showDialog();
@@ -90,16 +93,18 @@ public class Main extends Activity {
 		public void onItemClick(AdapterView<?> adapter, View view, int arg2, long arg3) {
 			int documentId = (Integer) view.getTag();
 			
-			//Check what fragment is currently shown, replace if needed.
-			if(((LinearLayout)findViewById(R.id.fragment_container)).getChildCount() > 0) {
-				Fragment fragment = getFragmentManager().findFragmentByTag(String.valueOf(documentId));
-				if(fragment == null) { // No Fragment with the actual documentId found 
-					replaceDocumentInfoFragment(documentId);
-				} else if(context.getActualInfoItem() != documentId) {
-					replaceDocumentInfoFragment(fragment);
+			if(documentId > -1) {
+				//Check what fragment is currently shown, replace if needed.
+				if(((LinearLayout)findViewById(R.id.fragment_container)).getChildCount() > 0) {
+					Fragment fragment = getFragmentManager().findFragmentByTag(String.valueOf(documentId));
+					if(fragment == null) { // No Fragment with the actual documentId found 
+						replaceDocumentInfoFragment(documentId);
+					} else if(context.getActualInfoItem() != documentId) {
+						replaceDocumentInfoFragment(fragment);
+					}
+				} else { // if no DocumentInfo Fragment has been set, add it initialy
+					addFragment(documentId);
 				}
-			} else { // if no DocumentInfo Fragment has been set, add it initialy
-				addFragment(documentId);
 			}
 		    
 		}
@@ -107,7 +112,7 @@ public class Main extends Activity {
 	};
 	
 	private void addFragment(int documentId) {
-		DocumentInfo documentInfo = new DocumentInfo(documentId);
+		DocumentInfo documentInfo = new DocumentInfo();
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.add(R.id.fragment_container, documentInfo, String.valueOf(documentId));
 		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -117,7 +122,7 @@ public class Main extends Activity {
 	
 	private void replaceDocumentInfoFragment(int documentId){
 		((ViewGroup)findViewById(R.id.fragment_container)).removeAllViews();
-		DocumentInfo documentInfo = new DocumentInfo(documentId);
+		DocumentInfo documentInfo = new DocumentInfo();
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 	    transaction.replace(R.id.fragment_container, documentInfo, String.valueOf(documentId));
 	    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);

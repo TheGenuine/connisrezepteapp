@@ -8,7 +8,9 @@ import java.util.List;
 
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,50 +38,58 @@ import de.reneruck.connisRezepteApp.DB.DatabaseQueryCallback;
 public class DocumentInfo extends Fragment implements DatabaseQueryCallback {
 
 	private Rezept rezept;
-	private int documentId;
 	private View view;
-
-	public DocumentInfo() {
-	}
-	
-	public DocumentInfo(int documentId) {
-		this.documentId = documentId;
-	}
+	private ViewHolder viewHolder = new ViewHolder();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		((AppContext)getActivity().getApplicationContext()).getDatabaseManager().getDocument(this.documentId, this);
+		int actualInfoItem = ((AppContext)this.getActivity().getApplicationContext()).getActualInfoItem();
+		((AppContext)getActivity().getApplicationContext()).getDatabaseManager().getDocument(actualInfoItem, this);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		this.view = inflater.inflate(R.layout.fragment_document_preview, container, false);
+		
+		
+		this.viewHolder.rezept_name = (TextView) this.view.findViewById(R.id.document_info_rezept_name);
+		this.viewHolder.zubereitung = (TextView) this.view.findViewById(R.id.document_info_zubereitung);
+		this.viewHolder.zeit = (TextView) this.view.findViewById(R.id.document_info_zeit);
+		this.viewHolder.zutaten = (TextView) this.view.findViewById(R.id.document_info_zutaten);
+		this.viewHolder.kategorien_container = (LinearLayout) view.findViewById(R.id.kategorien_container);
+		
+		this.viewHolder.waiting_layout = (LinearLayout) this.view.findViewById(R.id.waiting_layout);
+		
+		((Button) view.findViewById(R.id.button_open_document)).setOnClickListener(openDocumentClickListener);
+		((Button) view.findViewById(R.id.button_edit_document)).setOnClickListener(editDocumentClickListener);
+		((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setOnClickListener(openDocumentClickListener);
 		return this.view;
 	}
-
+	
 	private void fillGui() {
-		((LinearLayout)this.view.findViewById(R.id.waiting_layout)).setVisibility(View.GONE);
-		((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setText(this.rezept.getName());
-		((TextView) this.view.findViewById(R.id.document_info_rezept_name)).setOnClickListener(openDocumentClickListener);
-		((TextView) this.view.findViewById(R.id.document_info_zubereitung)).setText(!this.rezept.getZubereitungsart().isEmpty() ? this.rezept.getZubereitungsart() : "-");
-		((TextView) this.view.findViewById(R.id.document_info_zeit)).setText(this.rezept.getZeit() + " min");
-		((TextView) this.view.findViewById(R.id.document_info_zutaten)).setText(!this.rezept.getZutaten().isEmpty() ? this.rezept.getZutaten().toString() : "-");
+		if(this.viewHolder.waiting_layout != null && View.VISIBLE == this.viewHolder.waiting_layout.getVisibility()) {
+			this.viewHolder.waiting_layout.setVisibility(View.GONE);
+		}
+		
+		this.viewHolder.rezept_name.setText(this.rezept.getName());
+		
+		this.viewHolder.zubereitung.setText(!this.rezept.getZubereitungsart().isEmpty() ? this.rezept.getZubereitungsart() : "-");
+		this.viewHolder.zeit.setText(this.rezept.getZeit() + " min");
+		this.viewHolder.zutaten.setText(!this.rezept.getZutaten().isEmpty() ? this.rezept.getZutaten().toString() : "-");
 		if(this.rezept.getKategorien().isEmpty()) {
 			TextView textview = new TextView(getActivity());
 			textview.setTextSize(15);
 			textview.setText("-");
-			((LinearLayout) view.findViewById(R.id.kategorien_container)).addView(textview);
+			this.viewHolder.kategorien_container.addView(textview);
 		} else {
 			for (String kategorie : this.rezept.getKategorien()) {
 				TextView textview = new TextView(getActivity());
 				textview.setTextSize(15);
 				textview.setText(kategorie);
-				((LinearLayout) view.findViewById(R.id.kategorien_container)).addView(textview);
+				this.viewHolder.kategorien_container.addView(textview);
 			}
 		}
-		((Button) view.findViewById(R.id.button_open_document)).setOnClickListener(openDocumentClickListener);
-		((Button) view.findViewById(R.id.button_edit_document)).setOnClickListener(editDocumentClickListener);
 		((LinearLayout)this.view.findViewById(R.id.data_layout)).setVisibility(View.VISIBLE);
 	}
 	
@@ -139,5 +149,14 @@ public class DocumentInfo extends Fragment implements DatabaseQueryCallback {
 			this.rezept = (Rezept) result.get(0);
 			fillGui();
 		}
+	}
+
+	private static class ViewHolder {
+		protected TextView rezept_name;
+		protected TextView zubereitung;
+		protected TextView zeit;
+		protected TextView zutaten;
+		protected LinearLayout kategorien_container;
+		protected LinearLayout waiting_layout;
 	}
 }
