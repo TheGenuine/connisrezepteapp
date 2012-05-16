@@ -48,17 +48,12 @@
 <!-- 		            android:name="android.app.DialogFragment" /> -->
 		
 	<LinearLayout
+	        android:id="@+id/fragment_container"
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"
 	        android:orientation="vertical" 
 	        android:layout_weight="1">
-<!-- 	        <fragment -->
-<!-- 	            android:id="@+id/fragment2" -->
-<!-- 	            android:layout_width="match_parent" -->
-<!-- 	            android:layout_height="match_parent" -->
-<!-- 	            android:name="de.reneruck.connisRezepteApp.fragments.DocumentPreview" > -->
-<!-- 	        </fragment> -->
-	    </LinearLayout>
+    </LinearLayout>
 	 <ScrollView
 	     android:id="@+id/scrollView1"
 	     android:layout_width="wrap_content"
