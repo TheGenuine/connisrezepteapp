@@ -1,10 +1,13 @@
 package de.reneruck.connisRezepteApp;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.artifex.mupdf.MuPDFActivity;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -14,6 +17,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings.System;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +29,9 @@ import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.artifex.mupdf.MuPDFActivity;
+
 import de.reneruck.connisRezepteApp.DB.DatabaseStorageCallback;
 
 public class DocumentEdit extends Activity{
@@ -195,6 +203,7 @@ public class DocumentEdit extends Activity{
 	 */
 	private void saveToDatabase() {
 		saveGuiToObject();
+		moveFileToInternalStorage();
 		this.appContext.getDatabaseManager().storeRezept(this.entries.get(actualEntry), new DatabaseStorageCallback() {
 			
 			@Override
@@ -213,6 +222,41 @@ public class DocumentEdit extends Activity{
 		showDialog(Configurations.DIALOG_WAITING_FOR_QUERY);
 	}
 	
+	/**
+	 * moves the Rezept file into the internal space of the app
+	 */
+	private void moveFileToInternalStorage() {
+		Rezept rezept = this.entries.get(this.actualEntry);
+		File sourceFile = new File(rezept.getDocumentPath());
+		File targetFile = new File(this.appContext.getFilesDir() + "/" + Configurations.LOCAL_FILE_DIR + "/" + rezept.getDocumentName());
+		
+		if(sourceFile.exists()) {
+			try {
+				copyFile(sourceFile, targetFile);
+			} catch (IOException e) {
+				Log.e(TAG, "Exception on file copy " + sourceFile.getName(), e);
+			}
+		rezept.setDocumentPath(targetFile.getAbsolutePath());	
+		}
+	}
+
+	
+	   // If targetLocation does not exist, it will be created.
+	public void copyFile(File sourceLocation, File targetLocation) throws IOException {
+
+		InputStream in = new FileInputStream(sourceLocation);
+		OutputStream out = new FileOutputStream(targetLocation);
+
+		// Copy the bits from instream to outstream
+		byte[] buf = new byte[1024];
+		int len;
+		while ((len = in.read(buf)) > 0) {
+			out.write(buf, 0, len);
+		}
+		in.close();
+		out.close();
+	}
+    
 	/**
 	 * gets all texts and inputs from the gui entries and saves it to the corresponding object
 	 */

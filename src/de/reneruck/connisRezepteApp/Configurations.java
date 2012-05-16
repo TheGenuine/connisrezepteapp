@@ -50,6 +50,5 @@ public class Configurations {
 	public static final int CUSTOM_LIST = 1;
 	public static final int DIALOG_NO_NEW_DOCUMENTS = 55;
 	protected static final int DIALOG_WAITING_FOR_QUERY = 56;
-
-	
+	public static final String LOCAL_FILE_DIR = "documents";
 }
