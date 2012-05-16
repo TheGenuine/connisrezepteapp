@@ -8,6 +8,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import de.reneruck.connisRezepteApp.AppContext;
+import de.reneruck.connisRezepteApp.R;
 import de.reneruck.connisRezepteApp.Rezept;
 
 /**
@@ -34,9 +36,7 @@ public class QueryDocumentList extends AsyncTask<Map<String, Object>, String, Li
 			SQLiteDatabase db = manager.getDbHelper().getReadableDatabase();
 			c = db.rawQuery(query, null);
 
-			if (c.getCount() == 0) {
-				rezepteList.add(new Rezept("Keine Rezepte gefunden"));
-			} else {
+			if (c.getCount() > 0) {
 				for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 					Rezept rezept = new Rezept(c);
 					rezepteList.add(rezept);
