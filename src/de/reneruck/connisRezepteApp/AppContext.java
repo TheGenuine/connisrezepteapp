@@ -13,9 +13,10 @@ import de.reneruck.connisRezepteApp.DB.DatabaseManager;
 public class AppContext extends Application {
 
 	private DatabaseHelper manager;
-	private DocumentsBean newDocumentsBean;
+	private DocumentsBean newDocumentsBean = new DocumentsBean();
 	private DatabaseManager databaseManager;
 	private int actualInfoItem = 0;
+	private ChooserListCallback chooserListCallback;
 	
 	@Override
 	public void onCreate() {
@@ -53,5 +54,13 @@ public class AppContext extends Application {
 
 	public void setActualInfoItem(int actualInfoItem) {
 		this.actualInfoItem = actualInfoItem;
+	}
+
+	public ChooserListCallback getChooserListCallback() {
+		return this.chooserListCallback;
+	}
+	
+	public void setChooserListCallback(ChooserListCallback callback) {
+		this.chooserListCallback = callback;
 	}
 }

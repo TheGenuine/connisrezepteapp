@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     
- <item android:id="@+id/menu_updated_documents"
-          android:icon="@drawable/redo"
-          android:showAsAction="always|withText" 
-          android:title="@string/updated_documents" android:visible="false"/>
- 
  <item android:id="@+id/menu_search_action" 
      	android:title="@string/action_menu_search" 
      	android:showAsAction="ifRoom"

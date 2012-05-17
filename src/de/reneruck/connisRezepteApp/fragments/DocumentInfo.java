@@ -144,7 +144,7 @@ public class DocumentInfo extends Fragment implements DatabaseQueryCallback {
 	}
 
 	@Override
-	public void onsSelectCallback(List<?> result) {
+	public void onSelectCallback(List<?> result) {
 		if(result.size() > 0) {
 			this.rezept = (Rezept) result.get(0);
 			fillGui();

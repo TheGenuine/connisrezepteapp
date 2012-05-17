@@ -17,5 +17,15 @@
     <string name="save_successfull">Das Rezept wurde gespeichert</string>
     <string name="import_database">Sind Sie sich sicher diese Datenbank zu importieren, es koennten alte Daten verlohren gehen!</string>
     <string name="keine_rezepte_gefunden">Keine Rezepte gefunden</string>
+    
+    <string name="zubereitungsart">Zubereitungsart</string>
+    <string name="kategorie">Kategorie</string>
+    <string name="zutaten">Zutaten</string>
+    <string name="zeit">Zeit</string>
 
+    <string name="tab_all_documents">Alle Rezepte</string>
+    <string name="tab_search">Neue Suche</string>
+    <string name="tab_last_search">Letze Suche</string>
+
+    
 </resources>

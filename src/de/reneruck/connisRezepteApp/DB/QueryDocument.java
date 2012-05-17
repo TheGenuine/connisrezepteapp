@@ -29,7 +29,7 @@ public class QueryDocument extends AsyncTask<Map<String, Object>, Void, Rezept> 
 		super.onPostExecute(result);
 		List<Rezept> resultList = new LinkedList<Rezept>();
 		resultList.add(result);
-		this.listener.onsSelectCallback(resultList);
+		this.listener.onSelectCallback(resultList);
 	}
 	
 	public Rezept getDocument(int documentId) {

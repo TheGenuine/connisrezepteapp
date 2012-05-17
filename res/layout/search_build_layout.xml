@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:background="@android:color/darker_gray"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/query_button_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+			android:layout_weight="2"
+            android:orientation="vertical" 
+            android:gravity="center_horizontal|center_vertical">
+
+           <LinearLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:orientation="vertical">
+               
+           	<Button android:id="@+id/button_zubereitung"
+           		android:layout_width="wrap_content"
+           		android:layout_height="wrap_content"
+           		android:layout_margin="30dip"
+           		android:text="@string/zubereitungsart" />
+
+           	<Button android:id="@+id/button_kategorie"
+           		android:layout_width="wrap_content"
+           		android:layout_height="wrap_content"
+           		android:layout_margin="30dip"
+           		android:text="@string/kategorie" />
+
+           	<Button android:id="@+id/button_zutaten"
+           		android:layout_width="wrap_content"
+           		android:layout_height="wrap_content"
+           		android:layout_margin="30dip"
+           		android:text="@string/zutaten" />
+
+           	<Button android:id="@+id/button_zeit"
+           		android:layout_width="wrap_content"
+           		android:layout_height="wrap_content"
+           		android:layout_margin="30dip" android:text="@string/zeit" />
+           </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/query_list_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+        </LinearLayout>
+        
+    </LinearLayout>
+
+</LinearLayout>

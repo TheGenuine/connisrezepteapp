@@ -12,5 +12,5 @@ public interface DatabaseQueryCallback extends DatabaseCallback {
 	 * @param result
 	 *            - a List of Results or null
 	 */
-	public void onsSelectCallback(List<?> result);
+	public void onSelectCallback(List<?> result);
 }

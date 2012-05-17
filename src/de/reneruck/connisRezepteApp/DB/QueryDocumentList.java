@@ -55,7 +55,7 @@ public class QueryDocumentList extends AsyncTask<Map<String, Object>, String, Li
 	
 	@Override
 	protected void onPostExecute(List<Rezept> result) {
-		this.listener.onsSelectCallback(result);
+		this.listener.onSelectCallback(result);
 	}
 
 }
