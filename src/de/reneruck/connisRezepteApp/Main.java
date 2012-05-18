@@ -39,6 +39,8 @@ public class Main extends Activity implements TabListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
+		this.context = (AppContext) getApplicationContext();
+
 		ActionBar actionBar = getActionBar();
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	    actionBar.setDisplayShowTitleEnabled(false);
@@ -159,7 +161,8 @@ public class Main extends Activity implements TabListener{
 
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-		
+		if(this.fragment != null) {
+			ft.remove(fragment);
+		}
 	}
 }

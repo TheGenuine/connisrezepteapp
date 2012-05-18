@@ -1,5 +1,8 @@
 package de.reneruck.connisRezepteApp;
 
+import java.util.List;
+import java.util.Map;
+
 import android.os.Environment;
 
 public class Configurations {
@@ -8,40 +11,45 @@ public class Configurations {
 	public static final int databaseVersion = 1;
 	public static final String dirPath = Environment.getExternalStorageDirectory() +"/Rezepte/";
 	
-	// available SQL Tables
-	public static final String table_Rezepte = "Rezepte";
-	public static final String table_Zutaten = "Zutaten";
-	public static final String table_Kategorien = "Kategorien";
-	public static final String table_Rezept_to_Kategorie = "Rezept_Kategorie";
-	public static final String table_Rezept_to_Zutat = "Rezept_Zutat";
-	public static final String ID = "ID";
-	
-	// collums of Rezepte Table
-	public static String rezepte_Id = ID;
-	public static String rezepte_Name = "rezeptName";
-	public static String rezepte_DocumentName = "documentName";
-	public static String rezepte_DocumentHash = "hash";
-	public static String rezepte_PathToDocument = "documentPath";	
-	public static String rezepte_Zubereitung = "zubereitung";
-	public static String rezepte_Zeit = "zeit";
-	
-	// Collums of Zutaten
-	public static String zutaten_Id = ID;
-	public static String zutaten_value = "value";
+	// Rezepte
+	public static final String TABLE_REZEPTE = "Rezepte";
+	public static final String ID_REZEPTE = "idRezepte";
+	public static final String NAME = "name";
+	public static final String DOCUMENT_NAME = "documentName";
+	public static final String DOCUMENT_HASH = "documentHash";
+	public static final String ZUBEREITUNGSARTEN_ID_ZUBEREITUNGSART = "Zubereitungsarten_idZubereitungsart";
+	public static final String ZEIT = "Zeit";
+	public static final String KATEGORIE_ID_KATEGORIE = "Kategorie_idKategorie";
+	public static final String FK_REZEPTE_KATEGORIE1 = "fk_Rezepte_Kategorie1";
+	public static final String FK_REZEPTE_ZUBEREITUNGSARTEN = "fk_Rezepte_Zubereitungsarten";
 
-	// Collums of Kategorien
-	public static String kategorien_Id = ID;
-	public static String kategorien_value = "value";
-
-	// Collums of Rezepte-Kategorie
-	public static String rezept_to_kategorie_Id = ID;
-	public static String rezept_to_kategorie_rezeptId= "rezeptId";
-	public static String rezept_to_kategorie_kategorieId= "katId";
 	
-	// Collums of Rezepte-Zutat
-	public static String rezept_to_zutat_Id = ID;
-	public static String rezept_to_zutat_rezeptId= "rezeptId";
-	public static String rezept_to_zutat_zutatId= "zutatId";
+	// Rezepte has zutaten
+	public static final String TABLE_REZEPTE_HAS_ZUTATEN = "Rezepte_has_Zutaten";
+	public static final String REZEPTE_ID_REZEPTE = "Rezepte_idRezepte";
+	public static final String ZUTATEN_ID_ZUTATEN = "Zutaten_idZutaten";
+	public static final String FK_REZEPTE_HAS_ZUTATEN_ZUTATEN1 = "fk_Rezepte_has_Zutaten_Zutaten1";
+	public static final String FK_REZEPTE_HAS_ZUTATEN_REZEPTE1 = "fk_Rezepte_has_Zutaten_Rezepte1";
+	
+	// zutaten kategorie
+	public static final String TABLE_ZUTATEN_KATEGORIE = "Zutaten_Kategorie";
+	public static final String ID_ZUTATEN_KATEGORIE = "idZutaten_Kategorie";
+	
+	// Zutaten
+	public static final String TABLE_ZUTATEN = "Zutaten";
+	public static final String ID_ZUTATEN = "idZutaten";
+	public static final String ZUTATEN_KATEGORIE_ID_ZUTATEN_KATEGORIE = "Zutaten_Kategorie_idZutaten_Kategorie";
+	public static final String FK_ZUTATEN_ZUTATEN_KATEGORIE1 = "fk_Zutaten_Zutaten_Kategorie1";
+	
+	// Kategorie
+	public static final String TABLE_KATEGORIEN = "Kategorie";
+	public static final String ID_KATEGORIE = "idKategorie";
+	
+	public static final String VALUE = "value";
+	
+	// Zubereitungsarten
+	public static final String TABLE_ZUBEREITUNGSARTEN = "Zubereitungsarten";
+	public static final String ID_ZUBEREITUNGSART = "idZubereitungsart";
 	
 	
 	// Communication Entries
@@ -51,4 +59,12 @@ public class Configurations {
 	public static final int DIALOG_NO_NEW_DOCUMENTS = 55;
 	protected static final int DIALOG_WAITING_FOR_QUERY = 56;
 	public static final String LOCAL_FILE_DIR = "documents";
+	
+	public static final String[] Kategorien = {"Vegetarisch", "Fleisch", "Backwaren - süß", "Backwaren - herzhaft", "Salat", "Fleisch+Gemüse", "Suppe/Eintopf"};
+	public static final String[] Zubereitungsart = {"Herd", "Backofen", "Grill", "Herd + Backofen", "ohne Kochen"};
+	public static final String[] ZutatenKategorie = {"Gemüse", "Fleisch", "Rohkost", "Getreide", "Hülsenfrüchte", "Milchprodukte", "Eier", "Obst", "Pilze"};
+	
+	public static final String[] ZutatenFleisch = {"Huhn", "Pute", "Kalb", "Rind", "Wild", "Schwein"};
+	public static final String[] ZutatenMilchprodukete = {"Milch", "Sahne", "Creme fraîche - Sauerrahm", "Käse"};
+	
 }

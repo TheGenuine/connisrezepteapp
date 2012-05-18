@@ -45,16 +45,35 @@ public class DatabaseManager {
 		new StoreDocument().execute(parameter);		
 	}
 
-	public void getAllDocuments(DatabaseCallback allDocumentsCallback) {
-		String query = SQLiteQueryBuilder.buildQueryString(true, Configurations.table_Rezepte, new String[]{"*"}, null, null, null, Configurations.rezepte_Name, null);
+	/**
+	 * Queries and returns all {@link Rezept}e stored in the Database.
+	 * 
+	 * @param allDocumentsCallback
+	 *            {@link DatabaseCallback} implementation to get the result
+	 */
+	public void getAllRezepe(DatabaseCallback allDocumentsCallback) {
+		String query = "Select * From  Rezepte " +
+				"Inner Join  Rezepte_has_Zutaten    On Rezepte.idRezepte = Rezepte_has_Zutaten.Rezepte_idRezepte " +
+				"Inner Join  Zubereitungsarten On Zubereitungsarten.idZubereitungsart =    Rezepte.Zubereitungsarten_idZubereitungsart " +
+				"Inner Join  Zutaten On Zutaten.idZutaten = Rezepte_has_Zutaten.Zutaten_idZutaten " +
+				"Inner Join  Zutaten_Kategorie On Zutaten_Kategorie.idZutaten_Kategorie = Zutaten.Zutaten_Kategorie_idZutaten_Kategorie"; 
+		
+//		String query = SQLiteQueryBuilder.buildQueryString(true, Configurations.TABLE_REZEPTE, new String[]{"*"}, null, null, null, Configurations.NAME, null);
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(CALLBACK, allDocumentsCallback);
 		parameter.put(QUERY, query);
 		parameter.put(DB_MANAGER, this);
-		
-		new QueryDocumentList().execute(parameter);		
+		new QueryRezepteList().execute(parameter);		
 	}
 	
+	/**
+	 * Queries for a {@link Rezept} with the given documentId
+	 * 
+	 * @param documentId
+	 *            documentId of the {@link Rezept} to query for
+	 * @param callback
+	 *            {@link DatabaseCallback} implementation to get the result
+	 */
 	public void getDocument(int documentId, DatabaseCallback callback) {
 		Map<String, Object> parameter = new HashMap<String, Object>();
 		parameter.put(CALLBACK, callback);
@@ -72,13 +91,35 @@ public class DatabaseManager {
 		this.dbHelper = dbHelper;
 	}
 
-	public List<Rezept> getAllZubereitungen() {
+	/**
+	 * Queries and returns all Zubereitungsarten stored in the database
+	 * 
+	 * @param allDocumentsCallback 
+	 *            {@link DatabaseCallback} implementation to get the result
+	 */
+	public void getAllZubereitungsarten(DatabaseCallback allDocumentsCallback) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
-	public List<Rezept> getAllKategorien() {
+	/**
+	 * Queries and returns all Kategorien stored in the database
+	 * 
+	 * @param allDocumentsCallback 
+	 *            {@link DatabaseCallback} implementation to get the result
+	 */
+	public void getAllKategorien(DatabaseCallback allDocumentsCallback) {
 		// TODO Auto-generated method stub
-		return null;
+	}
+	
+	/**
+	 * Queries and returns all Zutaten stored in the database<br>
+	 * <b>Note:</b> callback return value will be {@link List} with only one
+	 * element, a {@link Map} of String to {@link List}
+	 * 
+	 * @param allDocumentsCallback
+	 *            {@link DatabaseCallback} implementation to get the result
+	 */
+	public void getAllZutaten(DatabaseCallback allDocumentsCallback) {
+		// TODO Auto-generated method stub
 	}
 }

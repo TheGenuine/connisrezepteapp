@@ -8,8 +8,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import de.reneruck.connisRezepteApp.AppContext;
-import de.reneruck.connisRezepteApp.R;
 import de.reneruck.connisRezepteApp.Rezept;
 
 /**
@@ -17,7 +15,7 @@ import de.reneruck.connisRezepteApp.Rezept;
  * @author Rene
  *
  */
-public class QueryDocumentList extends AsyncTask<Map<String, Object>, String, List<Rezept>> {
+public class QueryRezepteList extends AsyncTask<Map<String, Object>, String, List<Rezept>> {
 
 	private static final String TAG = "QueryDocumentList Task";
 	private DatabaseQueryCallback listener;

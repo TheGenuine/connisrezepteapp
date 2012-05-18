@@ -79,8 +79,8 @@ public class FileScanner extends AsyncTask<String, Integer, Object>{
 			throws SQLException {
 		List<Integer> docsInDatabase = new LinkedList<Integer>();
 
-		Cursor documentsCursor = db.query(Configurations.table_Rezepte,
-				new String[] { Configurations.rezepte_DocumentHash }, null,
+		Cursor documentsCursor = db.query(Configurations.TABLE_REZEPTE,
+				new String[] { Configurations.DOCUMENT_HASH }, null,
 				null, null, null, null);
 
 		if (documentsCursor.getCount() > 0) {

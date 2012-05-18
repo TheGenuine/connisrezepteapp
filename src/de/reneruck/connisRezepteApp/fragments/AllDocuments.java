@@ -33,7 +33,7 @@ public class AllDocuments extends Fragment implements DatabaseQueryCallback {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		this.layout = inflater.inflate(R.layout.in_progress, null);
-		this.appContext.getDatabaseManager().getAllDocuments(this);
+		this.appContext.getDatabaseManager().getAllRezepe(this);
 		return this.layout;
 	}
 	
@@ -47,7 +47,8 @@ public class AllDocuments extends Fragment implements DatabaseQueryCallback {
 		View inflated = LayoutInflater.from(this.appContext).inflate(R.layout.all_documents, null);
 		((ListView) inflated.findViewById(R.id.listView)).setAdapter(new RezepteListAdapter(rezepte));
 		((ListView) inflated.findViewById(R.id.listView)).setOnItemClickListener(rezepteListEntyListener);
-		getActivity().setContentView(inflated);
+		ViewGroup fragmentContainer = (ViewGroup)this.layout.findViewById(R.id.main_fragment_container);
+		this.getActivity().setContentView(inflated);
 		this.layout = inflated;
 	}
 	

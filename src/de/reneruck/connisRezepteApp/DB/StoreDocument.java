@@ -46,18 +46,16 @@ public class StoreDocument extends AsyncTask<Map<String, Object>, Void, Boolean>
 				this.db.beginTransaction();
 				boolean success = false;
 				ContentValues values = new ContentValues();
-				values.put(Configurations.rezepte_Id, rezept.getId());
-				values.put(Configurations.rezepte_Name, rezept.getName());
-				values.put(Configurations.rezepte_DocumentHash, rezept.getId());
-				values.put(Configurations.rezepte_PathToDocument, rezept.getDocumentPath());
-				values.put(Configurations.rezepte_DocumentName, rezept.getDocumentName());
-				values.put(Configurations.rezepte_Zubereitung, rezept.getZubereitungsart());
-				values.put(Configurations.rezepte_Zeit, rezept.getZeit());
+				values.put(Configurations.ID_REZEPTE, rezept.getId());
+				values.put(Configurations.NAME, rezept.getName());
+				values.put(Configurations.DOCUMENT_HASH, rezept.getId());
+				values.put(Configurations.FK_REZEPTE_ZUBEREITUNGSARTEN, rezept.getZubereitungsart());
+				values.put(Configurations.ZEIT, rezept.getZeit());
 				long rezeptId = -1;
 				if(rezept.isStored()){
-					rezeptId = this.db.update(Configurations.table_Rezepte, values, Configurations.rezepte_Id + "=" + rezept.getId() ,null);
+					rezeptId = this.db.update(Configurations.TABLE_REZEPTE, values, Configurations.ID_REZEPTE + "=" + rezept.getId() ,null);
 				}else{
-					rezeptId = this.db.insert(Configurations.table_Rezepte, null, values);
+					rezeptId = this.db.insert(Configurations.TABLE_REZEPTE, null, values);
 				}		
 				boolean statusZutaten = storeZutaten(rezept);
 				boolean statusKategorien = storeKategorien(rezept);
@@ -91,11 +89,11 @@ public class StoreDocument extends AsyncTask<Map<String, Object>, Void, Boolean>
 		for (String kategorie : rezept.getKategorien()) {
 			if(!kategorie.isEmpty() && kategorie.length() > 0){
 				ContentValues values = new ContentValues(2);
-				values.put(Configurations.kategorien_Id, kategorie.hashCode());
-				values.put(Configurations.kategorien_value, kategorie);
+				values.put(Configurations.ID_KATEGORIE, kategorie.hashCode());
+				values.put(Configurations.VALUE, kategorie);
 				
-				if(!exists(Configurations.table_Kategorien, Configurations.kategorien_Id + " = " + kategorie.hashCode())){
-					long kategorieId = db.insertWithOnConflict(Configurations.table_Kategorien, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
+				if(!exists(Configurations.TABLE_KATEGORIEN, Configurations.ID_KATEGORIE + " = " + kategorie.hashCode())){
+					long kategorieId = db.insertWithOnConflict(Configurations.TABLE_KATEGORIEN, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
 					if(kategorieId != -1){
 						success = true & success;
 						success2 = success2 & storeRezeptToKategorie(rezept.getId(), kategorieId, db);
@@ -114,21 +112,21 @@ public class StoreDocument extends AsyncTask<Map<String, Object>, Void, Boolean>
 	
 	private boolean storeRezeptToKategorie(long rezeptId, long kategorieId, SQLiteDatabase db) {
 		boolean success = false;
-		if(!exists(Configurations.table_Rezept_to_Kategorie, 
-				Configurations.rezept_to_kategorie_rezeptId + " = " + rezeptId +
-				" and " + Configurations.rezept_to_kategorie_kategorieId + " = " + kategorieId)){
-			
-			ContentValues values = new ContentValues(2);
-			values.put(Configurations.rezept_to_kategorie_rezeptId, rezeptId);
-			values.put(Configurations.rezept_to_kategorie_kategorieId, kategorieId);
-			
-			if(db.insert(Configurations.table_Rezept_to_Kategorie, null, values) != -1){
-				success = true;
-			}
-			
-		} else {
-			success = true;
-		}
+//		if(!exists(Configurations.table_Rezept_to_Kategorie, 
+//				Configurations.rezept_to_kategorie_rezeptId + " = " + rezeptId +
+//				" and " + Configurations.rezept_to_kategorie_kategorieId + " = " + kategorieId)){
+//			
+//			ContentValues values = new ContentValues(2);
+//			values.put(Configurations.rezept_to_kategorie_rezeptId, rezeptId);
+//			values.put(Configurations.rezept_to_kategorie_kategorieId, kategorieId);
+//			
+//			if(db.insert(Configurations.table_Rezept_to_Kategorie, null, values) != -1){
+//				success = true;
+//			}
+//			
+//		} else {
+//			success = true;
+//		}
 		return success;
 	}
 	/**
@@ -140,24 +138,24 @@ public class StoreDocument extends AsyncTask<Map<String, Object>, Void, Boolean>
 	private boolean storeZutaten(Rezept rezept) throws SQLException{
 		boolean success = true;
 		boolean success2 = true;
-		for (String zutat : rezept.getZutaten()) {
-			ContentValues values = new ContentValues(2);
-			values.put(Configurations.zutaten_Id, zutat.hashCode());
-			values.put(Configurations.zutaten_value, zutat);
-			
-			if(!exists(Configurations.table_Zutaten, Configurations.zutaten_Id + " = " + zutat.hashCode())){
-				long zutatId = db.insertWithOnConflict(Configurations.table_Zutaten, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
-				if(zutatId != -1){
-					success = true & success;
-					success2 = success2 & storeRezeptToZutat(rezept.getId(), zutatId, db);
-				} else {
-					success = false;
-				}
-			} else {
-				success = true & success;
-				success2 = success2 & storeRezeptToZutat(rezept.getId(), zutat.hashCode(), db);
-			}
-		}
+//		for (String zutat : rezept.getZutaten()) {
+//			ContentValues values = new ContentValues(2);
+//			values.put(Configurations.zutaten_Id, zutat.hashCode());
+//			values.put(Configurations.zutaten_value, zutat);
+//			
+//			if(!exists(Configurations.table_Zutaten, Configurations.zutaten_Id + " = " + zutat.hashCode())){
+//				long zutatId = db.insertWithOnConflict(Configurations.table_Zutaten, null, values, SQLiteDatabase.CONFLICT_ROLLBACK);
+//				if(zutatId != -1){
+//					success = true & success;
+//					success2 = success2 & storeRezeptToZutat(rezept.getId(), zutatId, db);
+//				} else {
+//					success = false;
+//				}
+//			} else {
+//				success = true & success;
+//				success2 = success2 & storeRezeptToZutat(rezept.getId(), zutat.hashCode(), db);
+//			}
+//		}
 		return success & success2;
 	}
 	
@@ -170,21 +168,21 @@ public class StoreDocument extends AsyncTask<Map<String, Object>, Void, Boolean>
 	 */
 	private boolean storeRezeptToZutat(long rezeptId, long zutatId, SQLiteDatabase db) {
 		boolean success = false;
-		if(!exists(Configurations.table_Rezept_to_Zutat, 
-				Configurations.rezept_to_zutat_rezeptId + " = " + rezeptId +
-				" and " + Configurations.rezept_to_zutat_zutatId + " = " + zutatId)){
-			
-			ContentValues values = new ContentValues(2);
-			values.put(Configurations.rezept_to_zutat_rezeptId, rezeptId);
-			values.put(Configurations.rezept_to_zutat_zutatId, zutatId);
-			
-			if(db.insert(Configurations.table_Rezept_to_Zutat, null, values) != -1){
-				success = true;
-			}
-			
-		} else {
-			success = true;
-		}
+//		if(!exists(Configurations.table_Rezept_to_Zutat, 
+//				Configurations.rezept_to_zutat_rezeptId + " = " + rezeptId +
+//				" and " + Configurations.rezept_to_zutat_zutatId + " = " + zutatId)){
+//			
+//			ContentValues values = new ContentValues(2);
+//			values.put(Configurations.rezept_to_zutat_rezeptId, rezeptId);
+//			values.put(Configurations.rezept_to_zutat_zutatId, zutatId);
+//			
+//			if(db.insert(Configurations.table_Rezept_to_Zutat, null, values) != -1){
+//				success = true;
+//			}
+//			
+//		} else {
+//			success = true;
+//		}
 		return success;
 	}
 	

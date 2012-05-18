@@ -35,12 +35,12 @@ public class Rezept {
 	}
 	
 	public Rezept(Cursor cursor) {
-		this.id = cursor.getInt(cursor.getColumnIndex(Configurations.rezepte_Id));
-		this.name = cursor.getString(cursor.getColumnIndex(Configurations.rezepte_Name));
-		this.documentName = cursor.getString(cursor.getColumnIndex(Configurations.rezepte_DocumentName));
+		this.id = cursor.getInt(cursor.getColumnIndex(Configurations.ID_REZEPTE));
+		this.name = cursor.getString(cursor.getColumnIndex(Configurations.NAME));
+		this.documentName = cursor.getString(cursor.getColumnIndex(Configurations.DOCUMENT_NAME));
 		this.documentPath = Configurations.dirPath+this.documentName;
-		this.zubereitungsart = cursor.getString(cursor.getColumnIndex(Configurations.rezepte_Zubereitung));
-		this.zeit = cursor.getInt(cursor.getColumnIndex(Configurations.rezepte_Zeit));
+		this.zubereitungsart = cursor.getString(cursor.getColumnIndex(Configurations.FK_REZEPTE_ZUBEREITUNGSARTEN));
+		this.zeit = cursor.getInt(cursor.getColumnIndex(Configurations.ZEIT));
 		this.stored = true;
 	}
 	

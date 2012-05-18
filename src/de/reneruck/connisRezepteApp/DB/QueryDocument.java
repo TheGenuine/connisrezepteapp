@@ -34,7 +34,7 @@ public class QueryDocument extends AsyncTask<Map<String, Object>, Void, Rezept> 
 	
 	public Rezept getDocument(int documentId) {
 		SQLiteDatabase db= this.manager.getDbHelper().getReadableDatabase();
-		Cursor c = db.query(Configurations.table_Rezepte, new String[]{"*"}, Configurations.rezepte_Id + "=" + documentId, null, null, null, null);
+		Cursor c = db.query(Configurations.TABLE_REZEPTE, new String[]{"*"}, Configurations.ID_REZEPTE + "=" + documentId, null, null, null, null);
 		
 		c.moveToFirst();
 		if(c.getCount() > 0){
@@ -49,18 +49,18 @@ public class QueryDocument extends AsyncTask<Map<String, Object>, Void, Rezept> 
 
 	private void fillKategorien(Rezept rezept, int documentId, SQLiteDatabase db) {
 		
-		String query = "select " + Configurations.table_Kategorien + "." + Configurations.kategorien_value + " from " + Configurations.table_Rezept_to_Kategorie + " JOIN " + Configurations.table_Kategorien+ " ON ("
-				+ Configurations.table_Kategorien + "." + Configurations.kategorien_Id + " = " + Configurations.table_Rezept_to_Kategorie + "." + Configurations.rezept_to_kategorie_kategorieId + ")" + " where "
-				+ Configurations.rezept_to_kategorie_rezeptId + " = " + documentId;
-		Cursor kategorien = db.rawQuery(query, null);
-
-		if(kategorien.getCount() > 0){
-			kategorien.moveToFirst();
-			do{
-				rezept.addKategorie(kategorien.getString(0));
-			}while(kategorien.moveToNext());
-		}
-		kategorien.close();
+//		String query = "select " + Configurations.TABLE_KATEGORIEN + "." + Configurations.VALUE + " from " + Configurations.table_Rezept_to_Kategorie + " JOIN " + Configurations.table_Kategorien+ " ON ("
+//				+ Configurations.table_Kategorien + "." + Configurations.kategorien_Id + " = " + Configurations.table_Rezept_to_Kategorie + "." + Configurations.rezept_to_kategorie_kategorieId + ")" + " where "
+//				+ Configurations.rezept_to_kategorie_rezeptId + " = " + documentId;
+//		Cursor kategorien = db.rawQuery(query, null);
+//
+//		if(kategorien.getCount() > 0){
+//			kategorien.moveToFirst();
+//			do{
+//				rezept.addKategorie(kategorien.getString(0));
+//			}while(kategorien.moveToNext());
+//		}
+//		kategorien.close();
 	}
 
 	/**
@@ -70,20 +70,20 @@ public class QueryDocument extends AsyncTask<Map<String, Object>, Void, Rezept> 
 	 * @param db
 	 */
 	private void fillZutaten(Rezept rezept, int documentId, SQLiteDatabase db) {
-		/*
-		 * select Zutaten.value from Rezept_Zutat JOIN Zutaten ON (Zutaten.ID = Rezept_Zutat.zutatId) where Rezept_Zutat.rezeptId=1234
-		 */
-		String query = "select " + Configurations.table_Zutaten + "." + Configurations.zutaten_value + " from " + Configurations.table_Rezept_to_Zutat + " JOIN " + Configurations.table_Zutaten + " ON ("
-				+ Configurations.table_Zutaten + "." + Configurations.zutaten_Id + " = " + Configurations.table_Rezept_to_Zutat + "." + Configurations.rezept_to_zutat_zutatId + ")" + " where "
-				+ Configurations.rezept_to_zutat_rezeptId + " = " + documentId;
-		Cursor zutaten = db.rawQuery(query, null);
-
-		if(zutaten.getCount() > 0){
-			zutaten.moveToFirst();
-			do{
-				rezept.addZutat(zutaten.getString(zutaten.getColumnIndex(Configurations.zutaten_value)));
-			}while(zutaten.moveToNext());
-		}
-		zutaten.close();
+//		/*
+//		 * select Zutaten.value from Rezept_Zutat JOIN Zutaten ON (Zutaten.ID = Rezept_Zutat.zutatId) where Rezept_Zutat.rezeptId=1234
+//		 */
+//		String query = "select " + Configurations.TABLE_ZUTATEN + "." + Configurations.zutaten_value + " from " + Configurations.table_Rezept_to_Zutat + " JOIN " + Configurations.table_Zutaten + " ON ("
+//				+ Configurations.table_Zutaten + "." + Configurations.zutaten_Id + " = " + Configurations.table_Rezept_to_Zutat + "." + Configurations.rezept_to_zutat_zutatId + ")" + " where "
+//				+ Configurations.rezept_to_zutat_rezeptId + " = " + documentId;
+//		Cursor zutaten = db.rawQuery(query, null);
+//
+//		if(zutaten.getCount() > 0){
+//			zutaten.moveToFirst();
+//			do{
+//				rezept.addZutat(zutaten.getString(zutaten.getColumnIndex(Configurations.zutaten_value)));
+//			}while(zutaten.moveToNext());
+//		}
+//		zutaten.close();
 	}
 }
