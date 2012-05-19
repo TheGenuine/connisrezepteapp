@@ -3,8 +3,8 @@ package de.reneruck.connisRezepteApp.fragments;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import de.reneruck.connisRezepteApp.AppContext;
 import de.reneruck.connisRezepteApp.ChooserListCallback;
+import de.reneruck.connisRezepteApp.Configurations.ListType;
 import de.reneruck.connisRezepteApp.R;
+import de.reneruck.connisRezepteApp.DB.DatabaseManager;
 import de.reneruck.connisRezepteApp.DB.DatabaseQueryCallback;
 
 public class QueryList extends Fragment implements OnItemClickListener, DatabaseQueryCallback, ChooserListCallback {
@@ -26,24 +28,46 @@ public class QueryList extends Fragment implements OnItemClickListener, Database
 	private List<String> kategorien;
 	private Map<String, List<String>> zutaten;
 	private ListType displayListType;
+	private DatabaseManager databaseManager;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.appContext = ((AppContext) getActivity().getApplicationContext());
 		this.appContext.setChooserListCallback(this);
+		this.databaseManager = this.appContext.getDatabaseManager();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		this.view = inflater.inflate(R.layout.in_progress, null);
+		this.view = inflater.inflate(R.layout.empty, null);
 		return this.view;
 	}
-	
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		// TODO Auto-generated method stub
+	public void onItemClick(AdapterView<?> parnet, View view, int position, long id) {
+		boolean checked = (Boolean) view.getTag();
+		String value = "";
+		switch (this.displayListType) {
+		case Zubereitungsart:
+			value  = this.zubereitungsarten.get(position);
+			break;
+		case Kategorie:
+			value = this.kategorien.get(position);
+			break;
+		default:
+			break;
+		}
 		
+		if(checked) {
+			view.setBackgroundColor(Color.TRANSPARENT);
+			view.setTag(false);
+			this.appContext.removeFromQuery(this.displayListType, value);
+			// remove from query
+		} else {
+			view.setTag(true);
+			view.setBackgroundColor(Color.YELLOW);
+			this.appContext.addToQuery(this.displayListType, value);
+		}
 	}
 
 	@Override
@@ -56,7 +80,9 @@ public class QueryList extends Fragment implements OnItemClickListener, Database
 				ListView list = new ListView(appContext);
 				list.setAdapter(adapter);
 				list.setOnItemClickListener(QueryList.this);
-				this.getActivity().setContentView(list);
+				ViewGroup viewGroup = (ViewGroup)this.view.findViewById(R.id.query_list_container);
+				viewGroup.removeAllViews();
+				viewGroup.addView(list);
 				break;
 			case Zutat:
 				// TODO: build expandable list 
@@ -70,10 +96,6 @@ public class QueryList extends Fragment implements OnItemClickListener, Database
 		
 	}
 	
-	public enum ListType {
-		Zubereitungsart, Kategorie, Zutat, Zeit
-	}
-
 	@Override
 	public void displayList(ListType type) {
 		this.displayListType = type;
@@ -82,15 +104,18 @@ public class QueryList extends Fragment implements OnItemClickListener, Database
 			case Zubereitungsart:
 				if(this.zubereitungsarten != null && !this.zubereitungsarten.isEmpty()) {
 					// display list
+					onSelectCallback(this.zubereitungsarten);
 				} else {
-					// start query
+					this.databaseManager.getAllZubereitungsarten(this);
 				}
 				break;
 			case Kategorie:
 				if(this.kategorien != null && !this.kategorien.isEmpty()) {
 					// display list
+					onSelectCallback(this.kategorien);
 				} else {
 					// start query
+					this.databaseManager.getAllKategorien(this);
 				}
 				break;
 			case Zutat:

@@ -15,10 +15,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import de.reneruck.connisRezepteApp.development.DatabaseOverview;
 import de.reneruck.connisRezepteApp.fragments.AllDocuments;
-import de.reneruck.connisRezepteApp.fragments.QueryList;
 /**
  * 
  * @author Rene Ruck

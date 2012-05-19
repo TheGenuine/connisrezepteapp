@@ -1,9 +1,5 @@
 package de.reneruck.connisRezepteApp;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -12,24 +8,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import de.reneruck.connisRezepteApp.DB.DatabaseManager;
-import de.reneruck.connisRezepteApp.DB.DatabaseQueryCallback;
+import de.reneruck.connisRezepteApp.Configurations.ListType;
 import de.reneruck.connisRezepteApp.fragments.QueryList;
 
 public class SearchBuilderActivity extends Fragment {
 
 	private AppContext appContext;
-	private List<String> allZubereitungsarten;
-	private List<String> allKategorien;
-	private Map<String, List<String>> zutaten = new HashMap<String, List<String>>();
-	private Map<String, List<String>> query = new HashMap<String, List<String>>();
 	private View layout;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.appContext = (AppContext) this.getActivity().getApplicationContext();
-		DatabaseManager databaseManager = this.appContext.getDatabaseManager();
 		
 		// TODO: run Queries
 		// - alle Zubereitungsarten
@@ -66,59 +56,28 @@ public class SearchBuilderActivity extends Fragment {
 		
 		@Override
 		public void onClick(View v) {
-			appContext.getChooserListCallback().displayList(QueryList.ListType.Zubereitungsart);
+			appContext.getChooserListCallback().displayList(ListType.Zubereitungsart);
 		}
 	};
 	private OnClickListener kategorieClickListener = new OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
-			appContext.getChooserListCallback().displayList(QueryList.ListType.Kategorie);
-			
+			appContext.getChooserListCallback().displayList(ListType.Kategorie);
 		}
 	};
 	private OnClickListener zutatenClickListener = new OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
-			appContext.getChooserListCallback().displayList(QueryList.ListType.Zutat);
-			
+			appContext.getChooserListCallback().displayList(ListType.Zutat);
 		}
 	};
 	private OnClickListener zeitClickListener = new OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
-			appContext.getChooserListCallback().displayList(QueryList.ListType.Zeit);
+			appContext.getChooserListCallback().displayList(ListType.Zeit);
 		}
 	};
-	
-	private DatabaseQueryCallback zubereitungsartenQueryCallback = new DatabaseQueryCallback() {
-		
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public void onSelectCallback(List<?> result) {
-			allZubereitungsarten = (List<String>) result;
-		}
-	};
-	
-	private DatabaseQueryCallback kategorienQueryCallback = new DatabaseQueryCallback() {
-		
-		@SuppressWarnings("unchecked")
-		@Override
-		public void onSelectCallback(List<?> result) {
-			allKategorien = (List<String>) result;
-		}
-	};
-
-	private DatabaseQueryCallback zutatenQueryCallback = new DatabaseQueryCallback() {
-		
-		@Override
-		public void onSelectCallback(List<?> result) {
-			// TODO Auto-generated method stub
-			
-		}
-	};
-	
 }

@@ -6,9 +6,9 @@ import java.util.Map;
 
 import android.content.Context;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteQueryBuilder;
 import de.reneruck.connisRezepteApp.Configurations;
 import de.reneruck.connisRezepteApp.Rezept;
+import de.reneruck.connisRezepteApp.Configurations.ListType;
 
 /**
  * Database Abstraction Layer<br>
@@ -90,6 +90,14 @@ public class DatabaseManager {
 	public void setDbHelper(DatabaseHelper dbHelper) {
 		this.dbHelper = dbHelper;
 	}
+	
+	private void queryAllofATable(DatabaseCallback callback, ListType type) {
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put(CALLBACK, callback);
+		parameter.put(QUERY, type);
+		parameter.put(DB_MANAGER, this);
+		new QueryAllOfaTable().execute(parameter);	
+	}
 
 	/**
 	 * Queries and returns all Zubereitungsarten stored in the database
@@ -98,7 +106,7 @@ public class DatabaseManager {
 	 *            {@link DatabaseCallback} implementation to get the result
 	 */
 	public void getAllZubereitungsarten(DatabaseCallback allDocumentsCallback) {
-		// TODO Auto-generated method stub
+		queryAllofATable(allDocumentsCallback, ListType.Zubereitungsart);
 	}
 
 	/**
@@ -108,18 +116,29 @@ public class DatabaseManager {
 	 *            {@link DatabaseCallback} implementation to get the result
 	 */
 	public void getAllKategorien(DatabaseCallback allDocumentsCallback) {
-		// TODO Auto-generated method stub
+		queryAllofATable(allDocumentsCallback, ListType.Kategorie);
 	}
 	
 	/**
 	 * Queries and returns all Zutaten stored in the database<br>
-	 * <b>Note:</b> callback return value will be {@link List} with only one
-	 * element, a {@link Map} of String to {@link List}
+	 * <b>Note:</b> requires an instance of {@link DatabaseZutatenQueryCallback}
+	 * as callback
 	 * 
 	 * @param allDocumentsCallback
 	 *            {@link DatabaseCallback} implementation to get the result
 	 */
 	public void getAllZutaten(DatabaseCallback allDocumentsCallback) {
-		// TODO Auto-generated method stub
+		queryAllofATable(allDocumentsCallback, ListType.Zutat);
 	}
+	
+	/**
+	 * Queries and returns all ZutatenKategorien stored in the database<br>
+	 * 
+	 * @param allDocumentsCallback
+	 *            {@link DatabaseCallback} implementation to get the result
+	 */
+	public void getAllZutatenKategorie(DatabaseCallback allDocumentsCallback) {
+		queryAllofATable(allDocumentsCallback, ListType.ZutatKategorie);
+	}
+	
 }

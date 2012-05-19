@@ -74,12 +74,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		try {
-			db.execSQL(CREATE_ZUBEREITUNGSART_DB);
-			db.execSQL(CREATE_KATEGORIEN_DB);
+			System.out.println(CREATE_REZEPTE_DB);
 			db.execSQL(CREATE_REZEPTE_DB);
+			
+			System.out.println(CREATE_ZUBEREITUNGSART_DB);
+			db.execSQL(CREATE_ZUBEREITUNGSART_DB);
+			
+			System.out.println(CREATE_KATEGORIEN_DB);
+			db.execSQL(CREATE_KATEGORIEN_DB);
+			
+			System.out.println(CREATE_ZUTATEN_KATEGORIE_DB);
 			db.execSQL(CREATE_ZUTATEN_KATEGORIE_DB);
+			
+			System.out.println(CREATE_ZUTATEN_DB);
 			db.execSQL(CREATE_ZUTATEN_DB);
+			
+			System.out.println(CREATE_REZEPT_HAS_ZUTATE_DB);
 			db.execSQL(CREATE_REZEPT_HAS_ZUTATE_DB);
+			
 			setupKategorien(db);
 			setupZubereitungsart(db);
 			setupZutatenKategorie(db);

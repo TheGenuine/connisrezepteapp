@@ -1,8 +1,5 @@
 package de.reneruck.connisRezepteApp;
 
-import java.util.List;
-import java.util.Map;
-
 import android.os.Environment;
 
 public class Configurations {
@@ -60,11 +57,14 @@ public class Configurations {
 	protected static final int DIALOG_WAITING_FOR_QUERY = 56;
 	public static final String LOCAL_FILE_DIR = "documents";
 	
-	public static final String[] Kategorien = {"Vegetarisch", "Fleisch", "Backwaren - süß", "Backwaren - herzhaft", "Salat", "Fleisch+Gemüse", "Suppe/Eintopf"};
+	public static final String[] Kategorien = {"Vegetarisch", "Fleisch", "Backwaren - sueß", "Backwaren - herzhaft", "Salat", "Fleisch+Gemuese", "Suppe/Eintopf"};
 	public static final String[] Zubereitungsart = {"Herd", "Backofen", "Grill", "Herd + Backofen", "ohne Kochen"};
-	public static final String[] ZutatenKategorie = {"Gemüse", "Fleisch", "Rohkost", "Getreide", "Hülsenfrüchte", "Milchprodukte", "Eier", "Obst", "Pilze"};
+	public static final String[] ZutatenKategorie = {"Gemuese", "Fleisch", "Rohkost", "Getreide", "Huelsenfrüchte", "Milchprodukte", "Eier", "Obst", "Pilze"};
 	
 	public static final String[] ZutatenFleisch = {"Huhn", "Pute", "Kalb", "Rind", "Wild", "Schwein"};
-	public static final String[] ZutatenMilchprodukete = {"Milch", "Sahne", "Creme fraîche - Sauerrahm", "Käse"};
+	public static final String[] ZutatenMilchprodukete = {"Milch", "Sahne", "Creme fraiche - Sauerrahm", "Kaese"};
 	
+	public enum ListType {
+		Zubereitungsart, Kategorie, Zutat, Zeit, ZutatKategorie
+	}
 }
