@@ -1,7 +1,7 @@
 package de.reneruck.connisRezepteApp.DB;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface DatabaseZutatenQueryCallback extends DatabaseCallback {
 
@@ -13,5 +13,5 @@ public interface DatabaseZutatenQueryCallback extends DatabaseCallback {
 	 * @param result
 	 *            - a List of Results or null
 	 */
-	public void onSelectCallback(Map<String, List<String>> result);
+	public void onSelectCallback(Map<String, Set<String>> result);
 }

@@ -41,7 +41,7 @@ public class QueryAllOfaTable extends AsyncTask<Map<String, Object>, Void, Objec
 	@Override
 	protected void onPostExecute(Object result) {
 		if(result instanceof Map<?, ?>){
-			((DatabaseZutatenQueryCallback)this.listener).onSelectCallback((Map<String, List<String>>) result);
+			((DatabaseZutatenQueryCallback)this.listener).onSelectCallback((Map<String, Set<String>>) result);
 		} else {
 			this.listener.onSelectCallback((List<?>) result);
 		}
@@ -53,7 +53,7 @@ public class QueryAllOfaTable extends AsyncTask<Map<String, Object>, Void, Objec
 		 Cursor query = db.query(Configurations.TABLE_KATEGORIEN, new String[]{Configurations.VALUE}, null, null, null, null, null);
 		 List<String> results = new LinkedList<String>();
 		 if(query.getCount() > 0){
-			 for (query.moveToFirst(); query.isAfterLast(); query.moveToNext()){
+			 for (query.moveToFirst(); !query.isAfterLast(); query.moveToNext()){
 				results.add(query.getString(0));
 			}
 		 }
@@ -67,7 +67,7 @@ public class QueryAllOfaTable extends AsyncTask<Map<String, Object>, Void, Objec
 		 Cursor query = db.query(Configurations.TABLE_ZUBEREITUNGSARTEN, new String[]{Configurations.VALUE}, null, null, null, null, null);
 		 List<String> results = new LinkedList<String>();
 		 if(query.getCount() > 0){
-			 for (query.moveToFirst(); query.isAfterLast(); query.moveToNext()){
+			 for (query.moveToFirst(); !query.isAfterLast(); query.moveToNext()){
 				results.add(query.getString(0));
 			}
 		 }
@@ -83,7 +83,7 @@ public class QueryAllOfaTable extends AsyncTask<Map<String, Object>, Void, Objec
 		Cursor allZutaten = db.rawQuery("Select  Zutaten.value,  Zutaten_Kategorie.value As kategorie From  Zutaten " +
 				"Inner Join  Zutaten_Kategorie On Zutaten_Kategorie.idZutaten_Kategorie = Zutaten.Zutaten_Kategorie_idZutaten_Kategorie Order By  kategorie", null);
 		 if(allZutaten.getCount() > 0){
-			 for (allZutaten.moveToFirst(); allZutaten.isAfterLast(); allZutaten.moveToNext()){
+			 for (allZutaten.moveToFirst(); !allZutaten.isAfterLast(); allZutaten.moveToNext()){
 				 String zutatenKategorie = allZutaten.getString(1);
 				Set<String> set = result.get(zutatenKategorie);
 				 if(set == null) {

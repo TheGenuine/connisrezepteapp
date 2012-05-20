@@ -1,6 +1,7 @@
 package de.reneruck.connisRezepteApp.DB;
 
 import de.reneruck.connisRezepteApp.Configurations;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String CREATE_REZEPTE_DB = "CREATE  TABLE IF NOT EXISTS `" + Configurations.TABLE_REZEPTE + "` ( " +
-		  "`" + Configurations.ID_REZEPTE + "` INTEGER  PRIMARY_KEY AUTO_INCREMENT ," +
+		  "`" + Configurations.ID_REZEPTE + "` INTEGER  PRIMARY KEY AUTOINCREMENT," +
 		  "`" + Configurations.NAME + "` TEXT NULL ," +
 		  "`" + Configurations.DOCUMENT_NAME + "` TEXT NULL ," +
 		  "`" + Configurations.DOCUMENT_HASH + "` INTEGER NULL ," +
@@ -29,15 +30,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		  "  ON UPDATE NO ACTION)";
 
 	private static final String CREATE_KATEGORIEN_DB = "CREATE  TABLE IF NOT EXISTS `" + Configurations.TABLE_KATEGORIEN + "` " +
-			"(   `" + Configurations.ID_KATEGORIE + "` INTEGER  PRIMARY_KEY AUTO_INCREMENT , " +
+			"(   `" + Configurations.ID_KATEGORIE + "` INTEGER  PRIMARY KEY AUTOINCREMENT , " +
 			" `" + Configurations.VALUE + "` TEXT NULL )";
 
 	private static final String CREATE_ZUBEREITUNGSART_DB = "CREATE  TABLE IF NOT EXISTS `" + Configurations.TABLE_ZUBEREITUNGSARTEN + "`" +
-			" (`" + Configurations.ID_ZUBEREITUNGSART + "` INTEGER  PRIMARY_KEY AUTO_INCREMENT ," +
+			" (`" + Configurations.ID_ZUBEREITUNGSART + "` INTEGER  PRIMARY KEY AUTOINCREMENT ," +
 			"`" + Configurations.VALUE + "` TEXT NULL )";
 
 	private static final String CREATE_ZUTATEN_DB = "CREATE  TABLE IF NOT EXISTS `" + Configurations.TABLE_ZUTATEN + "` " +
-		 "( " + " `" + Configurations.ID_ZUTATEN + "` INTEGER PRIMARY_KEY AUTO_INCREMENT ," +
+		 "( " + " `" + Configurations.ID_ZUTATEN + "` INTEGER  PRIMARY KEY AUTOINCREMENT ," +
 		 " `" + Configurations.VALUE + "` TEXT NULL ," +
 		 " `" + Configurations.ZUTATEN_KATEGORIE_ID_ZUTATEN_KATEGORIE + "` INTEGER NOT NULL ," +
 		 " CONSTRAINT `" + Configurations.FK_ZUTATEN_ZUTATEN_KATEGORIE1 + "`" +
@@ -47,7 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		 "   ON UPDATE NO ACTION)";
 
 	private static final String CREATE_ZUTATEN_KATEGORIE_DB = "	CREATE  TABLE IF NOT EXISTS `" + Configurations.TABLE_ZUTATEN_KATEGORIE + "`" +
-			" (`" + Configurations.ID_ZUTATEN_KATEGORIE + "` INTEGER  PRIMARY_KEY AUTO_INCREMENT ," +
+			" (`" + Configurations.ID_ZUTATEN_KATEGORIE + "` INTEGER  PRIMARY KEY AUTOINCREMENT ," +
 			"`" + Configurations.VALUE + "` TEXT NULL)";
 
 	private static final String CREATE_REZEPT_HAS_ZUTATE_DB = "CREATE  TABLE IF NOT EXISTS `" + Configurations.TABLE_REZEPTE_HAS_ZUTATEN + "` ( " +
@@ -118,7 +119,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	private void setupKategorien(SQLiteDatabase db) {
 		for (String value : Configurations.Kategorien) {
-			db.execSQL("INSERT INTO " + Configurations.TABLE_KATEGORIEN + " (" + Configurations.VALUE + ") values('" + value +"')");
+			ContentValues values = new ContentValues();
+			values.put(Configurations.VALUE, value);
+			db.insert(Configurations.TABLE_KATEGORIEN, null, values);
+//			db.execSQL("INSERT INTO " + Configurations.TABLE_KATEGORIEN + " (" + Configurations.VALUE + ") values('" + value +"')");
 		}
 	}
 	

@@ -1,8 +1,12 @@
 package de.reneruck.connisRezepteApp;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.collections.map.HashedMap;
 
 import android.app.Application;
 import de.reneruck.connisRezepteApp.Configurations.ListType;
@@ -22,7 +26,7 @@ public class AppContext extends Application {
 	private DatabaseManager databaseManager;
 	private int actualInfoItem = 0;
 	private ChooserListCallback chooserListCallback;
-	private Map<ListType, Set<String>> rawQuery;
+	private Map<ListType, Set<String>> rawQuery = new HashMap<Configurations.ListType, Set<String>>();
 	
 	@Override
 	public void onCreate() {
@@ -127,5 +131,13 @@ public class AppContext extends Application {
 
 	public void removeFromQuery(ListType displayListType, String value) {
 		this.rawQuery.get(displayListType).remove(value);
+	}
+
+	public boolean isSet(ListType key) {
+		return this.rawQuery.containsKey(key);
+	}
+
+	public Set<String> getEntriesFromRawQuery(ListType key) {
+		return this.rawQuery.get(key);
 	}
 }
