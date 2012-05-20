@@ -42,14 +42,14 @@ public class SearchBuilderActivity extends Fragment {
 		super.onResume();
 		Fragment findFragment = getFragmentManager().findFragmentByTag(QueryList.class.getName());
 		Fragment queryList;
-		if(findFragment != null) {
+		if(findFragment != null && findFragment.isAdded()) {
 			queryList = findFragment;
 		} else {
 			queryList = Fragment.instantiate(getActivity(), QueryList.class.getName());
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			ft.replace(R.id.query_list_container, queryList, QueryList.class.getName());
+			ft.commit();
 		}
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		ft.replace(R.id.query_list_container, queryList, QueryList.class.getName());
-		ft.commit();
 	}
 	
 	private OnClickListener zubereitungClickListener = new OnClickListener() {

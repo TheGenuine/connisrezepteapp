@@ -22,6 +22,7 @@ public class AllDocuments extends Fragment implements DatabaseQueryCallback {
 
 	private AppContext appContext;
 	private View layout;
+	private List<Rezept> rezepte;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class AllDocuments extends Fragment implements DatabaseQueryCallback {
 	
 	@Override
 	public void onSelectCallback(List<?> result) {
-		List<Rezept> rezepte = (List<Rezept>) result;
+		this.rezepte = (List<Rezept>) result;
 		if (rezepte.size() == 0) {
 			String string = getResources().getString(R.string.keine_rezepte_gefunden);
 			rezepte.add(new Rezept(string));
@@ -47,9 +48,9 @@ public class AllDocuments extends Fragment implements DatabaseQueryCallback {
 		View inflated = LayoutInflater.from(this.appContext).inflate(R.layout.all_documents, null);
 		((ListView) inflated.findViewById(R.id.listView)).setAdapter(new RezepteListAdapter(rezepte));
 		((ListView) inflated.findViewById(R.id.listView)).setOnItemClickListener(rezepteListEntyListener);
-		ViewGroup fragmentContainer = (ViewGroup)this.layout.findViewById(R.id.main_fragment_container);
-		this.getActivity().setContentView(inflated);
-		this.layout = inflated;
+		((ViewGroup) this.layout).removeAllViews();
+		((ViewGroup) this.layout).addView(inflated);
+//		this.layout = inflated;
 	}
 	
 	/**

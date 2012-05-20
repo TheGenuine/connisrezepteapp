@@ -80,9 +80,8 @@ public class QueryList extends Fragment implements OnItemClickListener, Database
 				ListView list = new ListView(appContext);
 				list.setAdapter(adapter);
 				list.setOnItemClickListener(QueryList.this);
-				ViewGroup viewGroup = (ViewGroup)this.view.findViewById(R.id.query_list_container);
-				viewGroup.removeAllViews();
-				viewGroup.addView(list);
+				((ViewGroup)this.view).removeAllViews();
+				((ViewGroup)this.view).addView(list);
 				break;
 			case Zutat:
 				// TODO: build expandable list 

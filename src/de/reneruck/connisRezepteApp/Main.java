@@ -45,7 +45,7 @@ public class Main extends Activity implements TabListener{
 
 	    actionBar.addTab(makeNewTab(actionBar, getResources().getString(R.string.tab_all_documents), AllDocuments.class));
 	    actionBar.addTab(makeNewTab(actionBar, getResources().getString(R.string.tab_search), SearchBuilderActivity.class));
-	    actionBar.addTab(makeNewTab(actionBar, getResources().getString(R.string.tab_last_search), SearchBuilderActivity.class));
+//	    actionBar.addTab(makeNewTab(actionBar, getResources().getString(R.string.tab_last_search), SearchBuilderActivity.class));
 	}
 	
 
