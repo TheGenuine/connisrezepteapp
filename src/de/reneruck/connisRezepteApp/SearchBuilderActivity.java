@@ -29,7 +29,7 @@ public class SearchBuilderActivity extends Fragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		this.layout = inflater.inflate(R.layout.search_build_layout, null);
+		this.layout = inflater.inflate(R.layout.search_build_tablet_layout, null);
 		((Button) this.layout.findViewById(R.id.button_zubereitung)).setOnClickListener(zubereitungClickListener);
 		((Button) this.layout.findViewById(R.id.button_kategorie)).setOnClickListener(kategorieClickListener);
 		((Button) this.layout.findViewById(R.id.button_zutaten)).setOnClickListener(zutatenClickListener);
