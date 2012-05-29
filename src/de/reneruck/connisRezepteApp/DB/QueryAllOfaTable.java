@@ -41,7 +41,7 @@ public class QueryAllOfaTable extends AsyncTask<Map<String, Object>, Void, Objec
 	@Override
 	protected void onPostExecute(Object result) {
 		if(result instanceof Map<?, ?>){
-			((DatabaseZutatenQueryCallback)this.listener).onSelectCallback((Map<String, Set<String>>) result);
+			((DatabaseZutatenQueryCallback)this.listener).onSelectCallback((Map<String, List<String>>) result);
 		} else {
 			this.listener.onSelectCallback((List<?>) result);
 		}
@@ -76,7 +76,7 @@ public class QueryAllOfaTable extends AsyncTask<Map<String, Object>, Void, Objec
 		return results;
 	}
 
-	private Map<String, Set<String>> getAllZutatenForZutatenKategorie() {
+	private Map<String, List<String>> getAllZutatenForZutatenKategorie() {
 		SQLiteDatabase db = this.manager.getDbHelper().getReadableDatabase();
 		Map<String, Set<String>> result = new HashMap<String, Set<String>>();
 		
@@ -95,6 +95,15 @@ public class QueryAllOfaTable extends AsyncTask<Map<String, Object>, Void, Objec
 		 }
 		allZutaten.close();
 		db.close();
+		return repackMap(result);
+	}
+	
+	private Map<String, List<String>> repackMap(Map<String, Set<String>> map) {
+		Map<String, List<String>> result = new HashMap<String, List<String>>();
+		Set<String> keySet = result.keySet();
+		for (String key : keySet) {
+			result.put(key, new LinkedList<String>(map.get(key)));
+		}
 		return result;
 	}
 }

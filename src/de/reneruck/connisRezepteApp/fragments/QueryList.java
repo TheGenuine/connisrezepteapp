@@ -86,7 +86,7 @@ public class QueryList extends Fragment implements OnItemClickListener, Database
 	}
 	
 	@Override
-	public void onSelectCallback(Map<String, Set<String>> result) {
+	public void onSelectCallback(Map<String, List<String>> result) {
 		this.zutaten = result;
 		this.zutatenAdapter = new ZutatenListAdapter(this.zutaten);
 		createZutatenList(this.zutatenAdapter);

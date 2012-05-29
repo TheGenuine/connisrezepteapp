@@ -2,7 +2,6 @@ package de.reneruck.connisRezepteApp.fragments;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
@@ -13,10 +12,10 @@ import android.widget.TextView;
 
 public class ZutatenListAdapter implements ExpandableListAdapter {
 
-	private Map<String, Set<String>> zutaten;
+	private Map<String, List<String>> zutaten;
 	private String[] kategorien;
 
-	public ZutatenListAdapter(Map<String, Set<String>> zutaten) {
+	public ZutatenListAdapter(Map<String, List<String>> zutaten) {
 		this.zutaten = zutaten;
 		this.kategorien = zutaten.keySet().toArray(new String[]{});
 		
