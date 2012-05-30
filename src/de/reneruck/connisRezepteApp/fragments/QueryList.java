@@ -3,8 +3,6 @@ package de.reneruck.connisRezepteApp.fragments;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.zip.Inflater;
 
 import android.app.Fragment;
 import android.graphics.Color;
@@ -56,7 +54,7 @@ public class QueryList extends Fragment implements OnItemClickListener, Database
 		return this.view;
 	}
 	@Override
-	public void onItemClick(AdapterView<?> parnet, View view, int position, long id) {
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Object checked = view.getTag();
 		if(checked == null){
 			checked = false;
