@@ -140,11 +140,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	private void setupZutaten(SQLiteDatabase db) {
 		for (String value : Configurations.ZutatenFleisch) {
-			db.execSQL("INSERT INTO " + Configurations.TABLE_ZUTATEN + " (" + Configurations.VALUE + ", " + Configurations.ZUTATEN_KATEGORIE_ID_ZUTATEN_KATEGORIE + ") values('" + value +"' , 1)");
+			db.execSQL("INSERT INTO " + Configurations.TABLE_ZUTATEN + " (" + Configurations.VALUE + ", " + Configurations.ZUTATEN_KATEGORIE_ID_ZUTATEN_KATEGORIE + ") values('" + value +"' , 2)");
 		}
 		
 		for (String value : Configurations.ZutatenMilchprodukete) {
-			db.execSQL("INSERT INTO " + Configurations.TABLE_ZUTATEN + " (" + Configurations.VALUE + ", " + Configurations.ZUTATEN_KATEGORIE_ID_ZUTATEN_KATEGORIE + ") values('" + value +"' , 5)");
+			db.execSQL("INSERT INTO " + Configurations.TABLE_ZUTATEN + " (" + Configurations.VALUE + ", " + Configurations.ZUTATEN_KATEGORIE_ID_ZUTATEN_KATEGORIE + ") values('" + value +"' , 6)");
 		}
 	}
 	

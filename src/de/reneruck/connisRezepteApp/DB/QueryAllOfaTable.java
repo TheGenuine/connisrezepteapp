@@ -100,7 +100,7 @@ public class QueryAllOfaTable extends AsyncTask<Map<String, Object>, Void, Objec
 	
 	private Map<String, List<String>> repackMap(Map<String, Set<String>> map) {
 		Map<String, List<String>> result = new HashMap<String, List<String>>();
-		Set<String> keySet = result.keySet();
+		Set<String> keySet = map.keySet();
 		for (String key : keySet) {
 			result.put(key, new LinkedList<String>(map.get(key)));
 		}

@@ -3,10 +3,16 @@ package de.reneruck.connisRezepteApp.fragments;
 import java.util.List;
 import java.util.Map;
 
+import de.reneruck.connisRezepteApp.AppContext;
+import de.reneruck.connisRezepteApp.Configurations.ListType;
+
+import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckedTextView;
 import android.widget.ExpandableListAdapter;
 import android.widget.TextView;
 
@@ -14,11 +20,12 @@ public class ZutatenListAdapter implements ExpandableListAdapter {
 
 	private Map<String, List<String>> zutaten;
 	private String[] kategorien;
+	private AppContext appContext;
 
-	public ZutatenListAdapter(Map<String, List<String>> zutaten) {
+	public ZutatenListAdapter(Context context, Map<String, List<String>> zutaten) {
 		this.zutaten = zutaten;
 		this.kategorien = zutaten.keySet().toArray(new String[]{});
-		
+		this.appContext = (AppContext) context;
 	}
 	
 	@Override
@@ -40,8 +47,12 @@ public class ZutatenListAdapter implements ExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-		View view = inflater.inflate(android.R.layout.simple_list_item_1, null);
-		((TextView)view).setText(this.zutaten.get(this.kategorien[groupPosition]).get(childPosition));	
+		View view = inflater.inflate(android.R.layout.select_dialog_multichoice, null);
+		String textValue = this.zutaten.get(this.kategorien[groupPosition]).get(childPosition);
+		
+		((CheckedTextView)view).setText(textValue);
+		((CheckedTextView)view).setTextColor(Color.BLACK);
+		((CheckedTextView)view).setChecked(this.appContext.isChecked(ListType.Zutat, textValue));
 		return view;
 	}
 
@@ -82,7 +93,9 @@ public class ZutatenListAdapter implements ExpandableListAdapter {
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 		View view = inflater.inflate(android.R.layout.simple_expandable_list_item_1, null);
-		((TextView)view).setText(this.kategorien[groupPosition]);	
+		String textValue = this.kategorien[groupPosition];
+		((TextView)view).setText(textValue);	
+		((TextView)view).setTextColor(Color.BLACK);
 		return view;
 	}
 
@@ -125,5 +138,4 @@ public class ZutatenListAdapter implements ExpandableListAdapter {
 		// TODO Auto-generated method stub
 
 	}
-
 }
